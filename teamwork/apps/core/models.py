@@ -16,13 +16,20 @@ from teamwork.apps.projects.views import to_bits, from_bits
        match: the list of matched students
     returns: a sorted list of students from best score to worst
 """
-def sort(matchList):
+def sort(course, matchList):
     matches = []
+    skip = False
     topScores = sorted(matchList.values())
     for j in reversed(topScores):
         for u, i in matchList.items():
             if j == i:
-                matches.append((u,i))
+                print(list(u.membership.all()))
+                for k in list(u.membership.all()):
+                    print(k.course.first())
+                    if k.course.first() == course:
+                        skip = True
+                if not skip:
+                    matches.append((u,i))
     return matches
 
 
@@ -113,9 +120,9 @@ def po_match(project):
     for l in initial.keys():
         temp = by_schedule(l, project)
         initial[l][0] += temp
-        initial[l][4] += temp 
+        initial[l][4] += temp
 
-    return sort(initial)
+    return sort(course, initial)
     # past classes match
 
 def auto_ros(course):
