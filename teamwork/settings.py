@@ -59,7 +59,9 @@ INSTALLED_APPS = [
 
     'django_gravatar',
 
-    'chartjs'
+    'chartjs',
+
+    'debug_toolbar'
 ]
 
 # Sets emails for notifications of error when DEBUG=False
@@ -91,6 +93,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'teamwork.urls'
@@ -205,3 +208,5 @@ ALLOWED_SIGNUP_DOMAINS = ['*']
 
 LOGIN_URL = '/'
 LOGIN_REDIRECT_URL = '/'
+
+INTERNAL_IPS = ('127.0.0.1',)
