@@ -13,42 +13,41 @@
 
     <script type="text/javascript">
         $(".select2").select2({
-                ajax: {
-                    url: "ajax/select_projects/",
-                    dataType: 'json',
-                    delay: 250,
-                    data: function (params) {
-                        return {
-                            q: params.term, // search term
-                            page: params.page
-                        };
-                    },
-                    processResults: function (data, params) {
-                        // parse the results into the format expected by Select2
-                        // since we are using custom formatting functions we do not need to
-                        // alter the remote JSON data, except to indicate that infinite
-                        // scrolling can be used
-                        params.page = params.page || 1;
-
-                        console.log(data);
-                        console.log(params);
-
-                        return {
-                            results: data.items,
-                            pagination: {
-                                more: (params.page * 30) < data.total_count
-                            }
-                        };
-                    },
-                    cache: true
+            ajax: {
+                url: "ajax/select_projects/",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term, // search term
+                        page: params.page
+                    };
                 },
-                placeholder: "Search for Projects to Claim",
-                //escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-                minimumInputLength: 1,
-                //templateResult: formatRepo, // omitted for brevity, see the source of this page
-                //templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
-            });
+                processResults: function (data, params) {
+                    // parse the results into the format expected by Select2
+                    // since we are using custom formatting functions we do not need to
+                    // alter the remote JSON data, except to indicate that infinite
+                    // scrolling can be used
+                    params.page = params.page || 1;
 
+                    console.log(data);
+                    console.log(params);
+
+                    return {
+                        results: data.items,
+                        pagination: {
+                            more: (params.page * 30) < data.total_count
+                        }
+                    };
+                },
+                cache: true
+            },
+            placeholder: "Search for Projects to Claim",
+            //escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+            minimumInputLength: 1,
+            //templateResult: formatRepo, // omitted for brevity, see the source of this page
+            //templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
+        });
 
 
     </script>
@@ -164,29 +163,32 @@
                     </li>
                 {% endif %}
 
-            <div class="tab-pane active" id="projects">
-                {% if user != course.creator %}
-                    {% if not user.profile.isGT %}
-                        {% if not user_role == "ta" %}
-                        {% if not course.limit_interest %}
-                            {% if projectCount > 0 %}
-                            <div class="row">
-                                <div class="alert alert-info" role="alert">
-                                    <a href="{% url 'show_interest' course.slug %}" class="alert-link">
-                                        Show interest in these projects!
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                    {{ form.info.errors }}
-                    <label for="{{ form.name.id_for_label }}" class="control-label">
-                    Course Information:
-                    </label>
-                    {{ form.name }}
-                </div>
-=======
+                <div class="tab-pane active" id="projects">
+                    {% if user != course.creator %}
+                        {% if not user.profile.isGT %}
+                            {% if not user_role == "ta" %}
+                                {% if not course.limit_interest %}
+                                    {% if projectCount > 0 %}
+                                        <div class="row">
+                                            <div class="alert alert-info" role="alert">
+                                                <a href="{% url 'show_interest' course.slug %}" class="alert-link">
+                                                    Show interest in these projects!
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                    {% endif %}
+                                    {{ form.info.errors }}
+                                    <label for="{{ form.name.id_for_label }}" class="control-label">
+                                        Course Information:
+                                    </label>
+                                    {{ form.name }}
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                    </div>
             </ul>
-
             <div class="tab-content" style="background-color: #ecf0f5">
                 <div class="tab-pane active" id="projects">
                     {% if user != course.creator %}
@@ -203,7 +205,6 @@
                                         </div>
                                     {% endif %}
                                 {% endif %}
->>>>>>> 2fdefffab283843afc61ed2b5e29ec9dc52f6367
                             {% endif %}
                         {% endif %}
                     {% endif %}
