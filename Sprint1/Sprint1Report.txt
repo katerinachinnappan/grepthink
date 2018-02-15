@@ -1,0 +1,30 @@
+GrepThink
+GrepThink Updates
+Sprint 1 Report
+08-02-2018
+
+Actions to stop doing
+•	For now, stop fixing remaining bugs. These were simply there for us to learn Django.
+
+Actions to start doing
+•	Ask help from your teammates more than from the sponsors
+
+Actions to keep doing
+•	Keep up the work rate
+•	Scrum meetings
+
+Work Completed
+•	Fixed priority bugs
+
+Work Not Completed
+•	Some minor bugs which weren’t on the list but discovered as fixing main bugs
+
+Work Completion Rate
+•	3 User stories completed:
+  -	User Story 1: As a developer I want to learn Django
+  -	User Story 2: As a developer I want to build a small basic app using Django
+  -	User Story 3: As a developer I want to fix small bugs in GrepThink
+•	Total Hours Completed:
+  -	15 hours
+•	Time
+  -	2 weeks 
