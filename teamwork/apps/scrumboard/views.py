@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from .models import *
-
+from teamwork.apps.projects.models import *
 
 def index(request):
     return render(request, 'scrumboard/board.html', {})
@@ -21,14 +21,16 @@ def myscrum(request):
                                                            'page_description': page_description, 'title': title,
                                                            'projects': myscrum})
 
-# @login_required
-# def view_projects(request):
-#     """
-#     Public method that takes a request, retrieves all Project objects from the model,
-#     then calls _projects to render the request to template view_projects.html
-#     """
-#     my_projects = Project.get_my_projects(request.user)
-#     return myscrum(request, my_projects)
-
+@login_required
 def view_projects_scrum(request):
-	return render(request, 'scrumboard/view_projects_scrum.html', {})
+    """
+    Public method that takes a request, retrieves all Project objects from the model,
+    then calls _projects to render the request to template view_projects.html
+    """
+    my_projects = Project.objects.first()
+    print("hello\n\n")
+    print(my_projects)
+    return myscrum(request, my_projects)
+
+# def view_projects_scrum(request):
+# 	return render(request, 'scrumboard/view_projects_scrum.html', {})

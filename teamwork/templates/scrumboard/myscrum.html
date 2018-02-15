@@ -7,9 +7,9 @@
 
 <!-- BREADCRUMB -->
 <!-- {% block crumb %}
-<li><a href="view_projects_scrum.html">My Projects</a></li>
+<li><a href="{% url 'myscrum' %}">My Projects</a></li>
 {% endblock crumb %} -->
 
-{% include "projects/partial_project_box.html" with projects=projects %}
+{% include "scrumboard/partial_scrum_box.html" with projects=projects %}
 
 {% endblock content %}
