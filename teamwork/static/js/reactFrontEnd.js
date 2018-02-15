@@ -49,6 +49,10 @@ class App extends Component {
   }
 
   onDragEnd(result) {
+ /*   $.ajax{
+        url = '/scrum_board/add'
+
+    } */
     // dropped outside the list
     if (!result.destination) {
       return;
