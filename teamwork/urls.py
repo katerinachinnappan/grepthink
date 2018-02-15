@@ -91,6 +91,7 @@ urlpatterns = [
 
 
         url(r'^scrumboard/$', scrumboard.index, name='scrumboard'),
+        url(r'^myscrum/$', scrumboard.myscrum, name='myscrum'),
 
                   # View all courses
         url(r'^course/$', course_views.view_courses, name='view_course'),
