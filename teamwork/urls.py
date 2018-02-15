@@ -92,7 +92,10 @@ urlpatterns = [
 
         url(r'^scrumboard/$', scrumboard.index, name='scrumboard'),
         url(r'^myscrum/all/', scrumboard.myscrum, name='myscrum'),
-       
+        # url(r'^view_projects_scrum/all/', scrumboard.view_projects_scrum, name='myscrum'),
+
+        # # /view_projects/
+        #  url(r'^myscrum/all/', scrumboard.view_projects, name='view_projects'),
 
                   # View all courses
         url(r'^course/$', course_views.view_courses, name='view_course'),
