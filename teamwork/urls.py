@@ -89,7 +89,7 @@ urlpatterns = [
         # Edit individual assignment (based on slug)
         url(r'^assignment/(?P<slug>[^/]+)/edit/$', course_views.edit_assignment, name='edit_assignment'),
 
-
+        # SCRUM BOARD
         url(r'^scrumboard/$', scrumboard.index, name='scrumboard'),
         url(r'^myscrum/all/', scrumboard.myscrum, name='myscrum'),
        

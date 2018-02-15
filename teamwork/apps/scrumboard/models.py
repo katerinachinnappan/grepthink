@@ -7,8 +7,8 @@ class Board(models.Model):
     description = models.CharField(max_length=200)
     userID = models.ForeignKey(User, on_delete=models.CASCADE,
                                   related_name="userID", default=0)
-    taskID = models.ForeignKey(Task, on_delete=models.CASCADE,
-                                  related_name="taskID", default=0)
+    #taskID = models.ForeignKey(Task, on_delete=models.CASCADE,
+                                  #related_name="taskID", default=0)
 
 
 class Task(models.Model):
