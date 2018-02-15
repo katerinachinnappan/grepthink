@@ -7,6 +7,10 @@ class Board(models.Model):
     description = models.CharField(max_length=200)
 
 
+class Column(models.Model):
+    pass
+
+
 class Task(models.Model):
     assigned = models.BooleanField(default=False)
     category = models.CharField(max_length=200)
