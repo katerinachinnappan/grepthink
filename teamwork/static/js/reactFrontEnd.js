@@ -1,10 +1,13 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
+
+
+
 
 // fake data generator
 const getItems = count =>
-  Array.from({ length: count }, (v, k) => k).map(k => ({
+  Array.from({length: count}, (v, k) => k).map(k => ({
     id: `item-${k}`,
     content: `item ${k}`,
   }));
@@ -40,6 +43,7 @@ const getListStyle = isDraggingOver => ({
 });
 
 class App extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -50,20 +54,23 @@ class App extends Component {
 
   onDragEnd(result) {
 
-      $.ajax({
-        url: '/scrumboard/update/',
-        data: {
-          'some data': 'some data'
-        },
-        dataType: 'json',
-        success: function (data) {
-          if (data.some_data) {
-            alert("A user with this username already exists.");
-          }
+    $.ajax({
+      url: '/scrumboard/update/',
+      data: {
+        'some data': 'some data'
+      },
+      dataType: 'json',
+      success: function (data) {
+        if (data.some_data) {
+          alert("A user with this username already exists.");
         }
-      });
+      }
+    });
 
-      // dropped outside the list
+    console.log(globallyVisibleVar);
+
+
+    // dropped outside the list
     if (!result.destination) {
       return;
     }
@@ -121,4 +128,4 @@ class App extends Component {
 }
 
 // Put the thing into the DOM!
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<App/>, document.getElementById('root'));
