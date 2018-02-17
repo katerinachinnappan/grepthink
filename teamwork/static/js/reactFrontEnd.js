@@ -49,11 +49,21 @@ class App extends Component {
   }
 
   onDragEnd(result) {
- /*   $.ajax{
-        url = '/scrum_board/add'
 
-    } */
-    // dropped outside the list
+      $.ajax({
+        url: '/scrumboard/update/',
+        data: {
+          'some data': 'some data'
+        },
+        dataType: 'json',
+        success: function (data) {
+          if (data.some_data) {
+            alert("A user with this username already exists.");
+          }
+        }
+      });
+
+      // dropped outside the list
     if (!result.destination) {
       return;
     }

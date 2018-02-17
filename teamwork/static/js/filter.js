@@ -86,7 +86,7 @@ var multiFilter = {
           var searchString = '';
           for (let s of searchTerms){
             if(s.endsWith(','))
-              searchString += "[class~="+s+"]"
+              searchString += "[class~="+s+"]";
             else
               searchString += "[class*="+s+"]"
 

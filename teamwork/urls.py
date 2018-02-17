@@ -96,7 +96,7 @@ urlpatterns = [
 
         url(r'^scrumboard/add/', scrumboard.myscrum, name='myscrum'),
         url(r'^scrumboard/delete/', scrumboard.myscrum, name='myscrum'),
-        url(r'^scrumboard/update/', scrumboard.myscrum, name='myscrum'),
+        url(r'^scrumboard/update/', scrumboard.update, name='update'),
 
 
                   # View all courses
