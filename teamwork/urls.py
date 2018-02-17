@@ -92,7 +92,12 @@ urlpatterns = [
         # SCRUM BOARD
         url(r'^scrumboard/$', scrumboard.index, name='scrumboard'),
         url(r'^myscrum/all/', scrumboard.myscrum, name='myscrum'),
-       
+
+
+        url(r'^scrumboard/add/', scrumboard.myscrum, name='myscrum'),
+        url(r'^scrumboard/delete/', scrumboard.myscrum, name='myscrum'),
+        url(r'^scrumboard/update/', scrumboard.myscrum, name='myscrum'),
+
 
                   # View all courses
         url(r'^course/$', course_views.view_courses, name='view_course'),

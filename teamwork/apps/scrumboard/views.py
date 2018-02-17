@@ -2,10 +2,12 @@ from django.shortcuts import render
 
 
 def index(request):
-    return render(request, 'scrumboard/board.html', {})
+    return render(request, 'scrumboard/scrumboard.html', {})
+
 
 def myscrum(request):
-	return render(request, 'scrumboard/myscrum.html', {})
+    return render(request, 'scrumboard/myscrum.html', {})
+
 
 def view_projects_scrum(request):
-	return render(request, 'scrumboard/view_projects_scrum.html', {})
+    return render(request, 'scrumboard/view_projects_scrum.html', {})
