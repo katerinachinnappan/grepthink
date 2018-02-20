@@ -48,6 +48,8 @@ def view_projects(request):
     then calls _projects to render the request to template view_projects.html
     """
     my_projects = Project.get_my_projects(request.user)
+    print(my_projects)
+    print("\n\n")
 
     return _projects(request, my_projects)
 
