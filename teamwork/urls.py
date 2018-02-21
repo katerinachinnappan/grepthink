@@ -89,17 +89,23 @@ urlpatterns = [
         # Edit individual assignment (based on slug)
         url(r'^assignment/(?P<slug>[^/]+)/edit/$', course_views.edit_assignment, name='edit_assignment'),
 
+        # SCRUM BOARD
+        url(r'^scrumboard/$', scrumboard.index, name='scrumboard'),
+        url(r'^myscrum/all/', scrumboard.myscrum, name='myscrum'),
 
-        #url(r'^scrumboard/$', scrumboard.index, name='scrumboard'),
-        #url(r'^myscrum/all/', scrumboard.myscrum, name='myscrum'),
+        url(r'^scrumboard/add/', scrumboard.myscrum, name='myscrum'),
+        url(r'^scrumboard/delete/', scrumboard.myscrum, name='myscrum'),
+        url(r'^scrumboard/update/', scrumboard.update, name='update'),
+
+        # url(r'^scrumboard/$', scrumboard.index, name='scrumboard'),
+        # url(r'^myscrum/all/', scrumboard.myscrum, name='myscrum'),
         url(r'^myscrum/all/', scrumboard.view_projects, name='view_scrum_projects'),
 
-        #url(r'^view_projects_scrum/all/', scrumboard.view_projects_scrum, name='myscrum'),
+        # url(r'^view_projects_scrum/all/', scrumboard.view_projects_scrum, name='myscrum'),
 
         # # /view_projects/
         #  url(r'^myscrum/all/', scrumboard.view_projects, name='view_projects'),
-
-                  # View all courses
+        # View all courses
         url(r'^course/$', course_views.view_courses, name='view_course'),
         # Join a course (valid for all courses)
         url(r'^course/join/$', course_views.join_course, name='join_course'),
