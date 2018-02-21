@@ -25,7 +25,7 @@ export type ReorderTaskMapResult = {|
   autoFocusQuoteId: ?string,
 |}
 
-export const reorderQuoteMap = ({
+export const reorderTaskMap = ({
   taskMap,
   source,
   destination,

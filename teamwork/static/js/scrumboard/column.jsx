@@ -1,52 +1,57 @@
 import React, { Component } from 'react';
-import {Draggable, DraggableProvided, DraggableStateSnapshot, Droppable, Props} from 'react-beautiful-dnd';
+import {Draggable} from 'react-beautiful-dnd';
 import styled from 'styled-components';
-import { grid } from './constants';
+import {borderRadius, colors, grid} from './constants';
+import Title from './primatives/title'
+import {DraggableProvided, DraggableStateSnapshot} from "react-beautiful-dnd/lib/index";
+import QuoteList from "./primatives/list";
+import type {Task} from "./primatives/types";
 
 const Wrapper = styled.div`
   display: flex;
+  flex-direction: column;
 `;
 
 const Container = styled.div`
-  width: 200px;
   margin: ${grid}px;
-  background: lightpink;
+  display: flex;
+  flex-direction: column;
 `;
 
-const Header = styled.h3`
-  padding: ${grid}px;
-
+const Header = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top-left-radius: ${borderRadius}px;
+  border-top-right-radius: ${borderRadius}px;
+  background-color: ${({ isDragging }) => (isDragging ? colors.blue.lighter : colors.blue.light)};
+  transition: background-color 0.1s ease;
   &:hover {
-    background: purple;
+    background-color: ${colors.blue.lighter};
   }
 `;
 
-const List = styled.div`
-  background: lightgreen;
-`;
 
-class InnerList extends Component {
-  shouldComponentUpdate(nextProps) {
-    if(nextProps.tasks === this.props.tasks) {
-      return false;
-    }
-    return true;
-  }
+type Props = {|
+  title: string,
+  tasks: Task[],
+  index: number,
+  autoFocusTaskId: ?string,
+|}
 
+export default class Column extends Component<Props> {
   render() {
-    return this.props.children;
-  }
-}
-
-export default class Column extends  Component<Props> {
-  render() {
+    const title: string = this.props.title;
+    const tasks: Task[] = this.props.tasks;
+    const index: number = this.props.index;
     return (
-      <Draggable draggableId={this.props.column.pk} index={this.props.index}>
+      <Draggable draggableId={title} index={index}>
         {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
           <Wrapper>
-           <Container innerRef={provided.innerRef} {...provided.draggableProps}>
-
-
+            <Container
+              innerRef={provided.innerRef}
+              {...provided.draggableProps}
+            >
               <Header isDragging={snapshot.isDragging}>
                 <Title
                   isDragging={snapshot.isDragging}
@@ -55,36 +60,18 @@ export default class Column extends  Component<Props> {
                   {title}
                 </Title>
               </Header>
-              <List>
-                 <InnerList>
-                   {this.props.tasks}
-                 </InnerList>
-               </List>
+              <QuoteList
+                listId={title}
+                listType="QUOTE"
+                tasks={tasks}
+                autoFocusQuoteId={this.props.autoFocusTaskId}
+              />
             </Container>
             {provided.placeholder}
           </Wrapper>
         )}
 
       </Draggable>
-
-
-      // <Draggable draggableId={this.props.column.pk} index={this.props.index}>
-      //   {(provided, snapshot) => (
-      //     <Wrapper>
-      //       <Container innerRef={provided.innerRef} {...provided.draggableProps}>
-      //         <Header {...provided.dragHandleProps}>
-      //           {this.props.column.fields.title}
-      //         </Header>
-      //         <List>
-      //           <InnerList>
-      //             {this.props.tasks}
-      //           </InnerList>
-      //         </List>
-      //       </Container>
-      //       {provided.placeholder}
-      //     </Wrapper>
-      //   )}
-      // </Draggable>
     );
   }
 }

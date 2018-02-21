@@ -8,13 +8,9 @@
 
 <body>
 <script type="text/javascript">
-    let globallyVisibleVar = {{ initial_data|safe }};
+    let server_data = {{ initial_data|safe }};
 </script>
 
-
-{#<script>#}
-{#    window.initialData = {{ initial_data|safe }};#}
-{#</script>#}
 <div id="root"></div>
 {% render_bundle 'main' %}
 

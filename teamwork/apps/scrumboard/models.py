@@ -3,7 +3,7 @@ from django.db import models
 
 
 class Board(models.Model):
-    tittle = models.CharField(max_length=100, default='')
+    title = models.CharField(max_length=100, default='')
     description = models.CharField(max_length=200, default='')
     owner = models.ForeignKey(
         User, related_name='owner', on_delete=models.CASCADE)
@@ -12,7 +12,7 @@ class Board(models.Model):
 
 
 class Column(models.Model):
-    tittle = models.CharField(max_length=100, default='')
+    title = models.CharField(max_length=100, default='')
     description = models.CharField(max_length=200, default='')
     board = models.ForeignKey(Board, on_delete=models.CASCADE,
                               related_name="board", default=0)

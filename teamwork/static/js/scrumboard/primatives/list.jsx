@@ -1,25 +1,26 @@
-// @flow
-/* eslint-disable react/no-multi-comp */
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import styled from 'styled-components';
-import { Droppable, Draggable } from '../../../src';
-import QuoteItem from '../primatives/quote-item';
-import { grid, colors } from '../constants';
+import TaskItem from './item';
+import {grid, colors} from '../constants';
 import Title from '../primatives/title';
-import type { Quote } from '../types';
-import type {
-  DroppableProvided,
-  DroppableStateSnapshot,
-  DraggableProvided,
-  DraggableStateSnapshot,
-} from '../../../src/';
-import {Draggable, Droppable} from "react-beautiful-dnd";
+import type {Task} from "./types";
+
+import {
+  Draggable, Droppable
+} from "react-beautiful-dnd";
+
+
+
+import {
+  DraggableProvided, DraggableStateSnapshot, DroppableProvided,
+  DroppableStateSnapshot
+} from "react-beautiful-dnd/lib/index";
 
 const Wrapper = styled.div`
-  background-color: ${({ isDraggingOver }) => (isDraggingOver ? colors.blue.lighter : colors.blue.light)};
+  background-color: ${({isDraggingOver}) => (isDraggingOver ? colors.blue.lighter : colors.blue.light)};
   display: flex;
   flex-direction: column;
-  opacity: ${({ isDropDisabled }) => (isDropDisabled ? 0.5 : 'inherit')};
+  opacity: ${({isDropDisabled}) => (isDropDisabled ? 0.5 : 'inherit')};
   padding: ${grid}px;
   padding-bottom: 0;
   transition: background-color 0.1s ease, opacity 0.1s ease;
@@ -46,24 +47,26 @@ const Container = styled.div``;
 type Props = {|
   listId: string,
   listType?: string,
-  quotes: Quote[],
+  tasks: Task[],
   title?: string,
   internalScroll?: boolean,
   isDropDisabled ?: boolean,
   style?: Object,
+
   // may not be provided - and might be null
   autoFocusQuoteId?: ?string,
   ignoreContainerClipping?: boolean,
 |}
 
-type QuoteListProps = {|
-  quotes: Quote[],
-  autoFocusQuoteId: ?string,
+type TaskListProps = {|
+  tasks: Task[],
+  autoFocusTaskId: ?string,
 |}
 
-class InnerQuoteList extends Component<QuoteListProps> {
-  shouldComponentUpdate(nextProps: QuoteListProps) {
-    if (nextProps.quotes !== this.props.quotes) {
+class InnerTaskList extends Component<TaskListProps> {
+
+  shouldComponentUpdate(nextProps: TaskListProps) {
+    if (nextProps.tasks !== this.props.tasks) {
       return true;
     }
 
@@ -73,20 +76,20 @@ class InnerQuoteList extends Component<QuoteListProps> {
   render() {
     return (
       <div>
-        {this.props.quotes.map((quote: Quote, index: number) => (
-          <Draggable key={quote.id} draggableId={quote.id} index={index}>
+        {this.props.tasks.map((task: Task, index: number) => (
+          <Draggable key={task.pk} draggableId={task.pk} index={index}>
             {(dragProvided: DraggableProvided, dragSnapshot: DraggableStateSnapshot) => (
               <div>
-                <QuoteItem
-                  key={quote.id}
-                  quote={quote}
+                <TaskItem
+                  key={task.pk}
+                  task={task}
                   isDragging={dragSnapshot.isDragging}
                   provided={dragProvided}
-                  autoFocus={this.props.autoFocusQuoteId === quote.id}
+                  autoFocus={this.props.autoFocusTaskId === task.pk}
                 />
                 {dragProvided.placeholder}
               </div>
-          )}
+            )}
           </Draggable>
         ))}
       </div>
@@ -96,14 +99,14 @@ class InnerQuoteList extends Component<QuoteListProps> {
 
 type InnerListProps = {|
   dropProvided: DroppableProvided,
-  quotes: Quote[],
+  quotes: Task[],
   title: ?string,
   autoFocusQuoteId: ?string,
 |}
 
 class InnerList extends Component<InnerListProps> {
   render() {
-    const { quotes, dropProvided, autoFocusQuoteId } = this.props;
+    const {tasks, dropProvided, autoFocusQuoteId} = this.props;
     const title = this.props.title ? (
       <Title>{this.props.title}</Title>
     ) : null;
@@ -112,8 +115,8 @@ class InnerList extends Component<InnerListProps> {
       <Container>
         {title}
         <DropZone innerRef={dropProvided.innerRef}>
-          <InnerQuoteList
-            quotes={quotes}
+          <InnerTaskList
+            tasks={tasks}
             autoFocusQuoteId={autoFocusQuoteId}
           />
           {dropProvided.placeholder}
@@ -123,7 +126,7 @@ class InnerList extends Component<InnerListProps> {
   }
 }
 
-export default class QuoteList extends Component<Props> {
+export default class TaskList extends Component<Props> {
   render() {
     const {
       ignoreContainerClipping,
@@ -132,7 +135,7 @@ export default class QuoteList extends Component<Props> {
       listId,
       listType,
       style,
-      quotes,
+      tasks,
       autoFocusQuoteId,
       title,
     } = this.props;
@@ -153,7 +156,7 @@ export default class QuoteList extends Component<Props> {
             {internalScroll ? (
               <ScrollContainer>
                 <InnerList
-                  quotes={quotes}
+                  tasks={tasks}
                   title={title}
                   dropProvided={dropProvided}
                   autoFocusQuoteId={autoFocusQuoteId}
@@ -161,12 +164,13 @@ export default class QuoteList extends Component<Props> {
               </ScrollContainer>
             ) : (
               <InnerList
-                quotes={quotes}
+                tasks={tasks}
                 title={title}
                 dropProvided={dropProvided}
                 autoFocusQuoteId={autoFocusQuoteId}
               />
-            )}
+            )
+            }
           </Wrapper>
         )}
       </Droppable>

@@ -1,13 +1,13 @@
-// @flow
-import React from 'react';
+import React, {PureComponent} from 'react';
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
-import { borderRadius, colors, grid } from '../constants';
-import type { Quote } from '../types';
-import type { DraggableProvided } from '../../../src/';
+import {borderRadius, colors, grid} from '../constants';
+import type {Task} from "./types";
+import {DraggableProvided} from "react-beautiful-dnd/lib/index";
+
 
 type Props = {
-  quote: Quote,
+  task: Task,
   isDragging: boolean,
   provided: DraggableProvided,
   autoFocus?: boolean,
@@ -18,9 +18,9 @@ type HTMLElement = any;
 const Container = styled.a`
 border-radius: ${borderRadius}px;
 border: 1px solid grey;
-background-color: ${({ isDragging }) => (isDragging ? colors.green : colors.white)};
+background-color: ${({isDragging}) => (isDragging ? colors.green : colors.white)};
 
-box-shadow: ${({ isDragging }) => (isDragging ? `2px 2px 1px ${colors.shadow}` : 'none')};
+box-shadow: ${({isDragging}) => (isDragging ? `2px 2px 1px ${colors.shadow}` : 'none')};
 padding: ${grid}px;
 min-height: 40px;
 margin-bottom: ${grid}px;
@@ -44,14 +44,6 @@ display: flex;
 align-items: center;
 `;
 
-const Avatar = styled.img`
-width: 40px;
-height: 40px;
-border-radius: 50%;
-margin-right: ${grid}px;
-flex-shrink: 0;
-flex-grow: 0;
-`;
 
 const Content = styled.div`
 /* flex child */
@@ -81,7 +73,7 @@ display: flex;
 margin-top: ${grid}px;
 `;
 
-const QuoteId = styled.small`
+const TaskID = styled.small`
 flex-grow: 0;
 margin: 0;
 `;
@@ -93,41 +85,34 @@ text-align: right;
 flex-grow: 1;
 `;
 
-// Previously this extended React.Component
-// That was a good thing, because using React.PureComponent can hide
-// issues with the selectors. However, moving it over does can considerable
-// performance improvements when reordering big lists (400ms => 200ms)
-// Need to be super sure we are not relying on PureComponent here for
-// things we should be doing in the selector as we do not know if consumers
-// will be using PureComponent
-export default class QuoteItem extends React.PureComponent<Props> {
+
+export default class TaskItem extends PureComponent<Props> {
+
+  //TODO Not sure what this is ?
   componentDidMount() {
     if (!this.props.autoFocus) {
       return;
     }
-
-    // eslint-disable-next-line react/no-find-dom-node
     const node: HTMLElement = ReactDOM.findDOMNode(this);
     node.focus();
   }
 
   render() {
-    const { quote, isDragging, provided } = this.props;
+    const {task, isDragging, provided} = this.props;
 
     return (
       <Container
-        href={quote.author.url}
+        // href={quote.author.url}
         isDragging={isDragging}
         innerRef={provided.innerRef}
         {...provided.draggableProps}
         {...provided.dragHandleProps}
       >
-        <Avatar src={quote.author.avatarUrl} alt={quote.author.name} />
         <Content>
-          <BlockQuote>{quote.content}</BlockQuote>
+          <BlockQuote>{task.fields.title}</BlockQuote>
           <Footer>
-            <QuoteId>(id: {quote.id})</QuoteId>
-            <Attribution>{quote.author.name}</Attribution>
+            <TaskID>(id: {task.pk})</TaskID>
+            <Attribution>{task.fields.description}</Attribution>
           </Footer>
         </Content>
       </Container>
