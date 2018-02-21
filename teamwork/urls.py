@@ -92,7 +92,7 @@ urlpatterns = [
         # SCRUM BOARD
         url(r'^scrumboard/$', scrumboard.index, name='scrumboard'),
         url(r'^myscrum', scrumboard.myscrum, name='myscrum'),
-
+        url(r'^myscrum/(?P<slug>[^/]+)/$', scrumboard.view_one_project_scrum, name='view_one_project_scrum'),
 
        # url(r'^scrumboard/add/', scrumboard.myscrum, name='myscrum_add'),
         url(r'^scrumboard/delete/', scrumboard.myscrum, name='myscrum_delete'),
