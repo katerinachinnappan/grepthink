@@ -1,6 +1,6 @@
 export const colors = {
   blue: {
-    deep: 'rgb(0, 121, 191)',
+    deep: 'rgb(255,255,255)',
     light: 'lightblue',
     lighter: '#d9fcff',
   },
