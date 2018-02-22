@@ -11,6 +11,7 @@ from django.core.validators import *
 
 from teamwork.apps.courses.models import *
 from teamwork.apps.profiles.models import *
+from teamwork.apps.scrumboard.models import Board
 from django.core.exceptions import ValidationError
 from django.forms import URLField
 
@@ -347,6 +348,44 @@ class UpdateForm(forms.ModelForm):
     class Meta:
         model = ProjectUpdate
         fields = ['update_title', 'update']
+
+
+class CreateScrumBoardForm (forms.Form):
+    """
+    Form used for creating scrum board
+
+
+    Attributes (Fields):
+        title:  [CharField] Name of scrum board
+        description:  [CharField] Project description
+        owner:		  [User] User object associated with creating scrum board
+        members:      [Uses] Gets all the Users associated with the project
+
+    Methods:
+        __init__ :	gets the current user when initiating the form
+
+    """
+
+    # used for filtering the queryset
+    def __init__(self, uid, *args, **kwargs):
+        super(CreateScrumBoardForm, self).__init__(*args, **kwargs)
+
+        owner = User.objects.get(id=uid)
+       # members = User.objects.all()
+
+    title = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        max_length=100,
+        required=True)
+
+    description = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        max_length=200,
+        required=True)
+
+    class Meta:
+        model = Board
+        fields = ['title', 'description']
 
 
 class ResourceForm(forms.ModelForm):

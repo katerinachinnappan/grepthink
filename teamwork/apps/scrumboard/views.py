@@ -13,34 +13,70 @@ from django.shortcuts import get_object_or_404, redirect, render
 # TODO Send the right scrum board here
 from teamwork.apps.scrumboard.models import Board, Task, Column
 from django.contrib.auth.decorators import login_required
+from django.http import (HttpResponse, HttpResponseBadRequest,
+                         HttpResponseRedirect)
+from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from teamwork.apps.courses.models import *
-from teamwork.apps.projects.models import *
+from teamwork.apps.projects.models import Project
+from teamwork.apps.projects.forms import CreateScrumBoardForm
 
 from teamwork.apps.core.models import *
 from teamwork.apps.courses.models import *
 from teamwork.apps.core.helpers import *
 
 
-def index(request):
-    board = Board.objects.all().filter(pk=1)
-    columns = Column.objects.all().filter(board_id=1)
-    tasks = []
-    for column in columns:
-        task = Task.objects.all().filter(column_id=column.id)
-        if task:
-            tasks.append([serializers.serialize('json', task)])
+# @login_required
+# def index(request, slug):
+#
+#     project = get_object_or_404(Project, slug=slug)
+#
+#     print("hello\n")
+#
+#     if request.user.profile.isGT:
+#         pass
+#     elif not request.user == project.creator and request.user not in project.members.all(
+#     ):
+#         # redirect them with a message
+#         messages.info(request, 'Only current members can create a scrum board!')
+#         return HttpResponseRedirect('/project/all')
+#
+#     if request.method == 'POST':
+#         print("hellos\n")
+#         form = CreateScrumBoardForm(request.user.id, request.POST)
+#         if form.is_valid():
+#             print("helloss\n")
+#             new_board = Board(project=project)
+#             new_board.tittle = form.cleaned_data.get('tittle')
+#             new_board.description = form.cleaned_data.get('description')
+#             new_board.owner = request.user
+#             new_board.save()
+#             return redirect(myscrum)
+#     else:
+#         form = CreateScrumBoardForm(request.user.id, request.POST)
+#         print("hellosss\n")
+#         return render(request, 'scrumboard/create_board.html',
+#                       {'form': form,
+#                        'project': project})
 
-    board = serializers.serialize('json', board)
-    columns = serializers.serialize('json', columns)
-    initial_data = json.dumps({
-        'board': board,
-        'columns': columns,
-        'tasks': tasks,
-    }, cls=DjangoJSONEncoder)
-    return render(request, 'scrumboard/scrumboard.html', {
-        'initial_data': initial_data
-    })
+    # board = Board.objects.all().filter(pk=1)
+    # columns = Column.objects.all().filter(board_id=1)
+    # tasks = []
+    # for column in columns:
+    #     task = Task.objects.all().filter(column_id=column.id)
+    #     if task:
+    #         tasks.append([serializers.serialize('json', task)])
+    #
+    # board = serializers.serialize('json', board)
+    # columns = serializers.serialize('json', columns)
+    # initial_data = json.dumps({
+    #     'board': board,
+    #     'columns': columns,
+    #     'tasks': tasks,
+    # }, cls=DjangoJSONEncoder)
+    # return render(request, 'scrumboard/scrumboard.html', {
+    #     'initial_data': initial_data
+    # })
 
 
 def update(request):
@@ -51,7 +87,21 @@ def update(request):
 
 
 def myscrum(request):
-    return render(request, 'scrumboard/myscrum.html', {})
+    """
+    Private method that will be used for paginator once I figure out how to get it working.
+    """
+    page = request.GET.get('page')
+
+    # Populate with page name and title
+    page_name = "My Scrum Boards"
+    page_description = "Scrum Boards created by " + request.user.username
+    title = "My Scrum Boards"
+
+    #print("hello\n\n")
+
+    return render(request, 'scrumboard/myscrum.html', {'page_name': page_name,
+                                                           'page_description': page_description, 'title': title,
+                                                            })
 
 
 def view_projects_scrum(request):
@@ -79,9 +129,9 @@ def myscrumprojects(request, projects):
     page = request.GET.get('page')
 
     # Populate with page name and title
-    page_name = "My Projectsss"
+    page_name = "My Projects"
     page_description = "Projects created by " + request.user.username
-    title = "My Projectsd"
+    title = "My Projects"
 
     #print("hello\n\n")
 

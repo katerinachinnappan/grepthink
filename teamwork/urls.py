@@ -90,7 +90,8 @@ urlpatterns = [
         url(r'^assignment/(?P<slug>[^/]+)/edit/$', course_views.edit_assignment, name='edit_assignment'),
 
         # SCRUM BOARD
-        url(r'^scrumboard/$', scrumboard.index, name='scrumboard'),
+        #url(r'^project/(?P<slug>[^/]+)/$', scrumboard.index, name='scrumboard'),
+        url(r'^project/(?P<slug>[^/]+)/$', project_views.create_board, name='newboard'),
         url(r'^myscrum/all/', scrumboard.myscrum, name='myscrum'),
 
         url(r'^scrumboard/add/', scrumboard.myscrum, name='myscrum'),
@@ -101,7 +102,7 @@ urlpatterns = [
         # url(r'^myscrum/all/', scrumboard.myscrum, name='myscrum'),
         url(r'^myscrum/all/', scrumboard.view_projects, name='view_scrum_projects'),
 
-        # url(r'^view_projects_scrum/all/', scrumboard.view_projects_scrum, name='myscrum'),
+       # url(r'^view_projects_scrum/all/', scrumboard.view_projects_scrum, name='myscrum'),
 
         # # /view_projects/
         #  url(r'^myscrum/all/', scrumboard.view_projects, name='view_projects'),

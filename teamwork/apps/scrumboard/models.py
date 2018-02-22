@@ -1,7 +1,11 @@
 from django.contrib.auth.models import User
 from django.db import models
+from teamwork.apps.projects.models import Project
+
 
 class Board(models.Model):
+    project = models.ForeignKey(Project)
+
     tittle = models.CharField(max_length=100, default='')
     description = models.CharField(max_length=200, default='')
     owner = models.ForeignKey(
