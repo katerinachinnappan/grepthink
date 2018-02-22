@@ -67,8 +67,17 @@ def myscrum(request):
              'page_description': page_description, 'title': title})
 
 
-def view_projects_scrum(request):
-    return render(request, 'scrumboard/view_projects_scrum.html', {})
+@login_required
+def view_scrums(request):
+    """
+    Public method that takes a request, retrieves all Scrum objects from the model,
+    then calls myscrum to render the request to template myscrum.html
+    """
+   # my_scrums = Board.get_my_scrums(request.user)
+
+    return myscrum(request)
+
+
 
 
 def myscrumprojects(request, projects):
