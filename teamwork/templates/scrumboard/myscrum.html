@@ -12,17 +12,14 @@
 {% endblock javascript %}
 
 {% block stylesheets %}
-<!-- Select2 -->
 	<link rel="stylesheet" href="{% static 'css/myscrumBox.css' %}">
 
-{{ block.super }}
+{{ block.super }} 
 
 {% endblock stylesheets %}
 
 {% block content %}
-<div class="contactBox first">
-  <div class="title">Scrum Board Example Box</div>
-  <a href="">View Board</a>
-</div>
+
+{% include "scrumboard/partial_scrum_box.html" with scrums=scrums %}
 
 {% endblock content %}
