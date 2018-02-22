@@ -1,11 +1,11 @@
-var path = require("path")
-var webpack = require('webpack')
-var BundleTracker = require('webpack-bundle-tracker')
+const path = require("path");
+const webpack = require('webpack');
+const BundleTracker = require('webpack-bundle-tracker');
 
 module.exports = {
   context: __dirname,
 
-  entry: './teamwork/static/js/reactFrontEnd.js',
+  entry: './teamwork/static/js/scrumboard/index.jsx',
 
   output: {
     path: path.resolve('assets/bundles/'),
@@ -19,7 +19,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.js?x/,
         exclude: /(node_modules|bower_components)/,
         use: {
           loader: 'babel-loader',
@@ -29,6 +29,8 @@ module.exports = {
         }
       }
     ]
+  }, resolve: {
+    extensions: ['.js', '.jsx'],
   }
 
-}
+};

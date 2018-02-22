@@ -23,7 +23,7 @@ $(function () {
           var selection_list_result = "";
           for (var i = 0 ; i < selection_list.length ; i++) {
             selection_list_result += "* " + selection_list[i] + "\n";
-          };
+          }
           if (selection_list_result.length > 0) {
             selection_list_result = selection_list_result.substring(0, selection_list_result.length - 1);
           }
@@ -44,7 +44,7 @@ $(function () {
           var selection_list_result = "";
           for (var i = 0; i < selection_list.length; i++) {
             selection_list_result += "    " + selection_list[i] + "\n";
-          };
+          }
           if (selection_list_result.length > 0) {
             selection_list_result = selection_list_result.substring(0, selection_list_result.length - 1);
           }
@@ -55,14 +55,13 @@ $(function () {
           var selection_list_result = "";
           for (var i = 0; i < selection_list.length ; i++) {
             selection_list_result += selection_list[i].trim() + "\n";
-          };
+          }
           if (selection_list_result.length > 0) {
             selection_list_result = selection_list_result.substring(0, selection_list_result.length - 1);
           }
           $(_textarea).selection("replace", {text: selection_list_result});
           break;
-      };
-
+      }
     });
 
     $(".add_link").click(function () {

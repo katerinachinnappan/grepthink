@@ -42,29 +42,12 @@ class Task(models.Model):
 
 class Task(models.Model):
     assigned = models.BooleanField(default=False)
-    category = models.CharField(max_length=200)
-    title = models.CharField(max_length=100)
-    description = models.CharField(max_length=200)
-    boardID = models.ForeignKey(Board, on_delete=models.CASCADE,
-                                  related_name="boardID", default=0)
 
-
-    # @staticmethod
-    # def get_my_projects(user):
-    #     """
-    #     Gets a list of project objects. Used in views then passed to the template.
-    #     """
-    #     # #Gets membership object of current user
-    #     # myProjects = Membership.objects.filter(user=user)
-    #     # #Gets project queryset of only projects user is in OR the user created
-    #     # proj = Project.objects.filter(membership__in=myProjects)
-    #
-    #     mem = list(user.membership.all())
-    #
-    #     claimed = list(user.ta.all())
-    #
-    #     created = list(user.project_creator.all())
-    #
-    #     projects = list(set(mem + created + claimed))
-    #
-    #     return projects
+    title = models.CharField(max_length=100, default='')
+    description = models.CharField(max_length=400, default='')
+    column = models.ForeignKey(Column, on_delete=models.CASCADE,
+                               related_name="column", default=0)
+    board = models.ForeignKey(Board, on_delete=models.CASCADE,
+    	                      related_name="%(class)s_board", default=0)
+    userID = models.ForeignKey(User, on_delete=models.CASCADE,
+                               related_name="user", default=0)

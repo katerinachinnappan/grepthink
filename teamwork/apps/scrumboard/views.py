@@ -12,6 +12,14 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 # TODO Send the right scrum board here
 from teamwork.apps.scrumboard.models import Board, Task, Column
+from django.contrib.auth.models import User
+from django.http import JsonResponse
+from django.core.serializers.json import DjangoJSONEncoder
+from django.shortcuts import get_object_or_404, redirect, render
+
+
+# TODO Send the right scrum board here
+from teamwork.apps.scrumboard.models import Board, Task, Column
 from django.contrib.auth.decorators import login_required
 from django.http import (HttpResponse, HttpResponseBadRequest,
                          HttpResponseRedirect)
@@ -21,59 +29,14 @@ from teamwork.apps.courses.models import *
 from teamwork.apps.projects.models import Project
 from teamwork.apps.projects.forms import CreateScrumBoardForm
 
-from teamwork.apps.core.models import *
-from teamwork.apps.courses.models import *
-from teamwork.apps.core.helpers import *
-
-
-# @login_required
-# def index(request, slug):
-#
-#     project = get_object_or_404(Project, slug=slug)
-#
-#     print("hello\n")
-#
-#     if request.user.profile.isGT:
-#         pass
-#     elif not request.user == project.creator and request.user not in project.members.all(
-#     ):
-#         # redirect them with a message
-#         messages.info(request, 'Only current members can create a scrum board!')
-#         return HttpResponseRedirect('/project/all')
-#
-#     if request.method == 'POST':
-#         print("hellos\n")
-#         form = CreateScrumBoardForm(request.user.id, request.POST)
-#         if form.is_valid():
-#             print("helloss\n")
-#             new_board = Board(project=project)
-#             new_board.tittle = form.cleaned_data.get('tittle')
-#             new_board.description = form.cleaned_data.get('description')
-#             new_board.owner = request.user
-#             new_board.save()
-#             return redirect(myscrum)
-#     else:
-#         form = CreateScrumBoardForm(request.user.id, request.POST)
-#         print("hellosss\n")
-#         return render(request, 'scrumboard/create_board.html',
-#                       {'form': form,
-#                        'project': project})
-
-    # board = Board.objects.all().filter(pk=1)
-    # columns = Column.objects.all().filter(board_id=1)
-    # tasks = []
-
-    for column in columns:
-        task = Task.objects.all().filter(column_id=column.id)
-        if task:
-            tasks.append([serializers.serialize('json', task)])
-
-    board = serializers.serialize('json', board)
-    columns = serializers.serialize('json', columns)
+def index(request):
+    board = Board.objects.all().filter(pk=1)
+    columns = Column.objects.all().filter(board_id=1)
+    tasks = Task.objects.all().filter(board_id=1)
     initial_data = json.dumps({
-        'board': board,
-        'columns': columns,
-        'tasks': tasks,
+        'board': serializers.serialize('json', board),
+        'columns': serializers.serialize('json', columns),
+        'tasks': serializers.serialize('json', tasks),
     }, cls=DjangoJSONEncoder)
     return render(request, 'scrumboard/scrumboard.html', {
         'initial_data': initial_data
