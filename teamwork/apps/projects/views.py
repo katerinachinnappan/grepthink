@@ -159,14 +159,6 @@ def view_one_project(request, slug):
         form = ChatForm(request.user.id, slug)
 
 
-    if request.user.profile.isGT:
-        pass
-    elif not request.user == project.creator and request.user not in project.members.all(
-    ):
-        # redirect them with a message
-        messages.info(request, 'Only current members can create a scrum board!')
-        return HttpResponseRedirect('/project/all')
-
     if request.method == 'POST':
         print("inside request.method\n")
         form = CreateScrumBoardForm(request.user.id, request.POST)
@@ -187,6 +179,7 @@ def view_one_project(request, slug):
             print("owner is \n", new_board.owner)
 
             return redirect(myscrum)
+
     else:
         print("show form\n")
         form = CreateScrumBoardForm(request.user.id)

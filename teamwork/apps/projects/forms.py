@@ -371,7 +371,7 @@ class CreateScrumBoardForm (forms.Form):
         super(CreateScrumBoardForm, self).__init__(*args, **kwargs)
 
         owner = User.objects.get(id=uid)
-       # members = User.objects.all()
+        #members = kwargs.pop('members', {})
 
     tittle = forms.CharField(
         widget=forms.TextInput(attrs={'class': 'form-control'}),

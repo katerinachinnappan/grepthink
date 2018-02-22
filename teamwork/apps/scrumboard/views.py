@@ -62,21 +62,22 @@ from teamwork.apps.core.helpers import *
     # board = Board.objects.all().filter(pk=1)
     # columns = Column.objects.all().filter(board_id=1)
     # tasks = []
-    # for column in columns:
-    #     task = Task.objects.all().filter(column_id=column.id)
-    #     if task:
-    #         tasks.append([serializers.serialize('json', task)])
-    #
-    # board = serializers.serialize('json', board)
-    # columns = serializers.serialize('json', columns)
-    # initial_data = json.dumps({
-    #     'board': board,
-    #     'columns': columns,
-    #     'tasks': tasks,
-    # }, cls=DjangoJSONEncoder)
-    # return render(request, 'scrumboard/scrumboard.html', {
-    #     'initial_data': initial_data
-    # })
+
+    for column in columns:
+        task = Task.objects.all().filter(column_id=column.id)
+        if task:
+            tasks.append([serializers.serialize('json', task)])
+
+    board = serializers.serialize('json', board)
+    columns = serializers.serialize('json', columns)
+    initial_data = json.dumps({
+        'board': board,
+        'columns': columns,
+        'tasks': tasks,
+    }, cls=DjangoJSONEncoder)
+    return render(request, 'scrumboard/scrumboard.html', {
+        'initial_data': initial_data
+    })
 
 
 def update(request):
@@ -96,8 +97,6 @@ def myscrum(request):
     page_name = "My Scrum Boards"
     page_description = "Scrum Boards created by " + request.user.username
     title = "My Scrum Boards"
-
-    #print("hello\n\n")
 
     return render(request, 'scrumboard/myscrum.html', {'page_name': page_name,
                                                            'page_description': page_description, 'title': title,

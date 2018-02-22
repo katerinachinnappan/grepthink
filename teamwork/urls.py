@@ -94,8 +94,8 @@ urlpatterns = [
         url(r'^project/(?P<slug>[^/]+)/create_board/$', project_views.create_board, name='create_board'),
         url(r'^myscrum/all/', scrumboard.myscrum, name='myscrum'),
 
-        url(r'^scrumboard/add/', scrumboard.myscrum, name='myscrum'),
-        url(r'^scrumboard/delete/', scrumboard.myscrum, name='myscrum'),
+        # url(r'^scrumboard/add/', scrumboard.myscrum, name='myscrum'),
+        # url(r'^scrumboard/delete/', scrumboard.myscrum, name='myscrum'),
         url(r'^scrumboard/update/', scrumboard.update, name='update'),
 
         # url(r'^scrumboard/$', scrumboard.index, name='scrumboard'),
