@@ -17,18 +17,11 @@ from teamwork.apps.scrumboard.models import Board, Task, Column
 def index(request):
     board = Board.objects.all().filter(pk=1)
     columns = Column.objects.all().filter(board_id=1)
-    tasks = []
-    for column in columns:
-        task = Task.objects.all().filter(column_id=column.id)
-        if task:
-            tasks.append([serializers.serialize('json', task)])
-
-    board = serializers.serialize('json', board)
-    columns = serializers.serialize('json', columns)
+    tasks = Task.objects.all().filter(board_id=1)
     initial_data = json.dumps({
-        'board': board,
-        'columns': columns,
-        'tasks': tasks,
+        'board': serializers.serialize('json', board),
+        'columns': serializers.serialize('json', columns),
+        'tasks': serializers.serialize('json', tasks),
     }, cls=DjangoJSONEncoder)
     return render(request, 'scrumboard/scrumboard.html', {
         'initial_data': initial_data
