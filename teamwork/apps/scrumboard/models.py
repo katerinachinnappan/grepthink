@@ -4,12 +4,16 @@ from teamwork.apps.projects.models import Project
 
 
 class Board(models.Model):
-    project = models.ForeignKey(Project)
+    project = models.ForeignKey(
+        Project,
+        on_delete=models.CASCADE,
+        default=0)
 
     tittle = models.CharField(max_length=100, default='')
     description = models.CharField(max_length=200, default='')
     owner = models.ForeignKey(
-        User, related_name='owner', on_delete=models.CASCADE)
+        User, related_name='owner',
+        on_delete=models.CASCADE, default=0)
     members = models.ManyToManyField(
         User, related_name='users')
 

@@ -167,10 +167,12 @@ def view_one_project(request, slug):
         messages.info(request, 'Only current members can create a scrum board!')
         return HttpResponseRedirect('/project/all')
 
-    if request.method == 'GET':
+    if request.method == 'POST':
         print("inside request.method\n")
-        form = CreateScrumBoardForm(request.user.id, request.GET)
+        form = CreateScrumBoardForm(request.user.id, request.POST)
         print("form's output is: \n", form)
+        print(" \n", form.is_valid())
+
         if form.is_valid():
             print("inside form.is_valid()\n")
             new_board = Board(project=project)
@@ -178,10 +180,16 @@ def view_one_project(request, slug):
             new_board.description = form.cleaned_data.get('description')
             new_board.owner = request.user
             new_board.save()
+
+            print("Project is \n", new_board.project)
+            print("title is \n", new_board.tittle)
+            print("description is \n", new_board.description)
+            print("owner is \n", new_board.owner)
+
             return redirect(myscrum)
     else:
-        print("help me\n")
-        form = CreateScrumBoardForm(request.user.id, request.POST)
+        print("show form\n")
+        form = CreateScrumBoardForm(request.user.id)
 
 
 
@@ -868,7 +876,11 @@ def post_update(request, slug):
         return HttpResponseRedirect('/project/all')
 
     if request.method == 'POST':
+        print("Inside POST\n")
         form = UpdateForm(request.user.id, request.POST)
+        print("form is \n", form)
+        print(" \n", form.is_valid())
+
         if form.is_valid():
             new_update = ProjectUpdate(project=project)
             new_update.update = form.cleaned_data.get('update')
@@ -888,8 +900,6 @@ def create_board(request, slug):
 
     project = get_object_or_404(Project, slug=slug)
 
-    print("hello\n")
-
     if request.user.profile.isGT:
         pass
     elif not request.user == project.creator and request.user not in project.members.all(
@@ -899,10 +909,10 @@ def create_board(request, slug):
         return HttpResponseRedirect('/project/all')
 
     if request.method == 'POST':
-        print("hellos\n")
+        print("Inside request\n")
         form = CreateScrumBoardForm(request.user.id, request.POST)
+        print("form is \n", form)
         if form.is_valid():
-            print("helloss\n")
             new_board = Board(project=project)
             new_board.tittle = form.cleaned_data.get('tittle')
             new_board.description = form.cleaned_data.get('description')
@@ -910,8 +920,8 @@ def create_board(request, slug):
             new_board.save()
             return redirect(myscrum)
     else:
-        form = CreateScrumBoardForm(request.user.id, request.POST)
-        print("hellosss\n")
+        form = CreateScrumBoardForm(request.user.id)
+        print("dont post data yet\n")
         return render(request, 'scrumboard/create_board.html',
                       {'form': form,
                        'project': project})
