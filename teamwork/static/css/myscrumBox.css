@@ -1,0 +1,43 @@
+.contactBox {
+  height: 170px;
+  width: 32%;
+  margin: 1%;
+  border-radius: 15px;
+  background: #E8FFC3;
+  position: relative;
+  float: left;
+  font-family: "Open Sans", sans-serif;
+}
+
+.contactBox .title {
+  display: block;
+  background: #D4FD95;
+  padding: 10px 10px 5px 10px;
+  border-radius: 15px 15px 0 0;
+  font-size: 17px;
+  color: #466c83;
+  font-family: "Open Sans", sans-serif;
+  opacity:.8;
+}
+
+.contactBox a {
+  text-decoration: none;
+  color: white;
+  background: #F99B49;
+  padding: 7px 25px;
+  font-size: 15px;
+  position: absolute;
+  bottom: 10px;
+  right: 20px;
+  border-radius: 3px;
+  opacity:.7;
+}
+
+.contactBox a:hover {
+  background: #B3F949;
+}
+
+.contactBox.first {
+  background: white url(https://images.unsplash.com/photo-1489486501123-5c1af10d0be6?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=533427d59c7300312bb07b2aa83a45a3&auto=format&fit=crop&w=1050&q=80) no-repeat;
+  background-size: cover;
+}
