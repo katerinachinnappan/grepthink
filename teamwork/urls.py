@@ -91,11 +91,14 @@ urlpatterns = [
 
         # SCRUM BOARD
         url(r'^scrumboard/$', scrumboard.index, name='scrumboard'),
-        url(r'^myscrum/all/', scrumboard.view_scrums, name='myscrum'),
+        #view individual scrum board
+        #url(r'^board/$', scrumboard.view_one_scrum, name='view_one_scrum'),
         url(r'^board/(?P<slug>[^/]+)/$', scrumboard.view_one_scrum, name='view_one_scrum'),
+        #url(r'^scrumboard/(?P<slug>[^/]+)/$', scrumboard.view_one_scrum, name='view_one_scrum'),
+        url(r'^myscrum/all/', scrumboard.view_scrums, name='myscrum'),
 
-       # url(r'^scrumboard/add/', scrumboard.myscrum, name='myscrum'),
-        #url(r'^scrumboard/delete/', scrumboard.myscrum, name='myscrum'),
+       # url(r'^scrumboard/add/', scrumboard.myscrum, name='myscrum_add'),
+        #url(r'^scrumboard/delete/', scrumboard.myscrum, name='myscrum_delete'),
         url(r'^scrumboard/update/', scrumboard.update, name='update'),
 
 

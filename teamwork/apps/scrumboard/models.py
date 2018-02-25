@@ -26,12 +26,12 @@ from teamwork.apps.profiles.models import *
 
 class Board(models.Model):
     title = models.CharField(max_length=100, default='')
-    tittle = models.CharField(max_length=100, default='')
     description = models.CharField(max_length=200, default='')
     owner = models.ForeignKey(
         User, related_name='owner', on_delete=models.CASCADE)
     members = models.ManyToManyField(
         User, related_name='users')
+
     # The Meta class provides some extra information about the ScrumBoard model.
     class Meta:
         # Verbose name is the same as class name in this case.
