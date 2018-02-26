@@ -1,0 +1,43 @@
+GrepThink
+GrepThink Updates
+Sprint 2 Report
+02-23-2018
+
+Actions to stop doing
+•	Not have two people work on the same task if it can be done by one person
+•	Stop having too many migration issues
+
+Actions to start doing
+•	Estimating how long some tasks take since it takes up time to complete another task
+•	If a task cannot be implemented fast then find another way to complete the task
+
+Actions to keep doing
+•	Keep communicating effectively with team members 
+•	Scrum meetings
+
+Work Completed
+•	UI design for the scrum board
+•	Allow data to be injected into React from the database
+•	Fix the drag and drop functionality for the board
+•	Add scrum board app to project
+•	Model Database for Scrum Board and Tasks
+•	Create RESTful API to allow data to be sent from React to Django
+•	Button to view all scrum boards
+•	Button to create new scrum board
+•	Fix views for myscrum
+
+Work Not Completed
+•	Add the ability to edit tasks/columns
+•	Show all scrum boards to users in myscrum.html
+•	Navigate users to the scrum board when they create a new board
+
+Work Completion Rate
+•	3 User stories completed:
+  -	User Story 1: As a developer I want to implement the scrum board within GrepThink
+  -	User Story 2: As a developer I want to implement a easy to use UI for the scrum board
+  -	User Story 3: As a developer I want to implement a model database for the scrum board and tasks
+•	Total Hours Completed:
+  -	40 + hours
+•	Time
+  -	2 weeks
+  
