@@ -24,8 +24,8 @@ Task listing, organized by user story
  
   * User Story 2: As the Professor I want to see student’s scrum boards but cannot make any modifications
      * Task 1: Remove “My Scrum Board” tab in the sidebar since Professor’s won’t be creating scrum boards (1 hour)
-     * Task 1: Create a tab in the Professor’s project Pane that navigates to myscrum.html. Professor’s can view all the scrum boards associated with a specific project (3 hours)
-     * Task 2: Give the Professor read access to student scrum boards but not write access (5 hours)
+     * Task 2: Create a tab in the Professor’s project Pane that navigates to myscrum.html. Professor’s can view all the scrum boards associated with a specific project (3 hours)
+     * Task 3: Give the Professor read access to student scrum boards but not write access (5 hours)
         Total Hours: ~9  hours
         
 Team Roles
@@ -38,13 +38,11 @@ Initial Task Assignment
 *  Oscar Castro:
    * Task 1: When user creates a new board they will be taken to an empty scrum board where they can start adding cards (5 hours)
    * Task 1: Remove “My Scrum Board” tab in the sidebar since Professor’s won’t be creating scrum boards (1 hour)
-   * Task 1: Create a tab in the Professor’s project Pane that navigates to myscrum.html. Professor’s can view all the scrum boards associated with a specific project (3 hours)
-   * Task 4: Make sure that anything the user does in their scrum board is updated to the database in real time (4 hours)
+   * Task 2: Create a tab in the Professor’s project Pane that navigates to myscrum.html. Professor’s can view all the scrum boards associated with a specific project (3 hours)
 
 * Katerina Chinnappan:
    * Task 2: In order for users to go back later and work on their boards they need to click on “My Scrum Boards” and they will see all the boards they are associated with. When the user clicks on the board they want to work on they will be taken to that board (6 hours)
-   * Task 2: Give the Professor read access to student scrum boards but not write access (5 hours)
-   * Task 4: Make sure that anything the user does in their scrum board is updated to the database in real time (4 hours)
+   * Task 3: Give the Professor read access to student scrum boards but not write access (5 hours)
 
 * Eddy Chen
    * Task 1: Have the ability for users to edit the “cards” in the scrum board (5 hours)
