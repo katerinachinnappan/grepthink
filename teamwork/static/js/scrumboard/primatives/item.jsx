@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react';
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
-import {borderRadius, colors, grid} from '../constants';
+import {borderRadius, colors, grid} from '../elements/constants';
 import type {Task} from "./types";
 import {DraggableProvided} from "react-beautiful-dnd/lib/index";
 

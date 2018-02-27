@@ -22,7 +22,7 @@ For windows: cd into twdev/Scripts and run activate.bat
 
 Note: you'll have to activate the venv anytime you want to work on this project. Consider adding an alias to your .bash_profile or .bashrc
 ```bash
-alias tw="cd ~/Documents/twdev && source bin/activate"
+alias tw="source"
 ```
 You can always exit the venv with `deactivate`
 

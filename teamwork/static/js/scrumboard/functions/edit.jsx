@@ -1,10 +1,9 @@
-import type {Task, TaskMap} from "./primatives/types";
+import type {Task, TaskMap} from "../primatives/types";
 import type {DraggableLocation} from "react-beautiful-dnd/lib/types";
 
-const reorder = (
-  list: any[],
-  startIndex: number,
-  endIndex: number): any[] => {
+// const addItem = (): TaskMap
+
+const reorder = (list: any[], startIndex: number, endIndex: number): any[] => {
   const result = Array.from(list);
   const [removed] = result.splice(startIndex, 1);
   result.splice(endIndex, 0, removed);
@@ -26,10 +25,10 @@ export type ReorderTaskMapResult = {|
 |}
 
 export const reorderTaskMap = ({
-  taskMap,
-  source,
-  destination,
-}: ReorderTaskMapArgs): ReorderTaskMapResult => {
+                                 taskMap,
+                                 source,
+                                 destination,
+                               }: ReorderTaskMapArgs): ReorderTaskMapResult => {
   const current: Task[] = [...taskMap[source.droppableId]];
   const next: Task[] = [...taskMap[destination.droppableId]];
   const target: Task = current[source.index];

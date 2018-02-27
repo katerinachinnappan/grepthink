@@ -1,6 +1,6 @@
 // @flow
 import styled from 'styled-components';
-import { colors, grid } from '../constants';
+import { colors, grid } from '../elements/constants';
 
 export default styled.h4`
   padding: ${grid}px;

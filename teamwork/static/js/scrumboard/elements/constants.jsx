@@ -1,4 +1,5 @@
 export const colors = {
+  lightBlue: '#add8e6',
   blue: {
     deep: 'rgb(255,255,255)',
     light: 'lightblue',
