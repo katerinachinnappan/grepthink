@@ -3,12 +3,23 @@
 {% load static %}
 {% load i18n %}
 
+{% block javascript %}
+
+<script src="js/jquery-1.8.2.min.js"></script>
+<script src="js/modernizr-1.5.min.js"></script>
+<script src="js/scripts.js"></script>
+{{ block.super }}
+{% endblock javascript %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" href="{% static 'css/myscrumBox.css' %}">
+
+{{ block.super }}
+
+{% endblock stylesheets %}
+
 {% block content %}
 
-<!-- BREADCRUMB -->
-<!-- {% block crumb %}
-<li><a href="{% url 'view_scrum_projects' %}">My Projects</a></li>
-{% endblock crumb %} -->
 
 {% include "scrumboard/partial_scrum_box.html" with projects=projects %}
 

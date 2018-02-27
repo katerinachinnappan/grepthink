@@ -91,16 +91,15 @@ urlpatterns = [
 
         # SCRUM BOARD
         url(r'^scrumboard/$', scrumboard.index, name='scrumboard'),
-        # SCRUM BOARD
-        #url(r'^project/(?P<slug>[^/]+)/$', scrumboard.index, name='scrumboard'),
-        url(r'^project/(?P<slug>[^/]+)/create_board/$', project_views.create_board, name='create_board'),
-        url(r'^myscrum/all/', scrumboard.myscrum, name='myscrum'),
+        #view individual scrum board
+        #url(r'^board/$', scrumboard.view_one_scrum, name='view_one_scrum'),
+        url(r'^board/(?P<slug>[^/]+)/$', scrumboard.view_one_scrum, name='view_one_scrum'),
+        #url(r'^scrumboard/(?P<slug>[^/]+)/$', scrumboard.view_one_scrum, name='view_one_scrum'),
+        url(r'^myscrum/all/', scrumboard.view_scrums, name='myscrum'),
 
-
-        # url(r'^scrumboard/add/', scrumboard.myscrum, name='myscrum'),
-        # url(r'^scrumboard/delete/', scrumboard.myscrum, name='myscrum'),
+       # url(r'^scrumboard/add/', scrumboard.myscrum, name='myscrum_add'),
+        #url(r'^scrumboard/delete/', scrumboard.myscrum, name='myscrum_delete'),
         url(r'^scrumboard/update/', scrumboard.update, name='update'),
-                  url(r'^myscrum/all/', scrumboard.view_projects, name='view_scrum_projects'),
 
 
                   # View all courses

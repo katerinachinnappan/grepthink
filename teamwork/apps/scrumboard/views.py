@@ -1,5 +1,6 @@
 import json
-
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, redirect, render
 from django.core import serializers
 from django.core.serializers import serialize
 from django.core.serializers.json import DjangoJSONEncoder
@@ -7,7 +8,12 @@ from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.core.serializers.json import DjangoJSONEncoder
-from django.shortcuts import get_object_or_404, redirect, render
+from teamwork.apps.courses.models import *
+from teamwork.apps.projects.models import *
+
+from teamwork.apps.core.models import *
+from teamwork.apps.core.helpers import *
+
 
 
 # TODO Send the right scrum board here
@@ -17,17 +23,25 @@ from django.http import JsonResponse
 from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import get_object_or_404, redirect, render
 
+def view_one_scrum(request, slug):
 
-# TODO Send the right scrum board here
-from teamwork.apps.scrumboard.models import Board, Task, Column
-from django.contrib.auth.decorators import login_required
-from django.http import (HttpResponse, HttpResponseBadRequest,
-                         HttpResponseRedirect)
-from django.contrib import messages
-from django.shortcuts import get_object_or_404, redirect, render
-from teamwork.apps.courses.models import *
-from teamwork.apps.projects.models import Project
-from teamwork.apps.projects.forms import CreateScrumBoardForm
+    board = get_object_or_404(Board, slug=slug)
+    columns = get_object_or_404(Column, slug=slug)
+    tasks = get_object_or_404(Task, slug=slug)
+    #page_name = scrum.tittle or "Scrum Board"
+    #page_description = scrum.description or "Tagline"
+    #title = project.title or "Project"
+    #board = Board.objects.all().filter(pk=1)
+    #columns = Column.objects.all().filter(board_id=1)
+    #tasks = Task.objects.all().filter(board_id=1)
+    initial_data = json.dumps({
+        'board': serializers.serialize('json', board),
+        'columns': serializers.serialize('json', columns),
+        'tasks': serializers.serialize('json', tasks),
+    }, cls=DjangoJSONEncoder)
+    return render(request, 'scrumboard/scrumboard.html', {
+        'initial_data': initial_data
+    })
 
 def index(request):
     board = Board.objects.all().filter(pk=1)
@@ -50,40 +64,36 @@ def update(request):
     return JsonResponse(data)
 
 
-def myscrum(request):
+def myscrum(request, scrumboard):
+        """
+        Private method that will be used for paginator once I figure out how to get it working.
+        """
+        page = request.GET.get('page')
+
+        # Populate with page name and title
+        page_name = "My Scrum Boards"
+        page_description = "Scrum Boards created by " + request.user.username
+        title = "Scrum Boards"
+
+        #print("hello\n\n")
+
+        return render(request, 'scrumboard/myscrum.html', {'page_name': page_name,
+             'page_description': page_description, 'title': title, 'scrumboard': scrumboard})
+
+
+@login_required
+def view_scrums(request):
     """
-    Private method that will be used for paginator once I figure out how to get it working.
+    Public method that takes a request, retrieves all Scrum objects from the model,
+    then calls myscrum to render the request to template myscrum.html
     """
-    page = request.GET.get('page')
+    my_scrums = Board.get_my_scrums(request.user)
 
-    # Populate with page name and title
-    page_name = "My Scrum Boards"
-    page_description = "Scrum Boards created by " + request.user.username
-    title = "My Scrum Boards"
-
-    return render(request, 'scrumboard/myscrum.html', {'page_name': page_name,
-                                                           'page_description': page_description, 'title': title,
-                                                            })
+    return myscrum(request, my_scrums)
 
 
-def view_projects_scrum(request):
-    return render(request, 'scrumboard/view_projects_scrum.html', {})
-# def myscrum(request):
-#     """
-#     Private method that will be used for paginator once I figure out how to get it working.
-#     """
-#     page = request.GET.get('page')
-#
-#     # Populate with page name and title
-#     page_name = "My Projectsss"
-#     page_description = "Projects created by " + request.user.username
-#     title = "My Projectsd"
-#
-#     #print("hello\n\n")
-#
-#     return render(request, 'scrumboard/myscrum.html', {'page_name': page_name,
-#                                                            'page_description': page_description, 'title': title
-#                                                            })
+
+
 def myscrumprojects(request, projects):
     """
     Private method that will be used for paginator once I figure out how to get it working.
@@ -91,9 +101,9 @@ def myscrumprojects(request, projects):
     page = request.GET.get('page')
 
     # Populate with page name and title
-    page_name = "My Projects"
+    page_name = "My Projectsss"
     page_description = "Projects created by " + request.user.username
-    title = "My Projects"
+    title = "My Projectsd"
 
     #print("hello\n\n")
 
@@ -101,20 +111,6 @@ def myscrumprojects(request, projects):
                                                            'page_description': page_description, 'title': title,
                                                             'projects': projects})
 
-#
-# def projects_in_course(slug):
-#     print("helloworldsss\n\n")
-#     """
-#     Public method that takes a coursename, retreives the course object, returns
-#     a list of project objects
-#     """
-#     # Gets current course
-#     cur_course = Course.objects.get(slug=slug)
-#     projects = Project.objects.filter(course=cur_course).order_by('-tagline')
-#     print("helloworldsss\n\n")
-#     print(projects)
-#
-#     return projects
 
 @login_required
 def view_projects(request):
@@ -129,5 +125,132 @@ def view_projects(request):
 
     return myscrumprojects(request, my_projects)
 
-# def view_projects_scrum(request):
-# 	return render(request, 'scrumboard/view_projects_scrum.html', {})
+@login_required
+def view_one_project_scrum(request, slug):
+    """
+    Public method that takes a request and a slug, retrieves the Project object
+    from the model with given project slug.  Renders projects/view_project.html
+
+    Passing status check unit test in test_views.py.
+    """
+
+    project = get_object_or_404(Project, slug=slug)
+    scrum_master = project.scrum_master
+    updates = project.get_updates()
+    resources = project.get_resources()
+    # Get the project owner for color coding stuff
+    project_owner = project.creator.profile
+    members = project.members.all()
+
+    # Populate with project name and tagline
+    page_name = project.title or "Project"
+    page_description = project.tagline or "Tagline"
+    title = project.title or "Project"
+
+    # Get the course given a project wow ethan great job keep it up.
+    course = project.course.first()
+    staff = course.get_staff()
+
+    asgs = list(course.assignments.all())
+    asg_completed = []
+
+    for i in asgs:
+        for j in i.subs.all():
+            if j.evaluator == request.user:
+                asg_completed.append(i)
+                break
+
+    user = request.user
+    profile = Profile.objects.get(user=user)
+
+    # to reduce querys in templates -kp
+    pending_members = project.pending_members.all()
+    pending_count = len(pending_members)
+    project_members = project.members.all()
+
+    requestButton = 1
+    if request.user in pending_members:
+        requestButton = 0
+
+    project_chat = reversed(project.get_chat())
+    if request.method == 'POST':
+        form = ChatForm(request.user.id, slug, request.POST)
+        if form.is_valid():
+            # Create a chat object
+            chat = ProjectChat(author=request.user, project=project)
+            chat.content = form.cleaned_data.get('content')
+            chat.save()
+            return redirect(view_one_project, project.slug)
+        else:
+            messages.info(request, 'Errors in form')
+    else:
+        # Send form for initial project creation
+        form = ChatForm(request.user.id, slug)
+
+    find_meeting(slug)
+
+    readable = ""
+    if project.readable_meetings:
+        jsonDec = json.decoder.JSONDecoder()
+        readable = jsonDec.decode(project.readable_meetings)
+
+    completed_tsrs = project.tsr.all()
+    avg_dict = {}
+    for i in completed_tsrs.all():
+        if i.evaluatee in avg_dict.keys():
+            avg_dict[i.evaluatee] = int(avg_dict[i.evaluatee]) + int(i.percent_contribution)
+        else:
+            avg_dict[i.evaluatee] = int(i.percent_contribution)
+
+    avgs = []
+    for key, item in avg_dict.items():
+        con_avg = item / (len(completed_tsrs) / len(members))
+        avgs.append((key, int(con_avg)))
+
+    # ======================
+    assigned_tsrs = course.assignments.filter(ass_type="tsr", closed=False)
+
+    tsr_tuple = {}
+
+    if not request.user.profile.isGT:
+        user_role = Enrollment.objects.filter(user=request.user, course=course).first().role
+    else:
+        user_role = 'GT'
+
+    fix = []
+    new_tsr_tuple = []
+    if request.user.profile.isGT or request.user.profile.isProf or user_role == "ta":
+        temp_tup = sorted(project.tsr.all(), key=lambda x: (x.ass_number, x.evaluatee.id))
+        temp = ""
+
+        for j in temp_tup:
+            if temp != j.evaluatee:
+                temp = j.evaluatee
+                fix.append([temp, j.ass.first(), j, 1])
+            else:
+                fix.append(["", j.ass.first(), j, 0])
+    else:
+        fix = None
+
+    med = 100
+    if len(members) > 0:
+        med = int(100 / len(members))
+    mid = {'low': int(med * 0.7), 'high': int(med * 1.4)}
+    # ======================
+    today = datetime.now().date()
+
+    return render(request, 'scrumboard/myscrum.html', {'page_name': page_name,
+                                                          'page_description': page_description, 'title': title,
+                                                          'members': members, 'form': form, 'temp_tup': fix,
+                                                          'project': project, 'project_members': project_members,
+                                                          'pending_members': pending_members,
+                                                          'requestButton': requestButton, 'avgs': avgs,
+                                                          'assignments': asgs, 'asg_completed': asg_completed,
+                                                          'today': today,
+                                                          'pending_count': pending_count, 'profile': profile,
+                                                          'scrum_master': scrum_master, 'staff': staff,
+                                                          'updates': updates, 'project_chat': project_chat,
+                                                          'course': course, 'project_owner': project_owner,
+                                                          'meetings': readable, 'resources': resources,
+                                                          'json_events': project.meetings, 'contribute_levels': mid,
+                                                          'assigned_tsrs': assigned_tsrs})
