@@ -3,12 +3,11 @@ import styled, {injectGlobal} from 'styled-components';
 import {DragDropContext, Droppable} from 'react-beautiful-dnd';
 import Column from './column';
 import {colors} from "./constants";
-import reorder, {addToTaskMap, reorderTaskMap} from "../functions/functions";
+import reorder, {addColumnToTaskMap, addNewColumn, addTaskToTaskMap, reorderTaskMap} from "../functions/functions";
 import {DroppableProvided} from "react-beautiful-dnd/lib/index";
 import type {TaskMap} from "../primatives/types";
 import type {DraggableLocation, DragStart, DropResult} from "react-beautiful-dnd/lib/types";
 import NewColumn from "./newColumn";
-import {Provider as AlertProvider} from 'react-alert'
 import {withAlert} from 'react-alert'
 
 
@@ -49,6 +48,7 @@ class Board extends Component {
     };
 
     this.handleAddTask = this.handleAddTask.bind(this);
+    this.handleAddColumn = this.handleAddColumn.bind(this);
   }
 
 
@@ -103,7 +103,7 @@ class Board extends Component {
 
 
   handleAddTask(index) {
-    const data = addToTaskMap(this.state.columns, index);
+    const data = addTaskToTaskMap(this.state.columns, index);
 
     this.setState({
       columns: data.taskMap,
@@ -111,14 +111,24 @@ class Board extends Component {
     });
   }
 
+  handleAddColumn(columnName) {
+    const data = addColumnToTaskMap(this.state.columns, columnName);
+    const ordered = this.state.ordered;
+    ordered.splice(ordered.length, 0, columnName);
+    this.setState({
+      ordered: ordered,
+      columns: data.taskMap,
+    });
+  }
+
 
   render() {
-
 
     const columns: TaskMap = this.state.columns;
     const ordered: Column[] = this.state.ordered;
     const {containerHeight} = this.props;
 
+    console.log(ordered);
     const board = (
       <Droppable
         droppableId="board"
@@ -138,9 +148,12 @@ class Board extends Component {
                   autoFocusTaskId={this.state.autoFocusQuoteId}
                   onAddTask={this.handleAddTask}
                 />
-              ))}
-            <NewColumn taskMap={columns} withAlert={this.props.alert}/>
 
+              ))}
+            <NewColumn
+              taskMap={columns}
+              withAlert={this.props.alert}
+              onAddColumn={this.handleAddColumn}/>
           </Container>
         )}
       </Droppable>

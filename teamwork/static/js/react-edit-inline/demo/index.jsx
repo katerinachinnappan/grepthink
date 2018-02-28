@@ -15,7 +15,6 @@ class MyParentComponent extends React.Component {
     dataChanged(data) {
         // data = { description: "New validated text comes here" }
         // Update your model from here
-        console.log(data)
         this.setState({...data})
     }
 

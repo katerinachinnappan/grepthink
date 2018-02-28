@@ -53,11 +53,14 @@ class NewColumn extends React.Component {
       taskMap: props.taskMap
     };
     this.customValidateText = this.customValidateText.bind(this);
-
+    this.handleAddColumn = this.handleAddColumn.bind(this);
   }
 
   dataChanged(data) {
-    this.setState({...data})
+    this.setState({
+      message: 'add new column'
+    });
+    this.handleAddColumn(data.message)
   }
 
   customValidateText(text) {
@@ -71,6 +74,10 @@ class NewColumn extends React.Component {
     flag = !flag;
   }
 
+   handleAddColumn(e) {
+    this.props.onAddColumn(e);
+  }
+
 
   render() {
     return (
@@ -82,7 +89,7 @@ class NewColumn extends React.Component {
               <InlineEdit
                 validate={this.customValidateText}
                 activeClassName="editing"
-                text={this.state.message}
+                text={'add new column'}
                 paramName="message"
                 change={this.dataChanged}
               />
