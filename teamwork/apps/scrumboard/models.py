@@ -31,6 +31,10 @@ class Board(models.Model):
         User, related_name='owner', on_delete=models.CASCADE)
     members = models.ManyToManyField(
         User, related_name='users')
+    # Unique URL slug for assignment
+    slug = models.CharField(
+        max_length=20,
+        unique=True, null=True)
 
     # The Meta class provides some extra information about the ScrumBoard model.
     class Meta:
@@ -53,6 +57,22 @@ class Board(models.Model):
 
         return scrums
 
+    def save(self, *args, **kwargs):
+
+        if self.slug is None or len(self.slug) == 0:
+            # Basing the slug off of project title. Possibly change in the future.
+            newslug = self.title
+            newslug = slugify(newslug)[0:20]
+            while Board.objects.filter(slug=newslug).exists():
+                # print(Project.objects.filter(slug=newslug).exists())
+                newslug = self.title
+                newslug = slugify(newslug[0:16] + "-" + rand_code(3))
+            self.slug = newslug
+
+            self.slug = slugify(self.slug)
+
+        super(Board, self).save(*args, **kwargs)
+
 
 
 class Column(models.Model):
@@ -60,6 +80,34 @@ class Column(models.Model):
     description = models.CharField(max_length=200, default='')
     board = models.ForeignKey(Board, on_delete=models.CASCADE,
                               related_name="%(class)s_board", default=0)
+    # Unique URL slug for assignment
+    slug = models.CharField(
+        default="",
+        max_length=20,
+        unique=True, 
+        null=True)
+
+    # The Meta class provides some extra information about the Column model.
+    class Meta:
+        # Verbose name is the same as class name in this case.
+        verbose_name = "Column"
+        # Multiple Project objects are referred to as Projects.
+        verbose_name_plural = "Column"
+    def save(self, *args, **kwargs):
+
+        if self.slug is None or len(self.slug) == 0:
+            # Basing the slug off of project title. Possibly change in the future.
+            newslug = self.title
+            newslug = slugify(newslug)[0:20]
+            while Column.objects.filter(slug=newslug).exists():
+                # print(Project.objects.filter(slug=newslug).exists())
+                newslug = self.title
+                newslug = slugify(newslug[0:16] + "-" + rand_code(3))
+            self.slug = newslug
+
+            self.slug = slugify(self.slug)
+
+        super(Column, self).save(*args, **kwargs)
 
 
 class Task(models.Model):
@@ -72,3 +120,30 @@ class Task(models.Model):
                               related_name="%(class)s_board", default=0)
     userID = models.ForeignKey(User, on_delete=models.CASCADE,
                                related_name="user", default=0)
+    # Unique URL slug for assignment
+    slug = models.CharField(
+        default="",
+        max_length=20,
+        unique=True, 
+        null=True)
+    # The Meta class provides some extra information about the Column model.
+    class Meta:
+        # Verbose name is the same as class name in this case.
+        verbose_name = "Task"
+        # Multiple Project objects are referred to as Projects.
+        verbose_name_plural = "Task"
+    def save(self, *args, **kwargs):
+
+        if self.slug is None or len(self.slug) == 0:
+            # Basing the slug off of project title. Possibly change in the future.
+            newslug = self.title
+            newslug = slugify(newslug)[0:20]
+            while Task.objects.filter(slug=newslug).exists():
+                # print(Project.objects.filter(slug=newslug).exists())
+                newslug = self.title
+                newslug = slugify(newslug[0:16] + "-" + rand_code(3))
+            self.slug = newslug
+
+            self.slug = slugify(self.slug)
+
+        super(Task, self).save(*args, **kwargs)
