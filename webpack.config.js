@@ -29,7 +29,9 @@ module.exports = {
         }
       }
     ]
-  }, resolve: {
+  },
+   // externals: require('react-native').getComponents()
+  resolve: {
     extensions: ['.js', '.jsx'],
   }
 

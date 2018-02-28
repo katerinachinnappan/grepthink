@@ -13,3 +13,5 @@ export let itemMap: TaskMap =
     ...previous, [column.fields.title]: getTasksByID(column, JSONTasks),
   }), {});
 
+
+//Find out what coloumn we are in and then add a new task to that coloumn

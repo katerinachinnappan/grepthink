@@ -1,14 +1,13 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
 import TaskItem from './item';
-import {grid, colors} from '../constants';
+import {grid, colors} from '../elements/constants';
 import Title from '../primatives/title';
 import type {Task} from "./types";
 
 import {
   Draggable, Droppable
 } from "react-beautiful-dnd";
-
 
 
 import {
@@ -63,17 +62,25 @@ type TaskListProps = {|
   autoFocusTaskId: ?string,
 |}
 
-class InnerTaskList extends Component<TaskListProps> {
+class InnerTaskList extends Component<> {
 
-  shouldComponentUpdate(nextProps: TaskListProps) {
-    if (nextProps.tasks !== this.props.tasks) {
-      return true;
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      tasks: [],
+    };
 
-    return false;
   }
 
+  shouldComponentUpdate(nextProps: TaskListProps) {
+    return nextProps.tasks !== this.props.tasks;
+  }
+
+
   render() {
+    // const tasks = this.props.tasks || [ ]
+
+
     return (
       <div>
         {this.props.tasks.map((task: Task, index: number) => (

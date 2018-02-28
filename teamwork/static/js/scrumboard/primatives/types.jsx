@@ -3,6 +3,7 @@ import type {DraggableId, DraggableLocation} from "react-beautiful-dnd/lib/types
 export type Task = {|
   fields: {
     assigned: boolean,
+    board: number,
     column: number,
     description: string,
     title: string,
@@ -24,7 +25,7 @@ export type Column = {|
 
 
 export type TaskMap = {
-  [key : string]: Task[]
+  [key: string]: Task[]
 }
 
 export type Dragging = {|

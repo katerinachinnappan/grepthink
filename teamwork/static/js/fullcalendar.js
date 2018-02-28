@@ -678,7 +678,7 @@ function computeGreatestUnit(start, end) {
 }
 
 
-// like computeGreatestUnit, but has special abilities to interpret the source input for clues
+// like computeGreatestUnit, but has special abilities to interpret the columnID input for clues
 function computeDurationGreatestUnit(duration, durationInput) {
 	var unit = computeGreatestUnit(duration);
 
@@ -12462,7 +12462,7 @@ function EventManager() { // assumed to be a calendar
 	var stickySource = { events: [] };
 	var sources = [ stickySource ];
 	var rangeStart, rangeEnd;
-	var pendingSourceCnt = 0; // outstanding fetch requests, max one per source
+	var pendingSourceCnt = 0; // outstanding fetch requests, max one per columnID
 	var cache = []; // holds events that have already been expanded
 	var prunedCache; // like cache, but only events that intersect with rangeStart/rangeEnd
 
@@ -12555,7 +12555,7 @@ function EventManager() { // assumed to be a calendar
 	}
 
 
-	// expects an array of event source objects (the originals, not copies)
+	// expects an array of event columnID objects (the originals, not copies)
 	// `specialFetchType` is an optimization parameter that affects purging of the event cache.
 	function fetchEventSources(specificSources, specialFetchType) {
 		var i, source;
@@ -12595,7 +12595,7 @@ function EventManager() { // assumed to be a calendar
 	}
 
 
-	// fetches an event source and processes its result ONLY if it is still the current fetch.
+	// fetches an event columnID and processes its result ONLY if it is still the current fetch.
 	// caller is responsible for incrementing pendingSourceCnt first.
 	function tryFetchEventSource(source, fetchId) {
 		_fetchEventSource(source, function(eventInputs) {
@@ -12604,10 +12604,10 @@ function EventManager() { // assumed to be a calendar
 			var abstractEvent;
 
 			if (
-				// is this the source's most recent fetch?
+				// is this the columnID's most recent fetch?
 				// if not, rely on an upcoming fetch of this source to decrement pendingSourceCnt
 				fetchId === source._fetchId &&
-				// event source no longer valid?
+				// event columnID no longer valid?
 				source._status !== 'rejected'
 			) {
 				source._status = 'resolved';
@@ -12678,7 +12678,7 @@ function EventManager() { // assumed to be a calendar
 				return;
 			}
 			else if (typeof res == 'object') {
-				// the fetcher returned a new source. process it
+				// the fetcher returned a new columnID. process it
 				_fetchEventSource(res, callback);
 				return;
 			}
@@ -12782,7 +12782,7 @@ function EventManager() { // assumed to be a calendar
 	}
 
 
-	function buildEventSource(sourceInput) { // will return undefined if invalid source
+	function buildEventSource(sourceInput) { // will return undefined if invalid columnID
 		var normalizers = FC.sourceNormalizers;
 		var source;
 		var i;
@@ -12860,7 +12860,7 @@ function EventManager() { // assumed to be a calendar
 			cache = [];
 		}
 		else {
-			// remove from persisted source list
+			// remove from persisted columnID list
 			sources = $.grep(sources, function(source) {
 				for (i = 0; i < targetSources.length; i++) {
 					if (source === targetSources[i]) {
@@ -12903,7 +12903,7 @@ function EventManager() { // assumed to be a calendar
 		var matchingSources = [];
 		var i;
 
-		// resolve raw inputs to real event source objects
+		// resolve raw inputs to real event columnID objects
 		for (i = 0; i < matchInputs.length; i++) {
 			matchingSources.push.apply( // append
 				matchingSources,
@@ -12916,11 +12916,11 @@ function EventManager() { // assumed to be a calendar
 
 
 	// matchInput can either by a real event source object, an ID, or the function/URL for the source.
-	// returns an array of matching source objects.
+	// returns an array of matching columnID objects.
 	function getEventSourcesByMatch(matchInput) {
 		var i, source;
 
-		// given an proper event source object
+		// given an proper event columnID object
 		for (i = 0; i < sources.length; i++) {
 			source = sources[i];
 			if (source === matchInput) {
@@ -12947,7 +12947,7 @@ function EventManager() { // assumed to be a calendar
 
 	function getSourcePrimitive(source) {
 		return (
-			(typeof source === 'object') ? // a normalized event source?
+			(typeof source === 'object') ? // a normalized event columnID?
 				(source.origArray || source.googleCalendarId || source.url || source.events) : // get the primitive
 				null
 		) ||
@@ -13145,7 +13145,7 @@ function EventManager() { // assumed to be a calendar
 	// Given a raw object with key/value properties, returns an "abstract" Event object.
 	// An "abstract" event is an event that, if recurring, will not have been expanded yet.
 	// Will return `false` when input is invalid.
-	// `source` is optional
+	// `columnID` is optional
 	function buildEventFromInput(input, source) {
 		var out = {};
 		var start, end;
