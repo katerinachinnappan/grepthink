@@ -1,7 +1,7 @@
 import React from "react";
 import {colors, grid} from "./constants";
 import styled from 'styled-components';
-import { withAlert } from 'react-alert'
+import {withAlert} from 'react-alert'
 import InlineEdit from 'react-edit-inline';
 
 const Title = styled.h4`
@@ -60,15 +60,14 @@ class NewColumn extends React.Component {
   }
 
   customValidateText(text) {
-    if(flag) {
-      flag = false;
+    if (flag) {
       if (text in this.state.taskMap) {
         this.props.alert.error('Column name must be unique');
         return false;
       } else
         return (text.length > 0 && text.length < 64);
     }
-
+    flag = !flag;
   }
 
 
