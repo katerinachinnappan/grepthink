@@ -139,7 +139,7 @@ class Board extends Component {
                   onAddTask={this.handleAddTask}
                 />
               ))}
-            <NewColumn taskMap={columns} altert={AlertProvider}/>
+            <NewColumn taskMap={columns} withAlert={this.props.alert}/>
 
           </Container>
         )}

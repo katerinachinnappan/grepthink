@@ -2,7 +2,7 @@ import React from "react";
 import {colors, grid} from "./constants";
 import styled from 'styled-components';
 import { withAlert } from 'react-alert'
-// import InlineEdit from 'react-edit-inline';
+import InlineEdit from 'react-edit-inline';
 
 const Title = styled.h4`
   padding: ${grid}px;
@@ -40,6 +40,9 @@ const Header = styled.div`
   }
 `;
 
+
+let flag = true;
+
 class NewColumn extends React.Component {
   constructor(props) {
     super(props);
@@ -57,12 +60,15 @@ class NewColumn extends React.Component {
   }
 
   customValidateText(text) {
-    console.log(this.props.alert);
-    if(text in this.state.taskMap) {
-      withAlert.show('Oh look, an alert!');
-      return false;
-    }else
-      return (text.length > 0 && text.length < 64);
+    if(flag) {
+      flag = false;
+      if (text in this.state.taskMap) {
+        this.props.alert.error('Column name must be unique');
+        return false;
+      } else
+        return (text.length > 0 && text.length < 64);
+    }
+
   }
 
 
@@ -73,13 +79,13 @@ class NewColumn extends React.Component {
         <Container>
           <Header>
             <Title>
-              {/*<InlineEdit*/}
-                {/*validate={this.customValidateText}*/}
-                {/*activeClassName="editing"*/}
-                {/*text={this.state.message}*/}
-                {/*paramName="message"*/}
-                {/*change={this.dataChanged}*/}
-              {/*/>*/}
+              <InlineEdit
+                validate={this.customValidateText}
+                activeClassName="editing"
+                text={this.state.message}
+                paramName="message"
+                change={this.dataChanged}
+              />
             </Title>
           </Header>
         </Container>
