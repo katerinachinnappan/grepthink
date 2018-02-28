@@ -122,3 +122,4 @@ sendgrid.env
 node_modules/
 webpack-stats.json
 assets/
+teamwork/apps/scrumboard/migrations/
