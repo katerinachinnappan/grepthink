@@ -18,7 +18,7 @@ const Button = styled.button`
   border: none;
   background-color: ${colors.lightBlue};
   font-size: 1.2em;
-  
+  &:focus { outline:0 !important; }
   &:hover {
     background-color: ${colors.blue.lighter};
   }
