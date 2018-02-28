@@ -2,7 +2,8 @@ import React from "react";
 import {colors, grid} from "./constants";
 import styled from 'styled-components';
 import {withAlert} from 'react-alert'
-import InlineEdit from 'react-edit-inline';
+// import InlineEdit from 'react-edit-inline';
+import InlineEdit from '../../react-edit-inline';
 
 const Title = styled.h4`
   padding: ${grid}px;
