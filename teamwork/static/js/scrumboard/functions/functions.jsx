@@ -1,8 +1,6 @@
 import type {Task, TaskMap} from "../primatives/types";
 import type {DraggableLocation} from "react-beautiful-dnd/lib/types";
 
-// const addItem = (): TaskMap
-
 const reorder = (list: any[], startIndex: number, endIndex: number): any[] => {
   const result = Array.from(list);
   const [removed] = result.splice(startIndex, 1);
@@ -19,16 +17,12 @@ type ReorderTaskMapArgs = {|
   destination: DraggableLocation,
 |}
 
-export type ReorderTaskMapResult = {|
+export type TaskMapResult = {|
   taskMap: TaskMap,
-  autoFocusQuoteId: ?string,
+  autoFocusTaskId: ?string,
 |}
 
-export const reorderTaskMap = ({
-                                 taskMap,
-                                 source,
-                                 destination,
-                               }: ReorderTaskMapArgs): ReorderTaskMapResult => {
+export const reorderTaskMap = ({taskMap, source, destination,}: ReorderTaskMapArgs): TaskMapResult => {
   const current: Task[] = [...taskMap[source.droppableId]];
   const next: Task[] = [...taskMap[destination.droppableId]];
   const target: Task = current[source.index];
@@ -47,7 +41,7 @@ export const reorderTaskMap = ({
     return {
       taskMap: result,
       // not auto focusing in own list
-      autoFocusQuoteId: null,
+      autoFocusTaskId: null,
     };
   }
 
@@ -63,9 +57,72 @@ export const reorderTaskMap = ({
     [source.droppableId]: current,
     [destination.droppableId]: next,
   };
+  return {
+    taskMap: result,
+    autoFocusTaskId: target.pk,
+  };
+};
+
+let id = 10;
+
+export const addToTaskMap = (taskMap, columnID): TaskMapResult => {
+  const current: Task[] = [...taskMap[columnID]];
+
+  const newTask: Task = {
+    model: "scrumboard.task",
+    pk: id++,
+    fields: {
+      assigned: true,
+      board: 1,
+      column: 1,
+      description: 'add',
+      title: 'add',
+      userID: 1,
+    },
+  };
+
+ current.push(newTask);
+
+  const result: TaskMap = {
+    ...taskMap,
+    [columnID]: current,
+  };
 
   return {
     taskMap: result,
-    autoFocusQuoteId: target.id,
+    autoFocusTaskId: newTask.pk,
   };
 };
+
+export const addNewColumn = (taskMap, columnID): TaskMapResult => {
+  const current: Task[] = [...taskMap[columnID]];
+
+  const newTask: Task = {
+    model: "scrumboard.task",
+    pk: id++,
+    fields: {
+      assigned: true,
+      board: 1,
+      column: 1,
+      description: 'add',
+      title: 'add',
+      userID: 1,
+    },
+  };
+
+ current.push(newTask);
+
+  const result: TaskMap = {
+    ...taskMap,
+    [columnID]: current,
+  };
+
+  return {
+    taskMap: result,
+    autoFocusTaskId: newTask.pk,
+  };
+};
+
+
+
+

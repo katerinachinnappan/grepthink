@@ -6,7 +6,6 @@ import Title from '../primatives/title'
 import {DraggableProvided, DraggableStateSnapshot} from "react-beautiful-dnd/lib/index";
 import QuoteList from "../primatives/list";
 import type {Task, TaskMap} from "../primatives/types";
-import type {State} from "react-beautiful-dnd/lib/types";
 
 
 const Wrapper = styled.div`
@@ -18,7 +17,7 @@ const Button = styled.button`
   color: ${colors.black};
   border: none;
   background-color: ${colors.lightBlue};
-  font-size: 1em;
+  font-size: 1.2em;
   
   &:hover {
     background-color: ${colors.blue.lighter};
@@ -62,7 +61,7 @@ export default class Column extends Component {
   }
 
   handleAddTask(e) {
-    this.props.onFilterTextChange(e);
+    this.props.onAddTask(e);
   }
 
   render() {
@@ -96,7 +95,7 @@ export default class Column extends Component {
 
                 this.handleAddTask(title)
 
-              }}>Add Task
+              }}>add task
               </Button>
 
             </Container>

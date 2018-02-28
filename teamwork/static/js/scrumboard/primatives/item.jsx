@@ -88,7 +88,6 @@ flex-grow: 1;
 
 export default class TaskItem extends PureComponent<Props> {
 
-  //TODO Not sure what this is ?
   componentDidMount() {
     if (!this.props.autoFocus) {
       return;
