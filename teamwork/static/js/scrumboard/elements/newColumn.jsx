@@ -3,7 +3,7 @@ import {colors, grid} from "./constants";
 import styled from 'styled-components';
 import {withAlert} from 'react-alert'
 // import InlineEdit from 'react-edit-inline';
-import InlineEdit from '../../react-edit-inline';
+import InlineEdit from '../react-edit-inline';
 
 const Title = styled.h4`
   padding: ${grid}px;
@@ -45,51 +45,55 @@ const Header = styled.div`
 let flag = true;
 
 class NewColumn extends React.Component {
+
   constructor(props) {
     super(props);
+    this.state = {text: this.props.text};
+    console.log(this.state.text);
     this.dataChanged = this.dataChanged.bind(this);
-    this.state = {
-      message: 'add new column',
-      taskMap: props.taskMap
-    };
     this.customValidateText = this.customValidateText.bind(this);
-    this.handleAddColumn = this.handleAddColumn.bind(this);
+
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    // only update chart if the data has changed
+    console.log(prevProps.title+ ' |||||  '+ prevState.text + ' |||||  ' + this.props.title);
+    if (prevProps.text !== this.props.text) {
+    }
+  }
+
+
   dataChanged(data) {
-    this.setState({
-      message: 'add new column'
-    });
-    this.handleAddColumn(data.message)
+    this.setState({text:"add column"}, function () {
+      this.props.onAddColumn(data.message)
+    }.bind(this));
   }
 
   customValidateText(text) {
-    if (flag) {
-      if (text in this.state.taskMap) {
+    if (text in this.props.taskMap) {
+      if (flag) {
+        flag = false;
         this.props.alert.error('Column name must be unique');
-        return false;
-      } else
-        return (text.length > 0 && text.length < 64);
+      } else {
+        flag = true;
+      }
+      return false;
+    } else {
+      return (text.length > 0 && text.length < 64 && text != 'add new column');
     }
-    flag = !flag;
   }
-
-   handleAddColumn(e) {
-    this.props.onAddColumn(e);
-  }
-
 
   render() {
     return (
 
-      <Wrapper>
+      <Wrapper fontSize={'1.5em'}>
         <Container>
           <Header>
             <Title>
               <InlineEdit
                 validate={this.customValidateText}
                 activeClassName="editing"
-                text={'add new column'}
+                text={this.state.text}
                 paramName="message"
                 change={this.dataChanged}
               />

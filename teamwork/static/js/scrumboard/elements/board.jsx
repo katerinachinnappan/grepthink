@@ -119,6 +119,7 @@ class Board extends Component {
       ordered: ordered,
       columns: data.taskMap,
     });
+
   }
 
 
@@ -127,8 +128,6 @@ class Board extends Component {
     const columns: TaskMap = this.state.columns;
     const ordered: Column[] = this.state.ordered;
     const {containerHeight} = this.props;
-
-    console.log(ordered);
     const board = (
       <Droppable
         droppableId="board"
@@ -151,9 +150,11 @@ class Board extends Component {
 
               ))}
             <NewColumn
+              text={"add new column"}
               taskMap={columns}
               withAlert={this.props.alert}
-              onAddColumn={this.handleAddColumn}/>
+              onAddColumn={this.handleAddColumn}
+            />
           </Container>
         )}
       </Droppable>
