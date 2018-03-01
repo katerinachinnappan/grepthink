@@ -101,7 +101,7 @@ export default class TaskItem extends PureComponent<Props> {
 
     return (
       <Container
-        // href={quote.author.url}
+
         isDragging={isDragging}
         innerRef={provided.innerRef}
         {...provided.draggableProps}

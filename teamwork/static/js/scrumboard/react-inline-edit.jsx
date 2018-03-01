@@ -35,12 +35,16 @@ export default class InlineEdit extends React.Component {
     editing: false
   };
 
-  state = {
-    editing: this.props.editing,
-    text: this.props.text,
-    minLength: this.props.minLength,
-    maxLength: this.props.maxLength,
-  };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      editing: this.props.editing,
+      text: this.props.text,
+      minLength: this.props.minLength,
+      maxLength: this.props.maxLength,
+    };
+  }
 
   componentWillMount() {
     this.isInputValid = this.props.validate || this.isInputValid;
@@ -95,7 +99,7 @@ export default class InlineEdit extends React.Component {
   };
 
   commitEditing = () => {
-    this.setState({editing: false, text: this.state.text});
+    this.setState({editing: false, text: "add new column..."});
     let newProp = {};
     newProp[this.props.paramName] = this.state.text;
     this.props.change(newProp);
@@ -112,7 +116,6 @@ export default class InlineEdit extends React.Component {
   };
 
   keyDown = (event) => {
-    console.log(event);
     if (event.keyCode === 13) {
       this.finishEditing();
     } else if (event.keyCode === 27) {
@@ -121,8 +124,9 @@ export default class InlineEdit extends React.Component {
   };
 
   textChanged = (event) => {
+    const text = event.target.value.trim();
     this.setState({
-      text: event.target.value.trim()
+      text: text
     });
   };
 

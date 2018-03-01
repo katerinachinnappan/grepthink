@@ -16,7 +16,7 @@ from teamwork.apps.scrumboard.models import Board, Task, Column
 
 def index(request):
     board = Board.objects.all().filter(pk=1)
-    columns = Column.objects.all().filter(board_id=1)
+    columns = Column.objects.all().filter(board_id=1).order_by('index')
     tasks = Task.objects.all().filter(board_id=1)
     initial_data = json.dumps({
         'board': serializers.serialize('json', board),

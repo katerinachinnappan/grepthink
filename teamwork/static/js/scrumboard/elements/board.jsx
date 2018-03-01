@@ -150,7 +150,7 @@ class Board extends Component {
 
               ))}
             <NewColumn
-              text={"add new column"}
+              text={"add new column..."}
               taskMap={columns}
               withAlert={this.props.alert}
               onAddColumn={this.handleAddColumn}

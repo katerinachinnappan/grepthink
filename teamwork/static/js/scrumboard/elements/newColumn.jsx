@@ -3,7 +3,7 @@ import {colors, grid} from "./constants";
 import styled from 'styled-components';
 import {withAlert} from 'react-alert'
 // import InlineEdit from 'react-edit-inline';
-import InlineEdit from '../react-edit-inline';
+import InlineEdit from '../react-inline-edit';
 
 const Title = styled.h4`
   padding: ${grid}px;
@@ -55,18 +55,11 @@ class NewColumn extends React.Component {
 
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    // only update chart if the data has changed
-    console.log(prevProps.title+ ' |||||  '+ prevState.text + ' |||||  ' + this.props.title);
-    if (prevProps.text !== this.props.text) {
-    }
-  }
-
 
   dataChanged(data) {
-    this.setState({text:"add column"}, function () {
-      this.props.onAddColumn(data.message)
-    }.bind(this));
+
+    this.props.onAddColumn(data.message)
+
   }
 
   customValidateText(text) {
