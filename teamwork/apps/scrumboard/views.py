@@ -24,6 +24,11 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import get_object_or_404, redirect, render
 
 def view_one_scrum(request, slug):
+            # Populate with page name and title
+    page_name = "My Scrum Board"
+    page_description = "Scrum Board created by " + request.user.username
+    title = "Scrum Board"
+
     board = Board.objects.all().filter(slug=slug)
     columns = Column.objects.all().filter(slug=slug)
     tasks = Task.objects.all().filter(slug=slug)
@@ -32,7 +37,8 @@ def view_one_scrum(request, slug):
         'columns': serializers.serialize('json', columns),
         'tasks': serializers.serialize('json', tasks),
     }, cls=DjangoJSONEncoder)
-    return render(request, 'scrumboard/scrumboard.html', {
+    return render(request, 'scrumboard/scrumboard.html', {'page_name': page_name,
+             'page_description': page_description, 'title': title,
         'initial_data': initial_data
     })
 

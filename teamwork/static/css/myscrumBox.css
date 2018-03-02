@@ -20,6 +20,18 @@
   opacity:.8;
 }
 
+.contactBox .project {
+  display: block;
+  background: #fdfb94;
+  padding: 10px 10px 5px 10px;
+ 
+  font-size: 17px;
+  color: #466c83;
+  font-family: "Open Sans", sans-serif;
+  opacity:.8;
+
+}
+
 .contactBox a {
   text-decoration: none;
   color: white;
