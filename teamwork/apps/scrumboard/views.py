@@ -24,16 +24,9 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import get_object_or_404, redirect, render
 
 def view_one_scrum(request, slug):
-
-    board = get_object_or_404(Board, slug=slug)
-    columns = get_object_or_404(Column, slug=slug)
-    tasks = get_object_or_404(Task, slug=slug)
-    #page_name = scrum.tittle or "Scrum Board"
-    #page_description = scrum.description or "Tagline"
-    #title = project.title or "Project"
-    #board = Board.objects.all().filter(pk=1)
-    #columns = Column.objects.all().filter(board_id=1)
-    #tasks = Task.objects.all().filter(board_id=1)
+    board = Board.objects.all().filter(slug  = slug)
+    columns = Column.objects.all().filter(slug=slug)
+    tasks = Task.objects.all().filter(slug = slug)
     initial_data = json.dumps({
         'board': serializers.serialize('json', board),
         'columns': serializers.serialize('json', columns),
@@ -42,6 +35,14 @@ def view_one_scrum(request, slug):
     return render(request, 'scrumboard/scrumboard.html', {
         'initial_data': initial_data
     })
+    # board = get_object_or_404(Board, slug=slug)
+    # columns = get_object_or_404(Column, slug=slug)
+    # tasks = get_object_or_404(Task, slug=slug)
+
+    # return render(request, 'scrumboard/scrumboard.html', {
+    #     'board': board, 'columns': columns, 'tasks': tasks
+    # })
+
 
 def index(request):
     board = Board.objects.all().filter(pk=1)
