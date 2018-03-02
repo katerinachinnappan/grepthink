@@ -17,8 +17,8 @@ from teamwork.apps.core.helpers import *
 from teamwork.apps.courses.views import view_one_course
 from teamwork.apps.profiles.views import view_alerts
 
-from teamwork.apps.scrumboard.models import Board
-from teamwork.apps.scrumboard.views import myscrum
+from teamwork.apps.scrumboard.models import Board, Column
+from teamwork.apps.scrumboard.views import view_one_scrum
 
 
 from teamwork.apps.courses.forms import EmailRosterForm
@@ -160,28 +160,65 @@ def view_one_project(request, slug):
 
 
     if request.method == 'POST':
-        print("inside request.method\n")
+        # print("inside request.method\n")
         form = CreateScrumBoardForm(request.user.id, request.POST)
-        print("form's output is: \n", form)
-        print(" \n", form.is_valid())
+        # print("form's output is: \n", form)
+        # print(" \n", form.is_valid())
 
         if form.is_valid():
-            print("inside form.is_valid()\n")
+            # print("inside form.is_valid()\n")
+            #create new board in database
             new_board = Board(project=project)
-            new_board.tittle = form.cleaned_data.get('tittle')
+            new_board.title = form.cleaned_data.get('title')
             new_board.description = form.cleaned_data.get('description')
+            new_board.slug = form.cleaned_data.get('slug')
             new_board.owner = request.user
             new_board.save()
+            print("Board slug is \n", new_board.slug)
 
-            print("Project is \n", new_board.project)
-            print("title is \n", new_board.tittle)
-            print("description is \n", new_board.description)
-            print("owner is \n", new_board.owner)
+            #create new column in database
+            new_column = Column()
+            new_column.title = 'To Do'
+            new_column.description = 'To do'
+            new_column_slug = str(Board.objects.get(slug=new_board.slug))
+            new_column.slug = new_column_slug
+            print("Column slug is \n", new_column.slug)
+            new_board_id = Board.objects.get(id=new_board.id)
+            new_column.board = new_board_id
+            new_column.save()
 
-            return redirect(myscrum)
+            new_column = Column()
+            new_column.title = 'In Progress'
+            new_column.description = 'In progress'
+            new_column_slug = str(Board.objects.get(slug=new_board.slug))
+            new_column.slug = new_column_slug
+            new_board_id = Board.objects.get(id=new_board.id)
+            new_column.board = new_board_id
+            new_column.save()
+
+            new_column = Column()
+            new_column.title = 'Done'
+            new_column.description = 'done'
+            new_column_slug = str(Board.objects.get(slug=new_board.slug))
+            new_column.slug = new_column_slug
+            new_board_id = Board.objects.get(id=new_board.id)
+            new_column.board = new_board_id
+            new_column.save()
+
+            # print("Project is \n", new_board.project)
+            # print("title is \n", new_column.title)
+            # print("description is \n", new_column.description)
+            # print("board is \n", new_column.board)
+
+            # print("Project is \n", new_board.project)
+            # print("title is \n", new_board.title)
+            # print("description is \n", new_board.description)
+            # print("owner is \n", new_board.owner)
+            # print("Board id is ", new_board.id)
+            return redirect(view_one_scrum, new_column.slug)
 
     else:
-        print("show form\n")
+        # print("show form\n")
         form = CreateScrumBoardForm(request.user.id)
 
 
@@ -888,36 +925,36 @@ def post_update(request, slug):
                    'project': project})
 
 
-@login_required
-def create_board(request, slug):
-
-    project = get_object_or_404(Project, slug=slug)
-
-    if request.user.profile.isGT:
-        pass
-    elif not request.user == project.creator and request.user not in project.members.all(
-    ):
-        # redirect them with a message
-        messages.info(request, 'Only current members can create a scrum board!')
-        return HttpResponseRedirect('/project/all')
-
-    if request.method == 'POST':
-        print("Inside request\n")
-        form = CreateScrumBoardForm(request.user.id, request.POST)
-        print("form is \n", form)
-        if form.is_valid():
-            new_board = Board(project=project)
-            new_board.tittle = form.cleaned_data.get('tittle')
-            new_board.description = form.cleaned_data.get('description')
-            new_board.owner = request.user
-            new_board.save()
-            return redirect(myscrum)
-    else:
-        form = CreateScrumBoardForm(request.user.id)
-        print("dont post data yet\n")
-        return render(request, 'scrumboard/create_board.html',
-                      {'form': form,
-                       'project': project})
+# @login_required
+# def create_board(request, slug):
+#
+#     project = get_object_or_404(Project, slug=slug)
+#
+#     if request.user.profile.isGT:
+#         pass
+#     elif not request.user == project.creator and request.user not in project.members.all(
+#     ):
+#         # redirect them with a message
+#         messages.info(request, 'Only current members can create a scrum board!')
+#         return HttpResponseRedirect('/project/all')
+#
+#     if request.method == 'POST':
+#         print("Inside request\n")
+#         form = CreateScrumBoardForm(request.user.id, request.POST)
+#         print("form is \n", form)
+#         if form.is_valid():
+#             new_board = Board(project=project)
+#             new_board.tittle = form.cleaned_data.get('tittle')
+#             new_board.description = form.cleaned_data.get('description')
+#             new_board.owner = request.user
+#             new_board.save()
+#             return redirect(myscrum)
+#     else:
+#         form = CreateScrumBoardForm(request.user.id)
+#         print("dont post data yet\n")
+#         return render(request, 'scrumboard/create_board.html',
+#                       {'form': form,
+#                        'project': project})
 
 @login_required
 def resource_update(request, slug):

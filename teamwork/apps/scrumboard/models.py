@@ -31,7 +31,7 @@ class Board(models.Model):
         on_delete=models.CASCADE,
         default=0)
 
-    tittle = models.CharField(max_length=100, default='')
+    title = models.CharField(max_length=100, default='')
     description = models.CharField(max_length=200, default='')
     owner = models.ForeignKey(
         User, related_name='owner',
@@ -64,6 +64,9 @@ class Board(models.Model):
 
         return scrums
 
+    def __str__(self):
+        return(("%s" % (self.slug)))
+
     def save(self, *args, **kwargs):
 
         if self.slug is None or len(self.slug) == 0:
@@ -91,7 +94,7 @@ class Column(models.Model):
     slug = models.CharField(
         default="",
         max_length=20,
-        unique=True, 
+        unique=False,
         null=True)
 
     # The Meta class provides some extra information about the Column model.
@@ -100,21 +103,21 @@ class Column(models.Model):
         verbose_name = "Column"
         # Multiple Project objects are referred to as Projects.
         verbose_name_plural = "Column"
-    def save(self, *args, **kwargs):
-
-        if self.slug is None or len(self.slug) == 0:
-            # Basing the slug off of project title. Possibly change in the future.
-            newslug = self.title
-            newslug = slugify(newslug)[0:20]
-            while Column.objects.filter(slug=newslug).exists():
-                # print(Project.objects.filter(slug=newslug).exists())
-                newslug = self.title
-                newslug = slugify(newslug[0:16] + "-" + rand_code(3))
-            self.slug = newslug
-
-            self.slug = slugify(self.slug)
-
-        super(Column, self).save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #
+    #     if self.slug is None or len(self.slug) == 0:
+    #         # Basing the slug off of project title. Possibly change in the future.
+    #         newslug = self.title
+    #         newslug = slugify(newslug)[0:20]
+    #         while Column.objects.filter(slug=newslug).exists():
+    #             # print(Project.objects.filter(slug=newslug).exists())
+    #             newslug = self.title
+    #             newslug = slugify(newslug[0:16] + "-" + rand_code(3))
+    #         self.slug = newslug
+    #
+    #         self.slug = slugify(self.slug)
+    #
+    #     super(Column, self).save(*args, **kwargs)
 
 
 class Task(models.Model):
@@ -131,7 +134,7 @@ class Task(models.Model):
     slug = models.CharField(
         default="",
         max_length=20,
-        unique=True, 
+        unique=False,
         null=True)
     # The Meta class provides some extra information about the Column model.
     class Meta:
@@ -139,18 +142,18 @@ class Task(models.Model):
         verbose_name = "Task"
         # Multiple Project objects are referred to as Projects.
         verbose_name_plural = "Task"
-    def save(self, *args, **kwargs):
-
-        if self.slug is None or len(self.slug) == 0:
-            # Basing the slug off of project title. Possibly change in the future.
-            newslug = self.title
-            newslug = slugify(newslug)[0:20]
-            while Task.objects.filter(slug=newslug).exists():
-                # print(Project.objects.filter(slug=newslug).exists())
-                newslug = self.title
-                newslug = slugify(newslug[0:16] + "-" + rand_code(3))
-            self.slug = newslug
-
-            self.slug = slugify(self.slug)
-
-        super(Task, self).save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #
+    #     if self.slug is None or len(self.slug) == 0:
+    #         # Basing the slug off of project title. Possibly change in the future.
+    #         newslug = self.title
+    #         newslug = slugify(newslug)[0:20]
+    #         while Task.objects.filter(slug=newslug).exists():
+    #             # print(Project.objects.filter(slug=newslug).exists())
+    #             newslug = self.title
+    #             newslug = slugify(newslug[0:16] + "-" + rand_code(3))
+    #         self.slug = newslug
+    #
+    #         self.slug = slugify(self.slug)
+    #
+    #     super(Task, self).save(*args, **kwargs)

@@ -373,7 +373,7 @@ class CreateScrumBoardForm (forms.Form):
         owner = User.objects.get(id=uid)
         #members = kwargs.pop('members', {})
 
-    tittle = forms.CharField(
+    title = forms.CharField(
         widget=forms.TextInput(attrs={'class': 'form-control'}),
         max_length=100,
         required=True)
@@ -383,9 +383,14 @@ class CreateScrumBoardForm (forms.Form):
         max_length=200,
         required=True)
 
+    slug = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        max_length=20,
+        required=False)
+
     class Meta:
         model = Board
-        fields = ['tittle', 'description']
+        fields = ['title', 'description', 'slug']
 
 
 class ResourceForm(forms.ModelForm):
