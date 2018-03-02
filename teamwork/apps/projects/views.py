@@ -171,6 +171,7 @@ def view_one_project(request, slug):
             new_board = Board(project=project)
             new_board.title = form.cleaned_data.get('title')
             new_board.description = form.cleaned_data.get('description')
+            new_board.sprint = form.cleaned_data.get('sprint')
             new_board.slug = form.cleaned_data.get('slug')
             new_board.owner = request.user
             new_board.save()

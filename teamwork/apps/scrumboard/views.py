@@ -25,7 +25,8 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 def view_one_scrum(request, slug):
             # Populate with page name and title
-    page_name = "My Scrum Board"
+    scrum = get_object_or_404(Board, slug=slug)
+    page_name = "My Scrum Board - " +  scrum.title
     page_description = "Scrum Board created by " + request.user.username
     title = "Scrum Board"
 
@@ -69,9 +70,8 @@ def myscrum(request, scrumboard):
         Private method that will be used for paginator once I figure out how to get it working.
         """
         page = request.GET.get('page')
-
         # Populate with page name and title
-        page_name = "My Scrum Boards"
+        page_name = "My Scrum Board" 
         page_description = "Scrum Boards created by " + request.user.username
         title = "Scrum Boards"
 

@@ -1,5 +1,5 @@
 .contactBox {
-  height: 170px;
+  height: 200px;
   width: 32%;
   margin: 1%;
   border-radius: 15px;
@@ -15,7 +15,7 @@
   padding: 10px 10px 5px 10px;
   border-radius: 15px 15px 0 0;
   font-size: 17px;
-  color: #466c83;
+  color: black;
   font-family: "Open Sans", sans-serif;
   opacity:.8;
 }
@@ -24,9 +24,18 @@
   display: block;
   background: #fdfb94;
   padding: 10px 10px 5px 10px;
- 
   font-size: 17px;
-  color: #466c83;
+  color: black;
+  font-family: "Open Sans", sans-serif;
+  opacity:.8;
+
+}
+.contactBox .sprint {
+  display: block;
+  background: #fdc994;
+  padding: 10px 10px 5px 10px;
+  font-size: 17px;
+  color: black;
   font-family: "Open Sans", sans-serif;
   opacity:.8;
 
@@ -50,6 +59,11 @@
 }
 
 .contactBox.first {
-  background: white url(https://images.unsplash.com/photo-1489486501123-5c1af10d0be6?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=533427d59c7300312bb07b2aa83a45a3&auto=format&fit=crop&w=1050&q=80) no-repeat;
+  background: white url(http://twigsfabricsandwallpaper.com/wp-content/uploads/2015/05/whiteboard-wall-paint-825x510.jpg) no-repeat;
   background-size: cover;
+}
+
+.contactBox .footers {
+  position: relative;
+  max-height: 100%;
 }

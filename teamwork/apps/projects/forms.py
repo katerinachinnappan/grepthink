@@ -383,6 +383,11 @@ class CreateScrumBoardForm (forms.Form):
         max_length=200,
         required=True)
 
+    sprint = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        max_length=200,
+        required=True)
+
     slug = forms.CharField(
         widget=forms.TextInput(attrs={'class': 'form-control'}),
         max_length=20,
@@ -390,7 +395,7 @@ class CreateScrumBoardForm (forms.Form):
 
     class Meta:
         model = Board
-        fields = ['title', 'description', 'slug']
+        fields = ['title', 'description', 'sprint', 'slug']
 
 
 class ResourceForm(forms.ModelForm):

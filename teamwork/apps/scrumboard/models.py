@@ -30,12 +30,7 @@ class Board(models.Model):
         Project,
         on_delete=models.CASCADE,
         default=0, related_name='project')
-    #projects in course, manytomany
-    projects = models.ManyToManyField(
-        # to project model
-        Project,
-        # projects can access scrum through this relation
-        related_name='board')
+    sprint = models.CharField(max_length=100, default='')
 
     title = models.CharField(max_length=100, default='')
     description = models.CharField(max_length=200, default='')
