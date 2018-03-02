@@ -136,7 +136,6 @@ class Column extends Component {
                 >
                   <MenuItem eventKey="1">Action</MenuItem>
                   <MenuItem eventKey="2">Another action</MenuItem>
-                  <MenuItem eventKey="3">Active Item</MenuItem>
                   <MenuItem divider/>
                   <MenuItem eventKey="4" onClick={() => this.deleteColumn()}>Delete Column</MenuItem>
                 </DropdownButton>
