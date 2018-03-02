@@ -1,0 +1,8 @@
+.btn{
+  background-color: transparent !important;
+  border: 0 none;
+}
+.btn-default.focus, .btn-default:focus {
+    color: #333;
+    border-color: #8c8c8c;
+}

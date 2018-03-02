@@ -6,6 +6,11 @@ import Title from '../primatives/title'
 import {DraggableProvided, DraggableStateSnapshot} from "react-beautiful-dnd/lib/index";
 import QuoteList from "../primatives/list";
 import type {Task, TaskMap} from "../primatives/types";
+import InlineEdit from "../primatives/inline-edit";
+import {withAlert} from "react-alert";
+import DropdownButton from "react-bootstrap/es/DropdownButton";
+import MenuItem from "react-bootstrap/es/MenuItem";
+import '../styles.css'
 
 
 const Wrapper = styled.div`
@@ -13,7 +18,7 @@ const Wrapper = styled.div`
   flex-direction: column;
 `;
 
-const Button = styled.button`
+const AddButton = styled.button`
   color: ${colors.black};
   border: none;
   background-color: ${colors.lightBlue};
@@ -44,24 +49,57 @@ const Header = styled.div`
   }
 `;
 
+//
+// type Props = {|
+//   title: string,
+//   tasks: Task[],
+//   index: number,
+//   autoFocusTaskId: ?string,
+// |}
 
-type Props = {|
-  title: string,
-  tasks: Task[],
-  index: number,
-  autoFocusTaskId: ?string,
-|}
+
+let flag = true;
+const menuItemWords = ['foo', 'bar', 'baz'];
 
 
-export default class Column extends Component {
+class Column extends Component {
 
   constructor(props) {
     super(props);
     this.handleAddTask = this.handleAddTask.bind(this);
+    this.dataChanged = this.dataChanged.bind(this);
+    this.customValidateText = this.customValidateText.bind(this);
+    this.handleSelection = this.handleSelection.bind(this);
   }
+
 
   handleAddTask(e) {
     this.props.onAddTask(e);
+  }
+
+
+  dataChanged(data) {
+    this.props.onTitleUpdate(this.props.title, data.message)
+  }
+
+  customValidateText(text) {
+    if (text === this.props.title)
+      return false;
+    if (this.props.keys.includes(text)) {
+      if (flag) {
+        flag = false;
+        this.props.alert.error('Column name must be unique');
+      } else {
+        flag = true;
+      }
+      return false;
+    } else {
+      return (text.length > 0 && text.length < 64 && text !== 'add new column...');
+    }
+  }
+
+  handleSelection() {
+
   }
 
   render() {
@@ -82,8 +120,30 @@ export default class Column extends Component {
                   isDragging={snapshot.isDragging}
                   {...provided.dragHandleProps}
                 >
-                  {title}
+                  <InlineEdit
+                    validate={this.customValidateText}
+                    activeClassName="editing"
+                    text={title}
+                    paramName="message"
+                    change={this.dataChanged}
+                  />
                 </Title>
+
+                <DropdownButton
+                  bsStyle={'default'}
+                  title={''}
+                  id={title}
+                >
+                  <MenuItem eventKey="1">Action</MenuItem>
+                  <MenuItem eventKey="2">Another action</MenuItem>
+                  <MenuItem eventKey="3">
+                    Active Item
+                  </MenuItem>
+                  <MenuItem divider/>
+                  <MenuItem eventKey="4">Separated link</MenuItem>
+                </DropdownButton>
+
+
               </Header>
               <QuoteList
                 listId={title}
@@ -91,12 +151,12 @@ export default class Column extends Component {
                 tasks={tasks}
                 autoFocusQuoteId={this.props.autoFocusTaskId}
               />
-              <Button type="submit" onClick={() => {
-
+              <AddButton type="submit" onClick={() => {
                 this.handleAddTask(title)
+              }}>
+                add task
+              </AddButton>
 
-              }}>add task
-              </Button>
 
             </Container>
             {provided.placeholder}
@@ -109,3 +169,4 @@ export default class Column extends Component {
 }
 
 
+export default withAlert(Column)

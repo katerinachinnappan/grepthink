@@ -24,13 +24,23 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: [ 'es2015', 'react', 'stage-2' ]
+            presets: ['es2015', 'react', 'stage-2']
           }
         }
+      },
+      {
+        test: /\.(jpe?g|png|gif|svg)$/i,
+        use: [
+          'url-loader?limit=10000',
+          'img-loader'
+        ]
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader']
       }
     ]
   },
-   // externals: require('react-native').getComponents()
   resolve: {
     extensions: ['.js', '.jsx'],
   }

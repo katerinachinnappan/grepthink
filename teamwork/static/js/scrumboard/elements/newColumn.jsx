@@ -3,7 +3,7 @@ import {colors, grid} from "./constants";
 import styled from 'styled-components';
 import {withAlert} from 'react-alert'
 // import InlineEdit from 'react-edit-inline';
-import InlineEdit from '../react-inline-edit';
+import InlineEdit from '../primatives/inline-edit';
 
 const Title = styled.h4`
   padding: ${grid}px;
@@ -49,7 +49,6 @@ class NewColumn extends React.Component {
   constructor(props) {
     super(props);
     this.state = {text: this.props.text};
-    console.log(this.state.text);
     this.dataChanged = this.dataChanged.bind(this);
     this.customValidateText = this.customValidateText.bind(this);
 
@@ -57,13 +56,11 @@ class NewColumn extends React.Component {
 
 
   dataChanged(data) {
-
     this.props.onAddColumn(data.message)
-
   }
 
   customValidateText(text) {
-    if (text in this.props.taskMap) {
+    if (this.props.keys.includes(text)) {
       if (flag) {
         flag = false;
         this.props.alert.error('Column name must be unique');
@@ -72,7 +69,7 @@ class NewColumn extends React.Component {
       }
       return false;
     } else {
-      return (text.length > 0 && text.length < 64 && text != 'add new column');
+      return (text.length > 0 && text.length < 64 && text != 'add new column...');
     }
   }
 
@@ -89,6 +86,7 @@ class NewColumn extends React.Component {
                 text={this.state.text}
                 paramName="message"
                 change={this.dataChanged}
+                initial={"add new column..."}
               />
             </Title>
           </Header>

@@ -37,11 +37,13 @@ export const reorderTaskMap = ({taskMap, source, destination,}: ReorderTaskMapAr
       ...taskMap,
       [source.droppableId]: reordered,
     };
+
     return {
       taskMap: result,
       // not auto focusing in own list
       autoFocusTaskId: null,
     };
+
   }
 
   // moving to different list
@@ -66,6 +68,7 @@ let id = 10;
 
 export const addTaskToTaskMap = (taskMap, columnID): TaskMapResult => {
   const current: Task[] = [...taskMap[columnID]];
+
 
   const newTask: Task = {
     model: "scrumboard.task",
@@ -103,6 +106,18 @@ export const addColumnToTaskMap = (taskMap, columnID): TaskMapResult => {
     autoFocusTaskId: null,
   };
 };
+
+export const updateColumnName = (oldName, newName, taskMap, keys): void => {
+  let index = keys.indexOf(oldName);
+  taskMap[newName] = taskMap[oldName];
+  delete taskMap[oldName];
+  keys.splice(index, 1, newName);
+  return {
+    taskMap: taskMap,
+    keys: keys,
+  };
+};
+
 
 
 

@@ -22,7 +22,8 @@ export default class InlineEdit extends React.Component {
     staticElement: PropTypes.string,
     tabIndex: PropTypes.number,
     isDisabled: PropTypes.bool,
-    editing: PropTypes.bool
+    editing: PropTypes.bool,
+    initial: PropTypes.string
   };
 
   static defaultProps = {
@@ -99,7 +100,8 @@ export default class InlineEdit extends React.Component {
   };
 
   commitEditing = () => {
-    this.setState({editing: false, text: "add new column..."});
+    if(this.props.initial != null)
+      this.setState({editing: false, text: this.props.initial});
     let newProp = {};
     newProp[this.props.paramName] = this.state.text;
     this.props.change(newProp);

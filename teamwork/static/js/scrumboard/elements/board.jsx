@@ -3,7 +3,10 @@ import styled, {injectGlobal} from 'styled-components';
 import {DragDropContext, Droppable} from 'react-beautiful-dnd';
 import Column from './column';
 import {colors} from "./constants";
-import reorder, {addColumnToTaskMap, addNewColumn, addTaskToTaskMap, reorderTaskMap} from "../functions/functions";
+import reorder, {
+  addColumnToTaskMap, addNewColumn, addTaskToTaskMap, reorderTaskMap,
+  updateColumnName
+} from "../functions/functions";
 import {DroppableProvided} from "react-beautiful-dnd/lib/index";
 import type {TaskMap} from "../primatives/types";
 import type {DraggableLocation, DragStart, DropResult} from "react-beautiful-dnd/lib/types";
@@ -49,6 +52,7 @@ class Board extends Component {
 
     this.handleAddTask = this.handleAddTask.bind(this);
     this.handleAddColumn = this.handleAddColumn.bind(this);
+    this.handleUpdateColumnName = this.handleUpdateColumnName.bind(this);
   }
 
 
@@ -103,6 +107,11 @@ class Board extends Component {
 
 
   handleAddTask(index) {
+    //  const data = updateColumnName("hello", "third col", this.state.columns, this.state.ordered);
+    // this.setState({
+    //   columns: data.taskMap,
+    //   ordered: data.keys,
+    // });
     const data = addTaskToTaskMap(this.state.columns, index);
 
     this.setState({
@@ -112,6 +121,8 @@ class Board extends Component {
   }
 
   handleAddColumn(columnName) {
+
+
     const data = addColumnToTaskMap(this.state.columns, columnName);
     const ordered = this.state.ordered;
     ordered.splice(ordered.length, 0, columnName);
@@ -120,6 +131,14 @@ class Board extends Component {
       columns: data.taskMap,
     });
 
+  }
+
+  handleUpdateColumnName(oldName, newName) {
+    const data = updateColumnName(oldName, newName, this.state.columns, this.state.ordered);
+    this.setState({
+      columns: data.taskMap,
+      ordered: data.keys,
+    });
   }
 
 
@@ -144,14 +163,16 @@ class Board extends Component {
                   index={index}
                   title={key}
                   tasks={columns[key]}
+                  keys={ordered}
                   autoFocusTaskId={this.state.autoFocusQuoteId}
+                  withAlert={this.props.alert}
                   onAddTask={this.handleAddTask}
+                  onTitleUpdate={this.handleUpdateColumnName}
                 />
-
               ))}
             <NewColumn
               text={"add new column..."}
-              taskMap={columns}
+              keys={ordered}
               withAlert={this.props.alert}
               onAddColumn={this.handleAddColumn}
             />
