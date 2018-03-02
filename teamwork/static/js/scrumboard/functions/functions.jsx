@@ -119,6 +119,16 @@ export const updateColumnName = (oldName, newName, taskMap, keys): void => {
 };
 
 
+export const deleteColumn = (colName, taskMap, keys): void => {
+  let index = keys.indexOf(colName);
+  delete taskMap[colName];
+  keys.splice(index, 1);
+  return {
+    taskMap: taskMap,
+    keys: keys,
+  };
+};
+
 
 
 

@@ -4,7 +4,7 @@ import {DragDropContext, Droppable} from 'react-beautiful-dnd';
 import Column from './column';
 import {colors} from "./constants";
 import reorder, {
-  addColumnToTaskMap, addNewColumn, addTaskToTaskMap, reorderTaskMap,
+  addColumnToTaskMap, addNewColumn, addTaskToTaskMap, deleteColumn, reorderTaskMap,
   updateColumnName
 } from "../functions/functions";
 import {DroppableProvided} from "react-beautiful-dnd/lib/index";
@@ -53,6 +53,7 @@ class Board extends Component {
     this.handleAddTask = this.handleAddTask.bind(this);
     this.handleAddColumn = this.handleAddColumn.bind(this);
     this.handleUpdateColumnName = this.handleUpdateColumnName.bind(this);
+    this.handleDeleteColumn = this.handleDeleteColumn.bind(this);
   }
 
 
@@ -107,13 +108,7 @@ class Board extends Component {
 
 
   handleAddTask(index) {
-    //  const data = updateColumnName("hello", "third col", this.state.columns, this.state.ordered);
-    // this.setState({
-    //   columns: data.taskMap,
-    //   ordered: data.keys,
-    // });
     const data = addTaskToTaskMap(this.state.columns, index);
-
     this.setState({
       columns: data.taskMap,
       autoFocusQuoteId: data.autoFocusTaskId,
@@ -121,8 +116,6 @@ class Board extends Component {
   }
 
   handleAddColumn(columnName) {
-
-
     const data = addColumnToTaskMap(this.state.columns, columnName);
     const ordered = this.state.ordered;
     ordered.splice(ordered.length, 0, columnName);
@@ -141,6 +134,13 @@ class Board extends Component {
     });
   }
 
+  handleDeleteColumn(colName) {
+    const data = deleteColumn(colName, this.state.columns, this.state.ordered);
+    this.setState({
+      columns: data.taskMap,
+      ordered: data.keys,
+    });
+  }
 
   render() {
 
@@ -168,6 +168,7 @@ class Board extends Component {
                   withAlert={this.props.alert}
                   onAddTask={this.handleAddTask}
                   onTitleUpdate={this.handleUpdateColumnName}
+                  onDeleteColumn={this.handleDeleteColumn}
                 />
               ))}
             <NewColumn

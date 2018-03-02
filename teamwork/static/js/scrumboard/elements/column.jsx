@@ -69,7 +69,7 @@ class Column extends Component {
     this.handleAddTask = this.handleAddTask.bind(this);
     this.dataChanged = this.dataChanged.bind(this);
     this.customValidateText = this.customValidateText.bind(this);
-    this.handleSelection = this.handleSelection.bind(this);
+    this.deleteColumn = this.deleteColumn.bind(this);
   }
 
 
@@ -80,6 +80,10 @@ class Column extends Component {
 
   dataChanged(data) {
     this.props.onTitleUpdate(this.props.title, data.message)
+  }
+
+  deleteColumn(){
+    this.props.onDeleteColumn(this.props.title)
   }
 
   customValidateText(text) {
@@ -96,10 +100,6 @@ class Column extends Component {
     } else {
       return (text.length > 0 && text.length < 64 && text !== 'add new column...');
     }
-  }
-
-  handleSelection() {
-
   }
 
   render() {
@@ -136,11 +136,9 @@ class Column extends Component {
                 >
                   <MenuItem eventKey="1">Action</MenuItem>
                   <MenuItem eventKey="2">Another action</MenuItem>
-                  <MenuItem eventKey="3">
-                    Active Item
-                  </MenuItem>
+                  <MenuItem eventKey="3">Active Item</MenuItem>
                   <MenuItem divider/>
-                  <MenuItem eventKey="4">Separated link</MenuItem>
+                  <MenuItem eventKey="4" onClick={() => this.deleteColumn()}>Delete Column</MenuItem>
                 </DropdownButton>
 
 
