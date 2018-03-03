@@ -4,13 +4,13 @@ import styled from 'styled-components';
 import {borderRadius, colors, grid} from './constants';
 import Title from '../primatives/title'
 import {DraggableProvided, DraggableStateSnapshot} from "react-beautiful-dnd/lib/index";
-import QuoteList from "../primatives/list";
+import TaskList from "../primatives/list";
 import type {Task, TaskMap} from "../primatives/types";
 import InlineEdit from "../primatives/inline-edit";
 import {withAlert} from "react-alert";
 import DropdownButton from "react-bootstrap/es/DropdownButton";
 import MenuItem from "react-bootstrap/es/MenuItem";
-import '../styles.css'
+import '../styles.scss'
 
 
 const Wrapper = styled.div`
@@ -141,8 +141,9 @@ class Column extends Component {
                 </DropdownButton>
 
 
+
               </Header>
-              <QuoteList
+              <TaskList
                 listId={title}
                 listType="QUOTE"
                 tasks={tasks}

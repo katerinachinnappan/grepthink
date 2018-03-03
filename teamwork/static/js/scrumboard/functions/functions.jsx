@@ -130,5 +130,9 @@ export const deleteColumn = (colName, taskMap, keys): void => {
 };
 
 
+export const updateTask = (taskId, keys) => {
+
+
+}
 
 

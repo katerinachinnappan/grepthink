@@ -15,6 +15,8 @@ import {
   DroppableStateSnapshot
 } from "react-beautiful-dnd/lib/index";
 
+import {addTaskToTaskMap} from "../functions/functions";
+
 const Wrapper = styled.div`
   background-color: ${({isDraggingOver}) => (isDraggingOver ? colors.blue.lighter : colors.blue.light)};
   display: flex;
@@ -77,9 +79,17 @@ class InnerTaskList extends Component<> {
   }
 
 
-  render() {
-    // const tasks = this.props.tasks || [ ]
+  handleUpdate() {
+    addTaskToTaskMap
+    this.handleDelete()
+  }
 
+  handleDelete() {
+    this.props.handleDelete();
+  }
+
+
+  render() {
 
     return (
       <div>
@@ -93,6 +103,8 @@ class InnerTaskList extends Component<> {
                   isDragging={dragSnapshot.isDragging}
                   provided={dragProvided}
                   autoFocus={this.props.autoFocusTaskId === task.pk}
+                  handleUpdate={this.handleUpdate}
+                  handleDelete={this.handleDelete}
                 />
                 {dragProvided.placeholder}
               </div>

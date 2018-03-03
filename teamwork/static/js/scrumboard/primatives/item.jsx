@@ -5,7 +5,7 @@ import {borderRadius, colors, grid} from '../elements/constants';
 import type {Task} from "./types";
 import {DraggableProvided} from "react-beautiful-dnd/lib/index";
 import ReactModal from "react-modal/dist/react-modal";
-
+import FormInstance from './form'
 
 type Props = {
   task: Task,
@@ -103,11 +103,10 @@ export default class TaskItem extends PureComponent<Props> {
 
   constructor(props) {
     super(props);
-
     this.state = {
       modalIsOpen: false
-    };
 
+    };
     this.openModal = this.openModal.bind(this);
     this.afterOpenModal = this.afterOpenModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
@@ -118,13 +117,22 @@ export default class TaskItem extends PureComponent<Props> {
   }
 
   afterOpenModal() {
-    // references are now sync'd and can be accessed.
-    this.subtitle.style.color = '#f00';
+    this.subtitle.style.color = '#494f57';
   }
 
   closeModal() {
     this.setState({modalIsOpen: false});
   }
+
+
+  handleUpdate() {
+    this.props.handleUpdate();
+  }
+
+  handleDelete() {
+    this.props.handleDelete();
+  }
+
 
   componentDidMount() {
     if (!this.props.autoFocus) {
@@ -153,20 +161,18 @@ export default class TaskItem extends PureComponent<Props> {
           onAfterOpen={this.afterOpenModal}
           onRequestClose={this.closeModal}
           className="Modal"
-          contentLabel="Example Modal"
           ariaHideApp={false}
         >
 
-          <h2 ref={subtitle => this.subtitle = subtitle}>Hello</h2>
-          <button onClick={this.closeModal}>close</button>
-          <div>I am a modal</div>
-          <form>
-            <input/>
-            <button>tab navigation</button>
-            <button>stays</button>
-            <button>inside</button>
-            <button>the modal</button>
-          </form>
+          <h2 ref={subtitle => this.subtitle = subtitle}>{task.fields.title}</h2>
+          <FormInstance
+            task={task}
+            handleClose={this.closeModal}
+            handleUpdate={this.handleUpdate}
+            handleDelete={this.handleDelete}
+          />
+
+
         </ReactModal>
 
 
