@@ -6,6 +6,7 @@ import type {Task} from "./types";
 import {DraggableProvided} from "react-beautiful-dnd/lib/index";
 import ReactModal from "react-modal/dist/react-modal";
 import FormInstance from './form'
+import {CirclePicker} from "react-color";
 
 type Props = {
   task: Task,
@@ -105,11 +106,12 @@ export default class TaskItem extends PureComponent<Props> {
     super(props);
     this.state = {
       modalIsOpen: false
-
     };
     this.openModal = this.openModal.bind(this);
     this.afterOpenModal = this.afterOpenModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
+    this.handleUpdate = this.handleUpdate.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
   }
 
   openModal() {
@@ -118,15 +120,17 @@ export default class TaskItem extends PureComponent<Props> {
 
   afterOpenModal() {
     this.subtitle.style.color = '#494f57';
+
   }
 
   closeModal() {
+    console.log(this.props);
     this.setState({modalIsOpen: false});
   }
 
 
-  handleUpdate() {
-    this.props.handleUpdate();
+  handleUpdate(title, desc, members, assigned, colour) {
+    this.props.handleUpdate(this.props.index, title, desc, members, assigned, colour);
   }
 
   handleDelete() {
@@ -146,8 +150,8 @@ export default class TaskItem extends PureComponent<Props> {
     const {task, isDragging, provided} = this.props;
 
     return (
-      <Container
 
+      <Container
         isDragging={isDragging}
         innerRef={provided.innerRef}
         {...provided.draggableProps}
@@ -162,9 +166,11 @@ export default class TaskItem extends PureComponent<Props> {
           onRequestClose={this.closeModal}
           className="Modal"
           ariaHideApp={false}
-        >
 
+
+        >
           <h2 ref={subtitle => this.subtitle = subtitle}>{task.fields.title}</h2>
+
           <FormInstance
             task={task}
             handleClose={this.closeModal}

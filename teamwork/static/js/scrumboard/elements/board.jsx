@@ -12,6 +12,7 @@ import type {TaskMap} from "../primatives/types";
 import type {DraggableLocation, DragStart, DropResult} from "react-beautiful-dnd/lib/types";
 import NewColumn from "./newColumn";
 import {withAlert} from 'react-alert'
+import {CirclePicker} from "react-color";
 
 
 const ParentContainer = styled.div`
@@ -187,6 +188,7 @@ class Board extends Component {
         onDragStart={this.onDragStart}
         onDragEnd={this.onDragEnd}
       >
+
         {this.props.containerHeight ? (
           <ParentContainer height={containerHeight}>{board}</ParentContainer>
         ) : (

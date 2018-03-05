@@ -9,6 +9,14 @@
 .btn-toolbar {
   float: right; }
 
+.circle-picker {
+  width: 70% !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  margin-right: 15% !important;
+  margin-left: 15% !important;
+  margin-bottom: 25px !important; }
+
 .Modal {
   width: 55%;
   position: absolute;

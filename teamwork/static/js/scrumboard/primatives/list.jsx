@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import TaskItem from './item';
 import {grid, colors} from '../elements/constants';
 import Title from '../primatives/title';
-import type {Task} from "./types";
+import type {Task, TaskUpdate} from "./types";
 
 import {
   Draggable, Droppable
@@ -15,7 +15,7 @@ import {
   DroppableStateSnapshot
 } from "react-beautiful-dnd/lib/index";
 
-import {addTaskToTaskMap} from "../functions/functions";
+import {addTaskToTaskMap, updateTask} from "../functions/functions";
 
 const Wrapper = styled.div`
   background-color: ${({isDraggingOver}) => (isDraggingOver ? colors.blue.lighter : colors.blue.light)};
@@ -71,7 +71,9 @@ class InnerTaskList extends Component<> {
     this.state = {
       tasks: [],
     };
-
+    this.handleUpdate = this.handleUpdate.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
+    this.toggleDragging = this.toggleDragging.bind(this);
   }
 
   shouldComponentUpdate(nextProps: TaskListProps) {
@@ -79,18 +81,38 @@ class InnerTaskList extends Component<> {
   }
 
 
-  handleUpdate() {
-    addTaskToTaskMap
-    this.handleDelete()
+  handleUpdate(index, title, desc, members, assigned, colour) {
+    const taskUpdate: TaskUpdate = {
+      task: this.props.tasks[index],
+      title: title,
+      desc: desc,
+      members: members,
+      assigned: assigned,
+      colour: colour
+    };
+    this.props.tasks[index] = updateTask(taskUpdate);
+
+
+
+    // for (const [key, value] of Object.entries(this.props.tasks)) {
+    //   if (value.pk === 3)
+    //     value.fields.title = "new title";
+    //   console.log(key, value);
+    // }
   }
 
   handleDelete() {
-    this.props.handleDelete();
+
+  }
+
+  toggleDragging (state){
+    console.log(this.props);
+    this.props.isDragDisabled = state;
   }
 
 
-  render() {
 
+  render() {
     return (
       <div>
         {this.props.tasks.map((task: Task, index: number) => (
@@ -100,11 +122,13 @@ class InnerTaskList extends Component<> {
                 <TaskItem
                   key={task.pk}
                   task={task}
+                  index={index}
                   isDragging={dragSnapshot.isDragging}
                   provided={dragProvided}
                   autoFocus={this.props.autoFocusTaskId === task.pk}
                   handleUpdate={this.handleUpdate}
                   handleDelete={this.handleDelete}
+                  isDragDisabled={true}
                 />
                 {dragProvided.placeholder}
               </div>
