@@ -1,0 +1,63 @@
+$base-duration: 500ms;
+$color-1: #2c3e50;
+$color-2: #3498db;
+$color-3: #2ecc71;
+$color-4: #e74c3c;
+$color-5: #fff7fb;
+$color-6: #494a4f;
+
+.dropdown-toggle {
+  background-color: transparent !important;
+  border: 0 none;
+  box-shadow: none !important;
+
+  .btn-default.focus, .btn-default:focus {
+    color: #333;
+    border-color: #8c8c8c;
+  }
+}
+
+.btn-toolbar {
+  float: right;
+}
+
+.circle-picker {
+  width: 70% !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  margin-right: 15% !important;
+  margin-left: 15% !important;
+  margin-bottom: 25px !important;
+}
+
+.Modal {
+  width: 55%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  border: 1px solid rgb(204, 204, 204);
+  background: rgb(255, 255, 255);
+  overflow: auto;
+  border-radius: 4px;
+  outline: none;
+  padding: 20px;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+
+  #close {
+
+    float: right;
+
+  }
+
+}
+
+.Overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
