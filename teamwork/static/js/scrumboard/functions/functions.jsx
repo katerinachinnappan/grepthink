@@ -157,7 +157,9 @@ export const updateTask = (taskUpdate: TaskUpdate): Task => {
 
 export const deleteTask = (colID, taskID, taskMap): TaskMapResult => {
   const current: Task[] = [...taskMap[colID]];
-  current.splice(current.indexOf(taskID), 1);
+  current.splice(taskID, 1);
+
+
   const result: TaskMap = {
     ...taskMap,
     [colID]: current,
