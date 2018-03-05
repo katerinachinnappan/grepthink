@@ -82,6 +82,7 @@ export const addTaskToTaskMap = (taskMap, columnID): TaskMapResult => {
       description: 'add',
       title: 'add',
       userID: 1,
+      colour: '#fff'
     },
   };
 
