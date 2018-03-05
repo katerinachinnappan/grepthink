@@ -10,12 +10,15 @@ Goal
 Our goal is to finish implementing the Scrum Board framework.
 
 Task listing, organized by user story
-  * User Story 1: As a user I want the ability to edit “cards” in my scrum board
+  * User Story 1: As a user I want the ability to edit “cards” and "columns" in my scrum board
      * Task 1: Give users the ability to edit the “cards” in their scrum board (5 hours)
      * Task 2: Assign specific “cards” to group members (5 hours)
      * Task 3: Have the ability to change the color of the “cards” (basic colors) (6 hours)
      * Task 4: “Cards” can be moved within their own column or to another column. Any changes in the scrum board will be updated to the        database (6 hours)
-        Total Hours: ~22 hours
+     * Task 5: Add ability to add new columns, change column name and delete columns (6 hours) 
+     * Task 6 Add ability to add new tasks (5 hours)
+     * Task 7: Create a modal which will allow users to delete / edit tasks (10 hours)     
+        Total Hours: ~43 hours
 
   * User Story 2: As a developer I want to show user’s their boards in myscrum.html
      * Task 1: When the user creates a new board they will be taken to an empty scrum board where they can start adding cards (5 hours)
@@ -51,7 +54,11 @@ Initial Task Assignment
 * Henry Hargreaves:
    * Task 2: Assign specific “cards” to group members (5 hours)
    * Task 4: “Cards” can be moved within their own column or to another column. Any changes in the scrum board will be updated to the database (6 hours)
-
+   * Task 5: Add ability to add new columns, change column name and delete columns (6 hours) 
+   * Task 6 Add ability to add new tasks (5 hours)
+   * Task 7: Create a modal which will allow users to delete / edit tasks (10 hours) 
+   
+   
 Scrum Times
 * Tuesday: 15 min within 9:50 am - 11:25 pm (meet with the TA)
 * Thursday: 10:30 am - 10:45 am (meet with Sponsor)
