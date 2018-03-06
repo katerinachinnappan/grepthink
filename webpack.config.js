@@ -36,21 +36,24 @@ module.exports = {
         ]
       },
       {
-        test: /\.scss$/,
-        use: [{
-          loader: "style-loader" // creates style nodes from JS strings
-        }, {
-          loader: "css-loader" // translates CSS into CommonJS
-        }, {
-          loader: "sass-loader",
-        }
-
+        test: /\.(s?)css$/,
+        // include: /node_modules/,
+        use: [
+          {
+            loader: "style-loader" // creates style nodes from JS strings
+          }, {
+            loader: "css-loader" // translates CSS into CommonJS
+          }, {
+            loader: "sass-loader",
+          }
         ]
-      }
-    ]
-  },
-  resolve: {
-    extensions: ['.js', '.jsx', 'scss'],
-  }
+      }]
 
-};
+  },
+  resolve:
+    {
+      extensions: ['.js', '.jsx', 'scss', 'css'],
+    }
+
+}
+;

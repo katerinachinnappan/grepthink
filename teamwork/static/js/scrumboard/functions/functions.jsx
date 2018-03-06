@@ -161,8 +161,6 @@ export const addColumnToTaskMap = (taskMap, columnID, keys): TaskMapResult => {
   });
 
   column = JSON.parse(column.column)[0];
-
-
   const result: TaskMap = {
     ...taskMap,
     [column.fields.title]: [],

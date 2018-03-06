@@ -55,6 +55,7 @@
     "react-modal-dialog": "^4.0.7",
     "react-native": "0.46.4",
     "react-native-webpack": "^0.1.1",
+    "react-select": "^1.2.1",
     "react-simple-dropdown": "^3.2.0",
     "react-transition-group": "^2.2.1",
     "sass-loader": "^6.0.7",

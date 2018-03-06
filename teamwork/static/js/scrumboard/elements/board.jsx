@@ -46,6 +46,7 @@ class Board extends Component {
   }
 
 
+
   componentDidMount() {
     injectGlobal`
       body {
@@ -162,7 +163,6 @@ class Board extends Component {
 
 
   render() {
-
     const columns: TaskMap = this.state.columns;
     const ordered: Column[] = this.state.ordered;
     const {containerHeight} = this.props;
@@ -173,6 +173,8 @@ class Board extends Component {
         direction="horizontal"
         ignoreContainerClipping={Boolean(containerHeight)}
       >
+
+
         {(provided: DroppableProvided) => (
           <Container innerRef={provided.innerRef}>
             {ordered.map((key: string, index: number) =>
@@ -203,17 +205,19 @@ class Board extends Component {
     );
 
     return (
-      <DragDropContext
-        onDragStart={this.onDragStart}
-        onDragEnd={this.onDragEnd}
-      >
 
-        {this.props.containerHeight ? (
-          <ParentContainer height={containerHeight}>{board}</ParentContainer>
-        ) : (
-          board
-        )}
-      </DragDropContext>
+        <DragDropContext
+          onDragStart={this.onDragStart}
+          onDragEnd={this.onDragEnd}
+        >
+
+          {this.props.containerHeight ? (
+            <ParentContainer height={containerHeight}>{board}</ParentContainer>
+          ) : (
+            board
+          )}
+        </DragDropContext>
+
     );
   }
 }

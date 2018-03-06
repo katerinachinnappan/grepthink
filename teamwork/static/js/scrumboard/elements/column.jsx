@@ -85,7 +85,7 @@ class Column extends Component {
     this.props.onTitleUpdate(this.props.title, data.message)
   }
 
-  deleteColumn(){
+  deleteColumn() {
     this.props.onDeleteColumn(this.props.title)
   }
 
@@ -111,59 +111,62 @@ class Column extends Component {
     const index: number = this.props.index;
     return (
 
-      <Draggable draggableId={title} index={index}>
-        {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
-          <Wrapper>
-            <Container
-              innerRef={provided.innerRef}
-              {...provided.draggableProps}
-            >
-              <Header isDragging={snapshot.isDragging}>
-                <Title
-                  isDragging={snapshot.isDragging}
-                  {...provided.dragHandleProps}
-                >
-                  <InlineEdit
-                    validate={this.customValidateText}
-                    activeClassName="editing"
-                    text={title}
-                    paramName="message"
-                    change={this.dataChanged}
-                  />
-                </Title>
 
-                <DropdownButton
-                  bsStyle={'default'}
-                  title={''}
-                  id={title}
-                >
-                  <MenuItem eventKey="1">Action</MenuItem>
-                  <MenuItem eventKey="2">Another action</MenuItem>
-                  <MenuItem divider/>
-                  <MenuItem eventKey="4" onClick={() => this.deleteColumn()}>Delete Column</MenuItem>
-                </DropdownButton>
+        <Draggable draggableId={title} index={index}>
+          {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
+            <Wrapper>
+              <Container
+                innerRef={provided.innerRef}
+                {...provided.draggableProps}
+              >
+                <Header isDragging={snapshot.isDragging}>
+                  <Title
+                    isDragging={snapshot.isDragging}
+                    {...provided.dragHandleProps}
+                  >
+                    <InlineEdit
+                      validate={this.customValidateText}
+                      activeClassName="editing"
+                      text={title}
+                      paramName="message"
+                      change={this.dataChanged}
+                    />
+                  </Title>
 
-              </Header>
-              <TaskList
-                listId={title}
-                listType="QUOTE"
-                tasks={tasks}
-                autoFocusQuoteId={this.props.autoFocusTaskId}
-                handleDeleteTask={this.handleDeleteTask}
-              />
-              <AddButton type="submit" onClick={() => {
-                this.handleAddTask(title)
-              }}>
-                add task
-              </AddButton>
+                  <DropdownButton
+                    bsStyle={'default'}
+                    title={''}
+                    id={title}
+                  >
+                    <MenuItem eventKey="1">Action</MenuItem>
+                    <MenuItem eventKey="2">Another action</MenuItem>
+                    <MenuItem divider/>
+                    <MenuItem eventKey="4" onClick={() => this.deleteColumn()}>Delete Column</MenuItem>
+                  </DropdownButton>
+
+                </Header>
+                <TaskList
+                  listId={title}
+                  listType="QUOTE"
+                  tasks={tasks}
+                  autoFocusQuoteId={this.props.autoFocusTaskId}
+                  handleDeleteTask={this.handleDeleteTask}
+                />
+                <AddButton type="submit" onClick={() => {
+                  this.handleAddTask(title)
+                }}>
+                  add task
+                </AddButton>
 
 
-            </Container>
-            {provided.placeholder}
-          </Wrapper>
+              </Container>
+              {provided.placeholder}
+            </Wrapper>
 
-        )}
-      </Draggable>
+          )}
+        </Draggable>
+
+
     );
   }
 }

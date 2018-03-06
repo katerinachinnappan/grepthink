@@ -6,10 +6,9 @@ import datetime
 class Board(models.Model):
     title = models.CharField(max_length=100, default='')
     description = models.CharField(max_length=200, default='')
+    members = models.ManyToManyField(User)
     owner = models.ForeignKey(
         User, related_name='owner', on_delete=models.CASCADE)
-    members = models.ManyToManyField(
-        User, related_name='users')
 
 
 class Column(models.Model):
@@ -31,8 +30,8 @@ class Task(models.Model):
 
     description = models.CharField(max_length=400, default='')
 
-    userID = models.ForeignKey(User, on_delete=models.CASCADE,
-                               related_name="user", default=0)
+    user = models.ForeignKey(User, on_delete=models.CASCADE,
+                             related_name="user", default=0)
 
     date = models.DateField(name="Date", default=datetime.date.today)
     members = models.ManyToManyField(User)

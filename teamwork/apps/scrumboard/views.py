@@ -1,5 +1,6 @@
 import json
 
+from django.contrib.auth.models import User
 from django.core import serializers
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse, JsonResponse
@@ -10,7 +11,10 @@ from teamwork.apps.scrumboard.models import Board, Task, Column
 
 
 def index(request):
-    board = Board.objects.all().filter(pk=1)
+    results = Board.objects.filter(pk=1)
+    members = []
+    for board in results:
+        members = serializers.serialize('json', board.members.only('id', 'username'))
     columns = Column.objects.all().filter(board_id=1).order_by('index')
     tasks = Task.objects.all().filter(board_id=1).order_by('index')
     initial_data = json.dumps({
@@ -18,6 +22,7 @@ def index(request):
         # 'board': serializers.serialize('json', board),
         'columns': serializers.serialize('json', columns),
         'tasks': serializers.serialize('json', tasks),
+        'members': members
     }, cls=DjangoJSONEncoder)
     return render(request, 'scrumboard/scrumboard.html', {
         'initial_data': initial_data
@@ -88,31 +93,14 @@ def updateColumn(request):
 def addTask(request):
     boardID = request.POST.get('board_id')
     board = Board.objects.get(id=boardID)
-
     colID = request.POST.get('col_id')
     column = Column.objects.get(id=colID)
-
     title = request.POST.get('title')
     desc = request.POST.get('desc')
     assigned = request.POST.get('assigned')
     colour = request.POST.get('colour')
     taskIndex = request.POST.get('index')
-
-    # if title is None:
-    #     title = ''
-    # if desc is None:
-    #     desc = ''
-    # if assigned is None:
-    #     assigned = False
-    # if colour is None:
-    #     colour = "#fff"
-    # if taskUpdate.members: TODO
-    #    taskUpdate.task.fields.members = taskUpdate.members;
-    # title = title, description = desc,
-    # assigned = assigned, colour = colour,
-
     newTask = Task.objects.create(board=board, column=column, index=taskIndex)
-
     return JsonResponse({'task': serializers.serialize('json', [newTask])})
 
 

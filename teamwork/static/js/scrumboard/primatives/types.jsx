@@ -26,10 +26,25 @@ export type Column = {|
   pk: number,
 |}
 
+export type Column = {|
+  fields: {
+    board: number,
+    description: string,
+    title: string,
+  },
+  model: string,
+  pk: number,
+|}
+
+
 
 export type TaskMap = {
   [key: string]: Task[]
 }
+
+export type UserMap = [
+  [{key: string}]
+]
 
 export type Dragging = {|
   id: DraggableId,
