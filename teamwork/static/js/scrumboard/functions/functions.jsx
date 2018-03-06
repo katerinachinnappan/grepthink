@@ -1,7 +1,7 @@
 import type {Column, Task, TaskMap} from "../primatives/types";
 import type {DraggableLocation} from "react-beautiful-dnd/lib/types";
 import {TaskUpdate} from "../primatives/types";
-import {boardID, csrfmiddlewaretoken, getColumnByName} from "../data";
+import {boardID, csrfmiddlewaretoken, getColumnByName, JSONColumns} from "../data";
 
 const reorder = (list: any[], startIndex: number, endIndex: number): any[] => {
   const result = Array.from(list);
@@ -102,7 +102,6 @@ export const reorderTaskMap = ({taskMap, source, destination,}: ReorderTaskMapAr
 export const addTaskToTaskMap = (taskMap, columnID): TaskMapResult => {
   const current: Task[] = [...taskMap[columnID]];
   let task;
-
   const post_data = {
     'csrfmiddlewaretoken': csrfmiddlewaretoken,
     'board_id': boardID,
@@ -161,6 +160,7 @@ export const addColumnToTaskMap = (taskMap, columnID, keys): TaskMapResult => {
   });
 
   column = JSON.parse(column.column)[0];
+  JSONColumns.push(column);
   const result: TaskMap = {
     ...taskMap,
     [column.fields.title]: [],
@@ -244,17 +244,15 @@ export const updateTask = (taskUpdate: TaskUpdate): Task => {
   }
   if (taskUpdate.members) {
     taskUpdate.task.fields.members = taskUpdate.members;
-    // post_data['members'] = taskUpdate.members; TODO
-  }
-  if (taskUpdate.assigned) {
-    taskUpdate.task.fields.assigned = taskUpdate.assigned;
-    post_data['assigned'] = taskUpdate.assigned;
+    post_data['members'] = taskUpdate.members.reduce((x, y) => {
+      x.push(y.value);
+      return x
+    }, []);
   }
   if (taskUpdate.colour) {
     taskUpdate.task.fields.colour = taskUpdate.colour;
     post_data['colour'] = taskUpdate.colour;
   }
-
   $.ajax({
     url: '/scrumboard/updateTask/',
     data: post_data,
@@ -265,7 +263,6 @@ export const updateTask = (taskUpdate: TaskUpdate): Task => {
     error: function (res) {
     }
   });
-
   return taskUpdate.task;
 };
 

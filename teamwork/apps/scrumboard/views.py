@@ -11,6 +11,13 @@ from teamwork.apps.scrumboard.models import Board, Task, Column
 
 
 def index(request):
+    #
+    # u1 = User.objects.filter(pk=1)
+    # u2 = User.objects.filter(pk=3)
+    # u3 = User.objects.filter(pk=4)
+    # board = Board.objects.get(pk=1)
+    # board.members.add(u1)
+
     results = Board.objects.filter(pk=1)
     members = []
     for board in results:
@@ -19,6 +26,7 @@ def index(request):
     tasks = Task.objects.all().filter(board_id=1).order_by('index')
     initial_data = json.dumps({
         'board_id': 1,
+
         # 'board': serializers.serialize('json', board),
         'columns': serializers.serialize('json', columns),
         'tasks': serializers.serialize('json', tasks),
@@ -40,7 +48,6 @@ def updateColumnIndex(request):
 def updateTaskIndexSameColumn(request):
     newIndexes = request.POST.getlist('tasks[]')
     boardID = request.POST.get('board_id')
-    print(newIndexes)
     for x in range(0, len(newIndexes)):
         Task.objects.filter(board=boardID, id=newIndexes[x]).update(index=x)
     return HttpResponse(status=204)
@@ -64,23 +71,25 @@ def updateTask(request):
     taskID = request.POST.get('task_id')
     title = request.POST.get('title')
     desc = request.POST.get('desc')
-    assigned = request.POST.get('assigned')
     colour = request.POST.get('colour')
+    members = request.POST.getlist('members[]')
+
+    Task.objects.filter(id=taskID).update(assigned=not (members is None))
     if title is not None:
         Task.objects.filter(id=taskID).update(title=title)
     if desc is not None:
-        Task.objects.filter(id=taskID).update(decription=desc)
-    if assigned is not None:
-        if assigned is 'on':
-            Task.objects.filter(id=taskID).update(assigned=True)
-        else:
-            Task.objects.filter(id=taskID).update(assigned=False)
+        Task.objects.filter(id=taskID).update(description=desc)
     if colour is not None:
         Task.objects.filter(id=taskID).update(colour=colour)
-    # if taskUpdate.members: TODO
-    #    taskUpdate.task.fields.members = taskUpdate.members;
+    if members is not None:
+        Task.objects.get(pk=taskID).members.clear()
+        for member in members:
+            user = User.objects.get(pk=member)
+            Task.objects.get(pk=taskID).members.add(user)
 
-    return HttpResponse(status=204)
+    task = Task.objects.get(pk=taskID)
+
+    return JsonResponse({'task': serializers.serialize('json', [task])})
 
 
 def updateColumn(request):

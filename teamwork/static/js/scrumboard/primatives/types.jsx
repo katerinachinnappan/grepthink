@@ -56,7 +56,6 @@ export type TaskUpdate = {|
   task: Task,
   title: string,
   desc: string,
-  members: string[],
-  assigned: boolean,
+  members: [{value : string}],
   colour: string
 |}

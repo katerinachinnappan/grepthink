@@ -6,6 +6,7 @@ import type {Task} from "./types";
 import {DraggableProvided} from "react-beautiful-dnd/lib/index";
 import ReactModal from "react-modal/dist/react-modal";
 import FormInstance from './form'
+import {getUserNameByID} from "../data";
 
 type Props = {
   task: Task,
@@ -62,11 +63,9 @@ flex-direction: column;
 
 const BlockQuote = styled.div`
 &::before {
-  content: open-quote;
 }
 
 &::after {
-  content: close-quote;
 }
 `;
 
@@ -114,8 +113,8 @@ export default class TaskItem extends PureComponent<Props> {
     this.setState({modalIsOpen: false});
   }
 
-  handleUpdate(title, desc, members, assigned, colour) {
-    this.props.handleUpdate(this.props.index, title, desc, members, assigned, colour);
+  handleUpdate(title, desc, members, colour) {
+    this.props.handleUpdate(this.props.index, title, desc, members, colour);
   }
 
   handleDeleteTask() {
@@ -168,8 +167,9 @@ export default class TaskItem extends PureComponent<Props> {
         <Content>
           <BlockQuote>{task.fields.title}</BlockQuote>
           <Footer>
-            <TaskID>(id: {task.pk})</TaskID>
+            {/*<TaskID>(id: {task.pk})</TaskID>*/}
             <Attribution>{task.fields.description}</Attribution>
+            <Attribution>{getUserNameByID(task.fields.members)}</Attribution>
           </Footer>
         </Content>
       </Container>

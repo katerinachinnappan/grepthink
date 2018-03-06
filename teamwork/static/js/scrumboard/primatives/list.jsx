@@ -77,17 +77,15 @@ class InnerTaskList extends Component<> {
     return nextProps.tasks !== this.props.tasks;
   }
 
-  handleUpdate(index, title, desc, members, assigned, colour) {
+  handleUpdate(index, title, desc, members, colour) {
     const taskUpdate: TaskUpdate = {
       task: this.props.tasks[index],
       title: title,
       desc: desc,
       members: members,
-      assigned: assigned,
       colour: colour,
     };
     this.props.tasks[index] = updateTask(taskUpdate);
-
   }
 
   handleDeleteTask(index) {

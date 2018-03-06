@@ -8,7 +8,8 @@ import ButtonToolbar from "react-bootstrap/es/ButtonToolbar";
 import {CirclePicker} from "react-color";
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
-import {userMap} from "../data";
+import {userMap, getMemberByID} from "../data";
+
 
 export default class FormInstance extends Component {
 
@@ -17,7 +18,7 @@ export default class FormInstance extends Component {
     this.state = {
       task: props.task,
       background: null,
-      value: [],
+      value: props.task.fields.members, //TODO Change this to current members on the task
     };
     this.handleClose = this.handleClose.bind(this);
     this.handleUpdate = this.handleUpdate.bind(this);
@@ -35,12 +36,10 @@ export default class FormInstance extends Component {
   }
 
   handleUpdate(title, desc) {
-    let assigned = this.state.task.fields.assigned || this.state.value;
-
     if (this.state.background === null)
-      this.props.handleUpdate(title, desc, this.state.value, assigned, this.props.task.fields.colour);
+      this.props.handleUpdate(title, desc, this.state.value, this.props.task.fields.colour);
     else
-      this.props.handleUpdate(title, desc, this.state.value, assigned, this.state.background);
+      this.props.handleUpdate(title, desc, this.state.value, this.state.background);
     this.handleClose();
   }
 
@@ -69,7 +68,7 @@ export default class FormInstance extends Component {
               id="formControlsText"
               type="text"
               label="Title"
-              placeholder={this.props.task.fields.title}
+              defaultValue={this.props.task.fields.title}
             />
           </FormGroup>
 
@@ -87,7 +86,7 @@ export default class FormInstance extends Component {
 
           <FormGroup controlId="formControlsTextarea">
             <ControlLabel>Description</ControlLabel>
-            <FormControl inputRef={node => this.description = node} componentClass="textarea" placeholder="textarea"/>
+            <FormControl inputRef={node => this.description = node} componentClass="textarea" defaultValue={this.props.task.fields.description}/>
           </FormGroup>
 
           <ControlLabel>Colour</ControlLabel>
