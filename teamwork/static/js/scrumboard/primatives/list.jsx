@@ -3,16 +3,17 @@ import styled from 'styled-components';
 import TaskItem from './item';
 import {grid, colors} from '../elements/constants';
 import Title from '../primatives/title';
-import type {Task, TaskUpdate} from "./types";
-import {addTaskToTaskMap, updateTask} from "../functions/functions";
-import {Draggable, Droppable} from "react-beautiful-dnd";
+import type {Task} from "./types";
+
 import {
-  DraggableProvided,
-  DraggableStateSnapshot,
-  DroppableProvided,
+  Draggable, Droppable
+} from "react-beautiful-dnd";
+
+
+import {
+  DraggableProvided, DraggableStateSnapshot, DroppableProvided,
   DroppableStateSnapshot
 } from "react-beautiful-dnd/lib/index";
-
 
 const Wrapper = styled.div`
   background-color: ${({isDraggingOver}) => (isDraggingOver ? colors.blue.lighter : colors.blue.light)};
@@ -68,9 +69,7 @@ class InnerTaskList extends Component<> {
     this.state = {
       tasks: [],
     };
-    this.handleUpdate = this.handleUpdate.bind(this);
-    this.toggleDragging = this.toggleDragging.bind(this);
-    this.handleDeleteTask = this.handleDeleteTask.bind(this);
+
   }
 
   shouldComponentUpdate(nextProps: TaskListProps) {
@@ -78,33 +77,10 @@ class InnerTaskList extends Component<> {
   }
 
 
-  handleUpdate(index, title, desc, members, assigned, colour) {
-    const taskUpdate: TaskUpdate = {
-      task: this.props.tasks[index],
-      title: title,
-      desc: desc,
-      members: members,
-      assigned: assigned,
-      colour: colour,
-    };
-    this.props.tasks[index] = updateTask(taskUpdate);
-    // for (const [key, value] of Object.entries(this.props.tasks)) {
-    //   if (value.pk === 3)
-    //     value.fields.title = "new title";
-    //   console.log(key, value);
-    // }
-  }
-
-  handleDeleteTask(index) {
-    this.props.handleDeleteTask(index)
-  }
-
-  toggleDragging(state) {
-    this.props.isDragDisabled = state;
-  }
-
-
   render() {
+    // const tasks = this.props.tasks || [ ]
+
+
     return (
       <div>
         {this.props.tasks.map((task: Task, index: number) => (
@@ -114,13 +90,9 @@ class InnerTaskList extends Component<> {
                 <TaskItem
                   key={task.pk}
                   task={task}
-                  index={index}
-                  colour={task.fields.colour}
                   isDragging={dragSnapshot.isDragging}
                   provided={dragProvided}
                   autoFocus={this.props.autoFocusTaskId === task.pk}
-                  handleUpdate={this.handleUpdate}
-                  handleDeleteTask={this.handleDeleteTask}
                 />
                 {dragProvided.placeholder}
               </div>
@@ -140,15 +112,6 @@ type InnerListProps = {|
 |}
 
 class InnerList extends Component<InnerListProps> {
-  constructor(props) {
-    super(props);
-    this.handleDeleteTask = this.handleDeleteTask.bind(this);
-  }
-
-  handleDeleteTask(taskID) {
-    this.props.handleDeleteTask(taskID)
-  }
-
   render() {
     const {tasks, dropProvided, autoFocusQuoteId} = this.props;
     const title = this.props.title ? (
@@ -162,7 +125,6 @@ class InnerList extends Component<InnerListProps> {
           <InnerTaskList
             tasks={tasks}
             autoFocusQuoteId={autoFocusQuoteId}
-            handleDeleteTask={this.handleDeleteTask}
           />
           {dropProvided.placeholder}
         </DropZone>
@@ -172,16 +134,6 @@ class InnerList extends Component<InnerListProps> {
 }
 
 export default class TaskList extends Component<Props> {
-
-  constructor(props) {
-    super(props);
-    this.handleDeleteTask = this.handleDeleteTask.bind(this);
-  }
-
-  handleDeleteTask(taskID) {
-    this.props.handleDeleteTask(taskID)
-  }
-
   render() {
     const {
       ignoreContainerClipping,
@@ -215,7 +167,6 @@ export default class TaskList extends Component<Props> {
                   title={title}
                   dropProvided={dropProvided}
                   autoFocusQuoteId={autoFocusQuoteId}
-                  handleDeleteTask={this.handleDeleteTask}
                 />
               </ScrollContainer>
             ) : (
@@ -224,7 +175,6 @@ export default class TaskList extends Component<Props> {
                 title={title}
                 dropProvided={dropProvided}
                 autoFocusQuoteId={autoFocusQuoteId}
-                handleDeleteTask={this.handleDeleteTask}
               />
             )
             }

@@ -1,6 +1,5 @@
 import type {Task, TaskMap} from "../primatives/types";
 import type {DraggableLocation} from "react-beautiful-dnd/lib/types";
-import {TaskUpdate} from "../primatives/types";
 
 const reorder = (list: any[], startIndex: number, endIndex: number): any[] => {
   const result = Array.from(list);
@@ -21,7 +20,6 @@ export type TaskMapResult = {|
   taskMap: TaskMap,
   autoFocusTaskId: ?string,
 |}
-
 
 export const reorderTaskMap = ({taskMap, source, destination,}: ReorderTaskMapArgs): TaskMapResult => {
   const current: Task[] = [...taskMap[source.droppableId]];
@@ -82,7 +80,6 @@ export const addTaskToTaskMap = (taskMap, columnID): TaskMapResult => {
       description: 'add',
       title: 'add',
       userID: 1,
-      colour: '#fff'
     },
   };
 
@@ -122,7 +119,6 @@ export const updateColumnName = (oldName, newName, taskMap, keys): void => {
 };
 
 
-//TODO Cascade delete
 export const deleteColumn = (colName, taskMap, keys): void => {
   let index = keys.indexOf(colName);
   delete taskMap[colName];
@@ -134,40 +130,5 @@ export const deleteColumn = (colName, taskMap, keys): void => {
 };
 
 
-export const updateTask = (taskUpdate: TaskUpdate): Task => {
-  if (taskUpdate.title)
-    taskUpdate.task.fields.title = taskUpdate.title;
 
-  if (taskUpdate.desc)
-    taskUpdate.task.fields.description = taskUpdate.desc;
-
-  if (taskUpdate.members)
-    taskUpdate.task.fields.members = taskUpdate.members;
-
-  if (taskUpdate.assigned)
-    taskUpdate.task.fields.assigned = taskUpdate.assigned;
-
-  if (taskUpdate.colour) //TODO Implement this properly
-    taskUpdate.task.fields.colour = taskUpdate.colour;
-
-  return taskUpdate.task;
-
-};
-
-
-export const deleteTask = (colID, taskID, taskMap): TaskMapResult => {
-  const current: Task[] = [...taskMap[colID]];
-  current.splice(taskID, 1);
-
-
-  const result: TaskMap = {
-    ...taskMap,
-    [colID]: current,
-  };
-
-  return {
-    taskMap: result,
-    autoFocusTaskId: null,
-  };
-};
 

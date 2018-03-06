@@ -4,8 +4,6 @@ import Board from './elements/board';
 import {itemMap} from "./data";
 import {Provider as AlertProvider} from 'react-alert'
 import AlertTemplate from 'react-alert-template-basic'
-import "./styles.scss"
-
 
 const options = {
   position: 'bottom center',

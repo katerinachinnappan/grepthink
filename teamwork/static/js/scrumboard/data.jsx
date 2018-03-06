@@ -4,7 +4,6 @@ const JSONColumns = JSON.parse(server_data.columns);
 const JSONTasks = JSON.parse(server_data.tasks);
 
 
-
 const getTasksByID = (column: Column, items: Task[]): Task[] =>
   items.filter((task: Task) => task.fields.column === column.pk);
 
@@ -15,3 +14,4 @@ export let itemMap: TaskMap =
   }), {});
 
 
+//Find out what coloumn we are in and then add a new task to that coloumn

@@ -4,13 +4,13 @@ import styled from 'styled-components';
 import {borderRadius, colors, grid} from './constants';
 import Title from '../primatives/title'
 import {DraggableProvided, DraggableStateSnapshot} from "react-beautiful-dnd/lib/index";
-import TaskList from "../primatives/list";
+import QuoteList from "../primatives/list";
 import type {Task, TaskMap} from "../primatives/types";
 import InlineEdit from "../primatives/inline-edit";
 import {withAlert} from "react-alert";
 import DropdownButton from "react-bootstrap/es/DropdownButton";
 import MenuItem from "react-bootstrap/es/MenuItem";
-import '../styles.scss'
+import '../styles.css'
 
 
 const Wrapper = styled.div`
@@ -70,7 +70,6 @@ class Column extends Component {
     this.dataChanged = this.dataChanged.bind(this);
     this.customValidateText = this.customValidateText.bind(this);
     this.deleteColumn = this.deleteColumn.bind(this);
-    this.handleDeleteTask = this.handleDeleteTask.bind(this);
   }
 
 
@@ -78,9 +77,6 @@ class Column extends Component {
     this.props.onAddTask(e);
   }
 
-  handleDeleteTask(taskID) {
-    this.props.handleDeleteTask(this.props.title, taskID)
-  }
 
   dataChanged(data) {
     this.props.onTitleUpdate(this.props.title, data.message)
@@ -140,17 +136,18 @@ class Column extends Component {
                 >
                   <MenuItem eventKey="1">Action</MenuItem>
                   <MenuItem eventKey="2">Another action</MenuItem>
+                  <MenuItem eventKey="3">Active Item</MenuItem>
                   <MenuItem divider/>
                   <MenuItem eventKey="4" onClick={() => this.deleteColumn()}>Delete Column</MenuItem>
                 </DropdownButton>
 
+
               </Header>
-              <TaskList
+              <QuoteList
                 listId={title}
                 listType="QUOTE"
                 tasks={tasks}
                 autoFocusQuoteId={this.props.autoFocusTaskId}
-                handleDeleteTask={this.handleDeleteTask}
               />
               <AddButton type="submit" onClick={() => {
                 this.handleAddTask(title)

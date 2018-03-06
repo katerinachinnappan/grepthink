@@ -4,7 +4,7 @@ import {DragDropContext, Droppable} from 'react-beautiful-dnd';
 import Column from './column';
 import {colors} from "./constants";
 import reorder, {
-  addColumnToTaskMap, addNewColumn, addTaskToTaskMap, deleteColumn, deleteTask, reorderTaskMap,
+  addColumnToTaskMap, addNewColumn, addTaskToTaskMap, deleteColumn, reorderTaskMap,
   updateColumnName
 } from "../functions/functions";
 import {DroppableProvided} from "react-beautiful-dnd/lib/index";
@@ -12,7 +12,6 @@ import type {TaskMap} from "../primatives/types";
 import type {DraggableLocation, DragStart, DropResult} from "react-beautiful-dnd/lib/types";
 import NewColumn from "./newColumn";
 import {withAlert} from 'react-alert'
-import {CirclePicker} from "react-color";
 
 
 const ParentContainer = styled.div`
@@ -55,7 +54,6 @@ class Board extends Component {
     this.handleAddColumn = this.handleAddColumn.bind(this);
     this.handleUpdateColumnName = this.handleUpdateColumnName.bind(this);
     this.handleDeleteColumn = this.handleDeleteColumn.bind(this);
-    this.handleDeleteTask = this.handleDeleteTask.bind(this);
   }
 
 
@@ -144,15 +142,6 @@ class Board extends Component {
     });
   }
 
-  handleDeleteTask(colName, taskID) {
-    const data = deleteTask(colName, taskID, this.state.columns);
-    this.setState({
-      columns: data.taskMap,
-      autoFocusQuoteId: data.autoFocusTaskId,
-    });
-  }
-
-
   render() {
 
     const columns: TaskMap = this.state.columns;
@@ -180,7 +169,6 @@ class Board extends Component {
                   onAddTask={this.handleAddTask}
                   onTitleUpdate={this.handleUpdateColumnName}
                   onDeleteColumn={this.handleDeleteColumn}
-                  handleDeleteTask={this.handleDeleteTask}
                 />
               ))}
             <NewColumn
@@ -199,7 +187,6 @@ class Board extends Component {
         onDragStart={this.onDragStart}
         onDragEnd={this.onDragEnd}
       >
-
         {this.props.containerHeight ? (
           <ParentContainer height={containerHeight}>{board}</ParentContainer>
         ) : (

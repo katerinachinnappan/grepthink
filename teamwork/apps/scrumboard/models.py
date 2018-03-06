@@ -23,15 +23,11 @@ class Task(models.Model):
     assigned = models.BooleanField(default=False)
     colour = models.CharField(default="blue", max_length=64)
     title = models.CharField(max_length=100, default='')
-    description = models.CharField(max_length=400, default='')
+    comment = models.CharField(max_length=400, default='')
     column = models.ForeignKey(Column, on_delete=models.CASCADE,
                                related_name="column", default=0)
     board = models.ForeignKey(Board, on_delete=models.CASCADE,
                               related_name="%(class)s_board", default=0)
     userID = models.ForeignKey(User, on_delete=models.CASCADE,
                                related_name="user", default=0)
-
-    members = models.ManyToManyField(User)
-
-
 

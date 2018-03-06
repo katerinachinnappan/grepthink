@@ -8,8 +8,6 @@ export type Task = {|
     description: string,
     title: string,
     userID: number,
-    members: string[],
-    colour : string,
   },
   model: string,
   pk: number,
@@ -17,10 +15,10 @@ export type Task = {|
 
 export type Column = {|
   fields: {
-    board: number,
+    board: number
     description: string,
     title: string,
-  },
+  }
   model: string,
   pk: number,
 |}
@@ -33,14 +31,4 @@ export type TaskMap = {
 export type Dragging = {|
   id: DraggableId,
   location: DraggableLocation,
-|}
-
-
-export type TaskUpdate = {|
-  task: Task,
-  title: string,
-  desc: string,
-  members: string[],
-  assigned: boolean,
-  colour: string
 |}
