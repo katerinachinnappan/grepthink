@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+import datetime
 
 
 class Board(models.Model):
@@ -33,5 +34,6 @@ class Task(models.Model):
     userID = models.ForeignKey(User, on_delete=models.CASCADE,
                                related_name="user", default=0)
 
+    date = models.DateField(name="Date", default=datetime.date.today)
     members = models.ManyToManyField(User)
     index = models.IntegerField(default=-1)

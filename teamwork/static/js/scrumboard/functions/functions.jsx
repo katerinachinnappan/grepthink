@@ -124,7 +124,7 @@ export const addTaskToTaskMap = (taskMap, columnID): TaskMapResult => {
   });
 
   task = JSON.parse(task.task)[0];
-  console.log(task);
+  current.push(task);
 
   const result: TaskMap = {
     ...taskMap,
@@ -152,7 +152,7 @@ export const addColumnToTaskMap = (taskMap, columnID, keys): TaskMapResult => {
     data: post_data,
     dataType: 'json',
     type: "POST",
-    async: false,
+    async: false, //TODO change from async
     success: function (res) {
       column = res;
     },
@@ -204,7 +204,6 @@ export const updateColumnName = (oldName, newName, taskMap, keys): void => {
 };
 
 
-//TODO Cascade delete
 export const deleteColumn = (colName, taskMap, keys): void => {
   let index = keys.indexOf(colName);
   let columnID = getColumnByName(colName);
