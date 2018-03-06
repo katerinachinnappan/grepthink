@@ -13,21 +13,25 @@ class Board(models.Model):
 
 class Column(models.Model):
     title = models.CharField(max_length=100, default='')
-    colour = models.CharField(default="blue", max_length=64)
     board = models.ForeignKey(Board, on_delete=models.CASCADE,
                               related_name="%(class)s_board", default=0)
     index = models.IntegerField(default=-1)
 
 
 class Task(models.Model):
-    assigned = models.BooleanField(default=False)
-    colour = models.CharField(default="blue", max_length=64)
-    title = models.CharField(max_length=100, default='')
-    comment = models.CharField(max_length=400, default='')
-    column = models.ForeignKey(Column, on_delete=models.CASCADE,
-                               related_name="column", default=0)
     board = models.ForeignKey(Board, on_delete=models.CASCADE,
                               related_name="%(class)s_board", default=0)
+    column = models.ForeignKey(Column, on_delete=models.CASCADE,
+                               related_name="column", default=0)
+
+    assigned = models.BooleanField(default=False)
+    colour = models.CharField(default="#fff", max_length=64)
+    title = models.CharField(max_length=100, default='new task - click to edit')
+
+    description = models.CharField(max_length=400, default='')
+
     userID = models.ForeignKey(User, on_delete=models.CASCADE,
                                related_name="user", default=0)
 
+    members = models.ManyToManyField(User)
+    index = models.IntegerField(default=-1)

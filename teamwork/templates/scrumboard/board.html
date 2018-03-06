@@ -8,9 +8,12 @@
 <body>
 <script type="text/javascript">
     let server_data = {{ initial_data|safe }};
+
+
 </script>
 
 <div id="root" style="overflow:scroll;"></div>
+{% csrf_token %}
 {% render_bundle 'main' %}
 
 </body>

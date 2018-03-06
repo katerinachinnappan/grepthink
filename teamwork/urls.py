@@ -96,7 +96,20 @@ urlpatterns = [
 
         url(r'^scrumboard/add/', scrumboard.myscrum, name='myscrum'),
         url(r'^scrumboard/delete/', scrumboard.myscrum, name='myscrum'),
-        url(r'^scrumboard/update/', scrumboard.update, name='update'),
+        url(r'^scrumboard/updateColumnIndex/', scrumboard.updateColumnIndex, name='updateColumnIndex'),
+        url(r'^scrumboard/updateTaskIndexSameColumn/', scrumboard.updateTaskIndexSameColumn, name='updateTaskIndex'),
+        url(r'^scrumboard/updateTaskIndexDifferentColumn/', scrumboard.updateTaskIndexDifferentColumn, name='updateTaskIndexDifferentColumn'),
+
+        url(r'^scrumboard/updateTask/', scrumboard.updateTask, name='updateTask'),
+        url(r'^scrumboard/updateColumn/', scrumboard.updateColumn, name='updateColumn'),
+
+        url(r'^scrumboard/addTask/', scrumboard.addTask, name='addTask'),
+        url(r'^scrumboard/addColumn/', scrumboard.addColumn, name='addColumn'),
+
+        url(r'^scrumboard/deleteTask/', scrumboard.deleteTask, name='deleteTask'),
+        url(r'^scrumboard/deleteColumn/', scrumboard.deleteColumn, name='deleteColumn'),
+
+
 
 
                   # View all courses
