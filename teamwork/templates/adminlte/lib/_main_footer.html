@@ -1,6 +1,7 @@
-{% block stylesheets %}
-    <link rel="stylesheet" href="static/css/myscrumBox.css">
+{% load static %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="{% static 'css/myscrumBox.css' %}">
 {% endblock stylesheets %}
 <div class="footers">
 <footer class="main-footer">
