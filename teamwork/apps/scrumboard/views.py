@@ -32,8 +32,12 @@ def view_one_scrum(request, slug):
     description = "About: " + scrum.description
 
     board = Board.objects.all().filter(slug=slug)
-    columns = Column.objects.all().filter(slug=slug)
-    tasks = Task.objects.all().filter(slug=slug)
+    results = Board.objects.filter(slug=slug)
+    members = []
+    for boardd in results:
+        members = serializers.serialize('json', boardd.members.only('id', 'username'))
+    columns = Column.objects.all().filter(slug=slug).order_by('index')
+    tasks = Task.objects.all().filter(slug=slug).order_by('index')
     initial_data = json.dumps({
         'board': serializers.serialize('json', board),
         'columns': serializers.serialize('json', columns),
@@ -43,6 +47,8 @@ def view_one_scrum(request, slug):
              'page_description': page_description,  'title': title,
         'initial_data': initial_data
     })
+
+ 
 
 
 def index(request):
@@ -92,166 +98,104 @@ def view_scrums(request):
 
     return myscrum(request, my_scrums)
 
+def updateColumnIndex(request):
+    newIndexes = request.POST.getlist('columns[]')
+    boardID = request.POST.get('board_id')
+    for x in range(0, len(newIndexes)):
+        Column.objects.filter(board=boardID, title=newIndexes[x]).update(index=x)
+    return HttpResponse(status=204)
+
+
+def updateTaskIndexSameColumn(request):
+    newIndexes = request.POST.getlist('tasks[]')
+    boardID = request.POST.get('board_id')
+    for x in range(0, len(newIndexes)):
+        Task.objects.filter(board=boardID, id=newIndexes[x]).update(index=x)
+    return HttpResponse(status=204)
+
+
+def updateTaskIndexDifferentColumn(request):
+    boardID = request.POST.get('board_id')
+    newColumnID = request.POST.get('newColumnID')
+    oldColTasksOrdered = request.POST.getlist('oldColTasksOrdered[]')
+    newColTasksOrdered = request.POST.getlist('newColTasksOrdered[]')
+    changedTaskID = request.POST.get('changedTaskID')
+    Task.objects.filter(board=boardID, id=changedTaskID).update(column_id=newColumnID)
+    for x in range(0, len(oldColTasksOrdered)):
+        Task.objects.filter(board=boardID, id=oldColTasksOrdered[x]).update(index=x)
+    for x in range(0, len(newColTasksOrdered)):
+        Task.objects.filter(board=boardID, id=newColTasksOrdered[x]).update(index=x)
+    return HttpResponse(status=204)
+
+
+def updateTask(request):
+    taskID = request.POST.get('task_id')
+    title = request.POST.get('title')
+    desc = request.POST.get('desc')
+    colour = request.POST.get('colour')
+    members = request.POST.getlist('members[]')
+
+    Task.objects.filter(id=taskID).update(assigned=not (members is None))
+    if title is not None:
+        Task.objects.filter(id=taskID).update(title=title)
+    if desc is not None:
+        Task.objects.filter(id=taskID).update(description=desc)
+    if colour is not None:
+        Task.objects.filter(id=taskID).update(colour=colour)
+    if members is not None:
+        Task.objects.get(pk=taskID).members.clear()
+        for member in members:
+            user = User.objects.get(pk=member)
+            Task.objects.get(pk=taskID).members.add(user)
+
+    task = Task.objects.get(pk=taskID)
+
+    return JsonResponse({'task': serializers.serialize('json', [task])})
+
+
+def updateColumn(request):
+    colID = request.POST.get('col_id')
+    title = request.POST.get('title')
+    Column.objects.filter(id=colID).update(title=title)
+    return HttpResponse(status=204)
+
+
+def addTask(request):
+    boardID = request.POST.get('board_id')
+    board = Board.objects.get(id=boardID)
+    colID = request.POST.get('col_id')
+    column = Column.objects.get(id=colID)
+    title = request.POST.get('title')
+    desc = request.POST.get('desc')
+    assigned = request.POST.get('assigned')
+    colour = request.POST.get('colour')
+    taskIndex = request.POST.get('index')
+    newTask = Task.objects.create(board=board, column=column, index=taskIndex)
+    return JsonResponse({'task': serializers.serialize('json', [newTask])})
+
+
+def addColumn(request):
+    boardID = request.POST.get('board_id')
+    board = Board.objects.get(id=boardID)
+    title = request.POST.get('title')
+    columnIndex = request.POST.get('index')
+    newColumn = Column.objects.create(board=board, title=title, index=columnIndex)
+    return JsonResponse({'column': serializers.serialize('json', [newColumn])})
+
+
+def deleteTask(request):
+    taskID = request.POST.get('task_id')
+    Task.objects.get(pk=taskID).delete()
+    return HttpResponse(status=204)
+
+
+def deleteColumn(request):
+    columnID = request.POST.get('column_id')
+    Column.objects.get(pk=columnID).delete()
+    return HttpResponse(status=204)
 
 
 
-def myscrumprojects(request, projects):
-    """
-    Private method that will be used for paginator once I figure out how to get it working.
-    """
-    page = request.GET.get('page')
-
-    # Populate with page name and title
-    page_name = "My Projectsss"
-    page_description = "Projects created by " + request.user.username
-    title = "My Projectsd"
-
-    #print("hello\n\n")
-
-    return render(request, 'scrumboard/myscrum.html', {'page_name': page_name,
-                                                           'page_description': page_description, 'title': title,
-                                                            'projects': projects})
 
 
-@login_required
-def view_projects(request):
-    """
-    Public method that takes a request, retrieves all Project objects from the model,
-    then calls _projects to render the request to template view_projects.html
-    """
-    my_projects = Project.get_my_projects(request.user)
-    print("helloworldsss\n\n")
-    print(my_projects)
-    print("\n\n")
 
-    return myscrumprojects(request, my_projects)
-
-@login_required
-def view_one_project_scrum(request, slug):
-    """
-    Public method that takes a request and a slug, retrieves the Project object
-    from the model with given project slug.  Renders projects/view_project.html
-
-    Passing status check unit test in test_views.py.
-    """
-
-    project = get_object_or_404(Project, slug=slug)
-    scrum_master = project.scrum_master
-    updates = project.get_updates()
-    resources = project.get_resources()
-    # Get the project owner for color coding stuff
-    project_owner = project.creator.profile
-    members = project.members.all()
-
-    # Populate with project name and tagline
-    page_name = project.title or "Project"
-    page_description = project.tagline or "Tagline"
-    title = project.title or "Project"
-
-    # Get the course given a project wow ethan great job keep it up.
-    course = project.course.first()
-    staff = course.get_staff()
-
-    asgs = list(course.assignments.all())
-    asg_completed = []
-
-    for i in asgs:
-        for j in i.subs.all():
-            if j.evaluator == request.user:
-                asg_completed.append(i)
-                break
-
-    user = request.user
-    profile = Profile.objects.get(user=user)
-
-    # to reduce querys in templates -kp
-    pending_members = project.pending_members.all()
-    pending_count = len(pending_members)
-    project_members = project.members.all()
-
-    requestButton = 1
-    if request.user in pending_members:
-        requestButton = 0
-
-    project_chat = reversed(project.get_chat())
-    if request.method == 'POST':
-        form = ChatForm(request.user.id, slug, request.POST)
-        if form.is_valid():
-            # Create a chat object
-            chat = ProjectChat(author=request.user, project=project)
-            chat.content = form.cleaned_data.get('content')
-            chat.save()
-            return redirect(view_one_project, project.slug)
-        else:
-            messages.info(request, 'Errors in form')
-    else:
-        # Send form for initial project creation
-        form = ChatForm(request.user.id, slug)
-
-    find_meeting(slug)
-
-    readable = ""
-    if project.readable_meetings:
-        jsonDec = json.decoder.JSONDecoder()
-        readable = jsonDec.decode(project.readable_meetings)
-
-    completed_tsrs = project.tsr.all()
-    avg_dict = {}
-    for i in completed_tsrs.all():
-        if i.evaluatee in avg_dict.keys():
-            avg_dict[i.evaluatee] = int(avg_dict[i.evaluatee]) + int(i.percent_contribution)
-        else:
-            avg_dict[i.evaluatee] = int(i.percent_contribution)
-
-    avgs = []
-    for key, item in avg_dict.items():
-        con_avg = item / (len(completed_tsrs) / len(members))
-        avgs.append((key, int(con_avg)))
-
-    # ======================
-    assigned_tsrs = course.assignments.filter(ass_type="tsr", closed=False)
-
-    tsr_tuple = {}
-
-    if not request.user.profile.isGT:
-        user_role = Enrollment.objects.filter(user=request.user, course=course).first().role
-    else:
-        user_role = 'GT'
-
-    fix = []
-    new_tsr_tuple = []
-    if request.user.profile.isGT or request.user.profile.isProf or user_role == "ta":
-        temp_tup = sorted(project.tsr.all(), key=lambda x: (x.ass_number, x.evaluatee.id))
-        temp = ""
-
-        for j in temp_tup:
-            if temp != j.evaluatee:
-                temp = j.evaluatee
-                fix.append([temp, j.ass.first(), j, 1])
-            else:
-                fix.append(["", j.ass.first(), j, 0])
-    else:
-        fix = None
-
-    med = 100
-    if len(members) > 0:
-        med = int(100 / len(members))
-    mid = {'low': int(med * 0.7), 'high': int(med * 1.4)}
-    # ======================
-    today = datetime.now().date()
-
-    return render(request, 'scrumboard/myscrum.html', {'page_name': page_name,
-                                                          'page_description': page_description, 'title': title,
-                                                          'members': members, 'form': form, 'temp_tup': fix,
-                                                          'project': project, 'project_members': project_members,
-                                                          'pending_members': pending_members,
-                                                          'requestButton': requestButton, 'avgs': avgs,
-                                                          'assignments': asgs, 'asg_completed': asg_completed,
-                                                          'today': today,
-                                                          'pending_count': pending_count, 'profile': profile,
-                                                          'scrum_master': scrum_master, 'staff': staff,
-                                                          'updates': updates, 'project_chat': project_chat,
-                                                          'course': course, 'project_owner': project_owner,
-                                                          'meetings': readable, 'resources': resources,
-                                                          'json_events': project.meetings, 'contribute_levels': mid,
-                                                          'assigned_tsrs': assigned_tsrs})

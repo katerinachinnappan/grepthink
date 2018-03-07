@@ -3,7 +3,6 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>React with Django </title>
 </head>
 
 <body>
@@ -12,6 +11,7 @@
 </script>
 
 <div id="root" style="overflow:scroll;"></div>
+{% csrf_token %}
 {% render_bundle 'main' %}
 
 </body>

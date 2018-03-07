@@ -5,7 +5,6 @@ from django.db import models
 import random
 import string
 from math import floor
-from datetime import datetime
 from decimal import Decimal
 
 # Third-party Modules
@@ -18,12 +17,13 @@ from django.template.defaultfilters import slugify
 
 from django.core.validators import URLValidator
 
-from django.utils import timezone
 
 from teamwork.apps.core.models import *
 from teamwork.apps.profiles.models import *
 from teamwork.apps.projects.models import Project
 
+import datetime
+today = datetime.date.today()
 
 class Board(models.Model):
     project = models.ForeignKey(
@@ -97,6 +97,7 @@ class Column(models.Model):
         max_length=20,
         unique=False,
         null=True)
+    index = models.IntegerField(default=-1)
 
     # The Meta class provides some extra information about the Column model.
     class Meta:
@@ -129,7 +130,7 @@ class Task(models.Model):
                                related_name="column", default=0)
     board = models.ForeignKey(Board, on_delete=models.CASCADE,
                               related_name="%(class)s_board", default=0)
-    userID = models.ForeignKey(User, on_delete=models.CASCADE,
+    user = models.ForeignKey(User, on_delete=models.CASCADE,
                                related_name="user", default=0)
     # Unique URL slug for assignment
     slug = models.CharField(
@@ -137,6 +138,10 @@ class Task(models.Model):
         max_length=20,
         unique=False,
         null=True)
+    date = models.DateField(name="Date", default=today)
+    members = models.ManyToManyField(User)
+    index = models.IntegerField(default=-1)
+    colour = models.CharField(default="#fff", max_length=64)
     # The Meta class provides some extra information about the Column model.
     class Meta:
         # Verbose name is the same as class name in this case.
