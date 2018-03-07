@@ -1,4 +1,4 @@
-﻿RELEASE Plan
+RELEASE Plan
 GrepThink
 Team GrepThink
 Revision #1

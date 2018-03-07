@@ -53,7 +53,6 @@ class Interest(models.Model):
     def __str__(self):
         return ("%d" % (self.interest))
 
-
 class Tsr(models.Model):
     """
     TSR objects relate a user and tsr fields, along with assignment information
