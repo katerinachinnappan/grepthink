@@ -24,7 +24,6 @@ from teamwork.apps.core.models import *
 from teamwork.apps.profiles.models import *
 from teamwork.apps.projects.models import Project
 
-
 class Board(models.Model):
     project = models.ForeignKey(
         Project,
@@ -58,11 +57,12 @@ class Board(models.Model):
         """
         # #Gets membership and ownership object of current user
         mem = list(user.users.all())
+        print("members are: \n", mem)
 
         owner = list(user.owner.all())
-
+        # print("owner is \n", owner)
         scrums = list(set(mem + owner))
-
+        # print("scrums: \n", scrums)
         return scrums
 
     def __str__(self):

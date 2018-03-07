@@ -160,13 +160,9 @@ def view_one_project(request, slug):
 
 
     if request.method == 'POST':
-        # print("inside request.method\n")
         form = CreateScrumBoardForm(request.user.id, request.POST)
-        # print("form's output is: \n", form)
-        # print(" \n", form.is_valid())
 
         if form.is_valid():
-            # print("inside form.is_valid()\n")
             #create new board in database
             new_board = Board(project=project)
             new_board.title = form.cleaned_data.get('title')
@@ -175,7 +171,12 @@ def view_one_project(request, slug):
             new_board.slug = form.cleaned_data.get('slug')
             new_board.owner = request.user
             new_board.save()
-            print("Board slug is \n", new_board.slug)
+
+            # add members associated with the project to the scrumboard
+            for member in members:
+                users = User.objects.get(username=member)
+                # print("users are ", users, '\n')
+                Board.objects.get(pk=new_board.id).members.add(users)
 
             #create new column in database
             new_column = Column()
@@ -183,7 +184,7 @@ def view_one_project(request, slug):
             new_column.description = 'To do'
             new_column_slug = str(Board.objects.get(slug=new_board.slug))
             new_column.slug = new_column_slug
-            print("Column slug is \n", new_column.slug)
+            # print("Column slug is \n", new_column.slug)
             new_board_id = Board.objects.get(id=new_board.id)
             new_column.board = new_board_id
             new_column.save()
@@ -207,11 +208,6 @@ def view_one_project(request, slug):
             new_column.save()
 
             # print("Project is \n", new_board.project)
-            # print("title is \n", new_column.title)
-            # print("description is \n", new_column.description)
-            # print("board is \n", new_column.board)
-
-            # print("Project is \n", new_board.project)
             # print("title is \n", new_board.title)
             # print("description is \n", new_board.description)
             # print("owner is \n", new_board.owner)
@@ -219,10 +215,7 @@ def view_one_project(request, slug):
             return redirect(view_one_scrum, new_column.slug)
 
     else:
-        # print("show form\n")
         form = CreateScrumBoardForm(request.user.id)
-
-
 
     find_meeting(slug)
 
@@ -290,7 +283,7 @@ def view_one_project(request, slug):
                                                           'course': course, 'project_owner': project_owner,
                                                           'meetings': readable, 'resources': resources,
                                                           'json_events': project.meetings, 'contribute_levels': mid,
-                                                          'assigned_tsrs': assigned_tsrs})
+                                                          'assigned_tsrs': assigned_tsrs, })
 
 
 def leave_project(request, slug):
