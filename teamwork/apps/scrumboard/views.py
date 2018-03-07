@@ -1,7 +1,6 @@
 import json
 
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.core import serializers
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import JsonResponse
@@ -14,7 +13,9 @@ from teamwork.apps.scrumboard.models import Board, Task, Column
 
 def view_one_scrum(request, slug):
     # Populate with page name, title and description
+    # scrum = Board.objects.filter(slug=slug)#get_object_or_404(Board, slug=slug)
     scrum = get_object_or_404(Board, slug=slug)
+
     page_name = "My Scrum Board - " + scrum.title
     page_description = "Scrum Board created by " + request.user.username
     title = "ScrumBoard"
@@ -23,14 +24,15 @@ def view_one_scrum(request, slug):
     board = Board.objects.all().filter(slug=slug)
     results = Board.objects.filter(slug=slug)
     members = []
-    for boardd in results:
-        members = serializers.serialize('json', boardd.members.only('id', 'username'))
-    columns = Column.objects.all().filter(slug=slug).order_by('index')
-    tasks = Task.objects.all().filter(slug=slug).order_by('index')
+    for board in results:
+        members = serializers.serialize('json', board.members.only('id', 'username'))
+    columns = Column.objects.all().filter(board_id=board.pk).order_by('index')
+    tasks = Task.objects.all().filter(board_id=board.pk).order_by('index')
     initial_data = json.dumps({
-        'board': serializers.serialize('json', board),
+        'board_id': board.pk,
         'columns': serializers.serialize('json', columns),
         'tasks': serializers.serialize('json', tasks),
+        'members': members
     }, cls=DjangoJSONEncoder)
     return render(request, 'scrumboard/scrumboard.html', {'description': description, 'page_name': page_name,
                                                           'page_description': page_description, 'title': title,
@@ -38,24 +40,29 @@ def view_one_scrum(request, slug):
                                                           })
 
 
-def index(request):
-    results = Board.objects.filter(pk=1)
-    members = []
-    for board in results:
-        members = serializers.serialize('json', board.members.only('id', 'username'))
-    columns = Column.objects.all().filter(board_id=1).order_by('index')
-    tasks = Task.objects.all().filter(board_id=1).order_by('index')
-    initial_data = json.dumps({
-        'board_id': 1,
+def myscrum(request, scrumboard):
+    """
+        Private method that will be used for paginator once I figure out how to get it working.
+        """
+    page = request.GET.get('page')
+    # Populate with page name and title
+    page_name = "My Scrum Board"
+    page_description = "Scrum Boards created by " + request.user.username
+    title = "Scrum Boards"
+    return render(request, 'scrumboard/myscrum.html', {'page_name': page_name,
+                                                       'page_description': page_description, 'title': title,
+                                                       'scrumboard': scrumboard})
 
-        # 'board': serializers.serialize('json', board),
-        'columns': serializers.serialize('json', columns),
-        'tasks': serializers.serialize('json', tasks),
-        'members': members
-    }, cls=DjangoJSONEncoder)
-    return render(request, 'scrumboard/scrumboard.html', {
-        'initial_data': initial_data
-    })
+
+@login_required
+def view_scrums(request):
+    """
+    Public method that takes a request, retrieves all Scrum objects from the model,
+    then calls myscrum to render the request to template myscrum.html
+    """
+
+    my_scrums = Board.get_my_scrums(request.user)  # This is broken
+    return myscrum(request, my_scrums)
 
 
 def updateColumnIndex(request):
@@ -155,35 +162,24 @@ def deleteColumn(request):
     return HttpResponse(status=204)
 
 
-def myscrum(request, scrumboard):
-    """
-        Private method that will be used for paginator once I figure out how to get it working.
-        """
-    page = request.GET.get('page')
-    # Populate with page name and title
-    page_name = "My Scrum Board"
-    page_description = "Scrum Boards created by " + request.user.username
-    title = "Scrum Boards"
-
-    # print("hello\n\n")
-
-    return render(request, 'scrumboard/myscrum.html', {'page_name': page_name,
-                                                       'page_description': page_description, 'title': title,
-                                                       'scrumboard': scrumboard})
-
-
-@login_required
-def view_scrums(request):
-    """
-    Public method that takes a request, retrieves all Scrum objects from the model,
-    then calls myscrum to render the request to template myscrum.html
-    """
-    my_scrums = Board.get_my_scrums(request.user)
-
-    return myscrum(request, my_scrums)
-
-
-
-
 def view_projects_scrum(request):
     return render(request, 'scrumboard/view_projects_scrum.html', {})
+
+# def index(request):
+#     results = Board.objects.filter(pk=1)
+#     members = []
+#     for board in results:
+#         members = serializers.serialize('json', board.members.only('id', 'username'))
+#     columns = Column.objects.all().filter(board_id=1).order_by('index')
+#     tasks = Task.objects.all().filter(board_id=1).order_by('index')
+#     initial_data = json.dumps({
+#         'board_id': 1,
+#
+#         # 'board': serializers.serialize('json', board),
+#         'columns': serializers.serialize('json', columns),
+#         'tasks': serializers.serialize('json', tasks),
+#         'members': members
+#     }, cls=DjangoJSONEncoder)
+#     return render(request, 'scrumboard/scrumboard.html', {
+#         'initial_data': initial_data
+#     })
