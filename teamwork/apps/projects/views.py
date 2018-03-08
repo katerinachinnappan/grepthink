@@ -51,9 +51,6 @@ def view_projects(request):
     then calls _projects to render the request to template view_projects.html
     """
     my_projects = Project.get_my_projects(request.user)
-    print(my_projects)
-    print("\n\n")
-
     return _projects(request, my_projects)
 
 
@@ -141,7 +138,8 @@ def view_one_project(request, slug):
         requestButton = 0
 
     project_chat = reversed(project.get_chat())
-    if request.method == 'POST':
+
+    if request.method == 'POST' and 'SUBMIT' not in request.POST:
         form = ChatForm(request.user.id, slug, request.POST)
         if form.is_valid():
             # Create a chat object
@@ -151,12 +149,11 @@ def view_one_project(request, slug):
             return redirect(view_one_project, project.slug)
         else:
             messages.info(request, 'Errors in form')
-
     else:
         # Send form for initial project creation
         form = ChatForm(request.user.id, slug)
 
-    if request.method == 'POST':  # TODO Implement this
+    if request.method == 'POST' and 'SUBMIT' in request.POST:  # TODO Implement this
         # print("inside request.method\n")
         form = CreateScrumBoardForm(request.user.id, request.POST, request.FILES)
         # print("form's output is: \n", form)
