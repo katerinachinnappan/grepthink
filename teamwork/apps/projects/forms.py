@@ -350,7 +350,7 @@ class UpdateForm(forms.ModelForm):
         fields = ['update_title', 'update']
 
 
-class CreateScrumBoardForm (forms.Form):
+class CreateScrumBoardForm (forms.ModelForm):
     """
     Form used for creating scrum board
 
