@@ -78,7 +78,7 @@
             {% endif %}
 
             {% if user in project_members or request.user in staff  %}
-            <li class=""><a href="#tab_8" data-toggle="tab" aria-expanded="false">Scrum Board</a></li>
+            <li class=""><a href="#tab_8" data-toggle="tab" aria-expanded="false">Scrum Boards</a></li>
             {% endif %}
 
             <li class="dropdown">
@@ -758,49 +758,68 @@
                    <div class="box box-primary">
                       <form action="{% url 'view_one_project' project.slug %}" method="post" role="form"
                           class="clearfix">
-                      <div class="box-body">
-                          {% csrf_token %}
-                          {{ form.status }}
-                          {% for field in form.visible_fields %}
-                          <div class="form-group{% if field.errors %} has-error{% endif %}">
-                              <label for="{{ field.label }}" class="control-label">{{ field.label }}</label>
-                              {{ field }}
-                              {% for error in field.errors %}
-                              <label class="control-label">{{ error }}</label>
-                              {% endfor %}
-                          </div>
-                          {% endfor %}
-                       </div>
+                          <div class="box-body">
+                              {% csrf_token %} {{ form.status }} {{ form.non_field_errors }}
+                              <div class="form-group">
+                                  {{form.title.errors}}
+                                  <label for="{{ form.title.id_for_label }}"class="control-label">
+                                      Title
+                                  </label>
+                                  {{form.title}}
+                              </div>
+                              <div class="form-group">
+                                  {{form.description.errors}}
+                                  <label for="{{ form.description.id_for_label }}"class="control-label">
+                                      Description
+                                  </label>
+                                  {{form.description}}
+                              </div>
+                              <div class="form-group">
+                                  {{form.sprint.errors}}
+                                  <label for="{{ form.sprint.id_for_label }}"class="control-label">
+                                     Sprint
+                                  </label>
+                                  {{form.sprint}}
+                              </div>
+                              <div class="form-group">
+                                  {{form.slug.errors}}
+                                    <a class='slug-tooltip' data-toggle="tooltip" data-placement="left" title="This will be the URL of your scrum board. Leave blank for a randomly generated URL. You will not be able to edit this after creation.">
+                                  <i class='glyphicon glyphicon-info-sign'></i></a>
+                                  <label for="{{ form.slug.id_for_label }}"class="control-label">
+                                      Custom URL Slug
+                                  </label>
+                                  {{form.slug}}
+                              </div>
 
-                       <div class="box-body">
-                       <div class="form-group">
-                          <div class="pull-right">
-                              <button class="btn btn-success" type="submit" name="SUBMIT">
-                                  Create Board
-                              </button>
+                          <div class="box-body">
+                               <div class="form-group">
+                                  <div class="pull-right">
+                                      <button class="btn btn-success" type="submit" name="SUBMIT">
+                                          Create Board
+                                      </button>
+                                  </div>
+                              </div>
                           </div>
-                      </div>
-                      </div>
                       </form>
-                    </div>
+                   </div>
                 {% endif %}
 
                 {% if user.profile.isProf %}
                     <h3>View Scrum Boards</h3>
-                    <h4>Click button to view all scrum boards for this project</h4>
-                       <div class="box-body ">
-                          <div class="pull-right">
-                              <button class="btn btn-info" type="submit" name="SUBMIT">
-                                  <i class="fa fa-book"></i>
-                                  View Boards
-                              </button>
-                          </div>
-                      </div>
-                      </div>
+                <h4><i> Click button to view all scrum boards associated with this project</i></h4>
+                    <div class="box-body ">
+                        <a href="{% url 'prof_view_boards' project.slug%}" >
+                            <div class="pull-right">
+                                <button class="btn btn-success" type="submit" name="SUBMIT">
+                                    <i class="fa fa-book"></i>
+                                    View Boards
+                                </button>
+                            </div>
+                        </a>
+                    </div>
                 {% endif %}
-
+            </div>
         </div>
-
         <!-- /.tab-content -->
     </div>
     <!-- nav-tabs-custom -->

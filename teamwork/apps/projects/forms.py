@@ -359,7 +359,6 @@ class CreateScrumBoardForm (forms.Form):
         title:  [CharField] Name of scrum board
         description:  [CharField] Project description
         owner:		  [User] User object associated with creating scrum board
-        members:      [Uses] Gets all the Users associated with the project
 
     Methods:
         __init__ :	gets the current user when initiating the form
@@ -371,7 +370,6 @@ class CreateScrumBoardForm (forms.Form):
         super(CreateScrumBoardForm, self).__init__(*args, **kwargs)
 
         owner = User.objects.get(id=uid)
-        #members = kwargs.pop('members', {})
 
     title = forms.CharField(
         widget=forms.TextInput(attrs={'class': 'form-control'}),

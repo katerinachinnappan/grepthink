@@ -52,8 +52,6 @@ def view_projects(request):
     then calls _projects to render the request to template view_projects.html
     """
     my_projects = Project.get_my_projects(request.user)
-    print(my_projects)
-    print("\n\n")
 
     return _projects(request, my_projects)
 
@@ -175,7 +173,6 @@ def view_one_project(request, slug):
             # add members associated with the project to the scrumboard
             for member in members:
                 users = User.objects.get(username=member)
-                # print("users are ", users, '\n')
                 Board.objects.get(pk=new_board.id).members.add(users)
 
             #create new column in database
@@ -184,7 +181,7 @@ def view_one_project(request, slug):
             new_column.description = 'To do'
             new_column_slug = str(Board.objects.get(slug=new_board.slug))
             new_column.slug = new_column_slug
-            # print("Column slug is \n", new_column.slug)
+            print("Column slug is \n", new_column.slug)
             new_board_id = Board.objects.get(id=new_board.id)
             new_column.board = new_board_id
             new_column.save()

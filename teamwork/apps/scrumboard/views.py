@@ -18,6 +18,7 @@ from teamwork.apps.core.helpers import *
 
 # TODO Send the right scrum board here
 from teamwork.apps.scrumboard.models import Board, Task, Column
+from teamwork.apps.projects.models import Project
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.core.serializers.json import DjangoJSONEncoder
@@ -76,7 +77,20 @@ def myscrum(request, scrumboard):
         page_description = "Scrum Boards created by " + request.user.username
         title = "Scrum Boards"
 
-        #print("hello\n\n")
+        return render(request, 'scrumboard/myscrum.html', {'page_name': page_name,
+             'page_description': page_description, 'title': title, 'scrumboard': scrumboard})
+
+
+def prof_view_myscrum(request, scrumboard, slug):
+        """
+        Private method that will be used for paginator once I figure out how to get it working.
+        """
+        get_project_title = str(Project.objects.get(slug=slug))
+        page = request.GET.get('page')
+        # Populate with page name and title
+        page_name = "View Scrum Boards"
+        page_description = "Scrum Boards created by " + get_project_title
+        title = "Scrum Boards"
 
         return render(request, 'scrumboard/myscrum.html', {'page_name': page_name,
              'page_description': page_description, 'title': title, 'scrumboard': scrumboard})
@@ -88,12 +102,27 @@ def view_scrums(request):
     Public method that takes a request, retrieves all Scrum objects from the model,
     then calls myscrum to render the request to template myscrum.html
     """
+
+    # users = User.objects.get(pk=1)
+    # my_scrums = Board.get_my_scrums(users)
     my_scrums = Board.get_my_scrums(request.user)
 
     return myscrum(request, my_scrums)
 
+@login_required
+def prof_view_scrums(request, slug):
+    """
+    Public method that takes a request, retrieves all Scrum objects from the model,
+    then calls myscrum to render the request to template myscrum.html
+    """
+    project = get_object_or_404(Project, slug=slug)
+    members = project.members.all()
+    for member in members:
+        user = User.objects.get(username=member)
+        break
+    my_scrums = Board.get_my_scrums(user)
 
-
+    return prof_view_myscrum(request, my_scrums, slug)
 
 def myscrumprojects(request, projects):
     """

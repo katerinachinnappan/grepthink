@@ -57,7 +57,7 @@ class Board(models.Model):
         """
         # #Gets membership and ownership object of current user
         mem = list(user.users.all())
-        print("members are: \n", mem)
+        # print("members are: \n", mem)
 
         owner = list(user.owner.all())
         # print("owner is \n", owner)

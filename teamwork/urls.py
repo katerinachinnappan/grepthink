@@ -96,6 +96,7 @@ urlpatterns = [
         url(r'^board/(?P<slug>[^/]+)/$', scrumboard.view_one_scrum, name='view_one_scrum'),
         #url(r'^scrumboard/(?P<slug>[^/]+)/$', scrumboard.view_one_scrum, name='view_one_scrum'),
         url(r'^myscrum/all/', scrumboard.view_scrums, name='myscrum'),
+        url(r'^myscrum/(?P<slug>[^/]+)/$', scrumboard.prof_view_scrums, name='prof_view_boards'),
 
        # url(r'^scrumboard/add/', scrumboard.myscrum, name='myscrum_add'),
         #url(r'^scrumboard/delete/', scrumboard.myscrum, name='myscrum_delete'),
