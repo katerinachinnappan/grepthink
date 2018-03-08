@@ -8,7 +8,7 @@
   <div class="title">{{ scrum.title }}</div>
   <div class="project"> Project: {{ scrum.project.title }}</div>
   <div class="sprint"> Sprint #: {{ scrum.sprint }}</div>
-  <a href="{% url 'deleteBoard'  %}">
+  <a href="{% url 'view_one_scrum' scrum.slug %}">
   View Board
 </a>
 
