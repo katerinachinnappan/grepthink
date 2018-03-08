@@ -174,6 +174,12 @@ def view_one_project(request, slug):
             new_board.save()
 
             new_board.members.add(user)
+            # add members associated with the project to the scrumboard
+            for member in members:
+                users = User.objects.get(username=member)
+                # print("users are ", users, '\n')
+                new_board.members.add(users)
+
             print("Board slug is \n", new_board.slug)
 
             # create new column in database
