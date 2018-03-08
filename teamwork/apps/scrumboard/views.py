@@ -155,6 +155,15 @@ def deleteTask(request):
     Task.objects.get(pk=taskID).delete()
     return HttpResponse(status=204)
 
+def deleteBoard(request):
+    boardID = request.POST.get('board_id')
+    #taskID = request.POST.get('task_id')
+    #columnID = request.POST.get('column_id')
+    Board.objects.get(pk=boardID).delete()
+    #Task.objects.get(pk=taskID).delete()
+    #Column.objects.get(pk=columnID).delete()
+    return HttpResponse(status=204)
+
 
 def deleteColumn(request):
     columnID = request.POST.get('column_id')
