@@ -1,12 +1,33 @@
 .contactBox {
   height: 200px;
-  width: 32%;
+  width: 300px;
   margin: 1%;
   border-radius: 15px;
   background: #E8FFC3;
   position: relative;
   float: left;
   font-family: "Open Sans", sans-serif;
+}
+
+.contactBox .title {
+  display: block;
+  background: #D4FD95;
+  padding: 10px 10px 5px 10px;
+  border-radius: 15px 15px 0 0;
+  font-size: 17px;
+  color: black;
+  font-family: "Open Sans", sans-serif;
+  opacity:.8;
+}
+
+.projectTitle {
+  display: block;
+  padding: 10px 10px 5px 10px;
+  border-radius: 15px 15px 0 0;
+  font-size: 22px;
+  color: black;
+  font-family: "Open Sans", sans-serif;
+  opacity:.8;
 }
 
 .contactBox .title {
@@ -40,12 +61,25 @@
   opacity:.8;
 
 }
+.outer{
+    width:100%;
+    overflow:auto;
+    white-space:nowrap;
+}
+.outer li{
+    display: inline-block;
+    *display: inline;/*For IE7*/
+    *zoom:1;/*For IE7*/
+    vertical-align:top;
+    margin-right:20px;
+    white-space:normal;
+}
 
 .contactBox a {
   text-decoration: none;
   color: white;
   background: #F99B49;
-  padding: 7px 25px;
+  /*padding: 7px 25px;*/
   font-size: 15px;
   position: absolute;
   bottom: 10px;
