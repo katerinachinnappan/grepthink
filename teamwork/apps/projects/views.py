@@ -158,7 +158,7 @@ def view_one_project(request, slug):
 
     if request.method == 'POST':  # TODO Implement this
         # print("inside request.method\n")
-        form = CreateScrumBoardForm(request.user.id, request.POST)
+        form = CreateScrumBoardForm(request.user.id, request.POST, request.FILES)
         # print("form's output is: \n", form)
         # print(" \n", form.is_valid())
 
@@ -171,6 +171,7 @@ def view_one_project(request, slug):
             new_board.sprint = form.cleaned_data.get('sprint')
             new_board.slug = form.cleaned_data.get('slug')
             new_board.owner = request.user
+            new_board.backGround = form.cleaned_data['backGround']
             new_board.save()
 
             new_board.members.add(user)
