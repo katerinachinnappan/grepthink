@@ -24,6 +24,11 @@ class Board(models.Model):
         max_length=20,
         unique=True, null=True)
 
+    # Background Image
+    backGround = models.ImageField(
+        upload_to='view_one_scrum/',
+        default="")
+
     # The Meta class provides some extra information about the ScrumBoard model.
     class Meta:
         # Verbose name is the same as class name in this case.

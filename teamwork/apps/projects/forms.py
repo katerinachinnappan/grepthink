@@ -393,6 +393,9 @@ class CreateScrumBoardForm (forms.ModelForm):
         max_length=20,
         required=False)
 
+    """Image upload form."""
+    backGround = forms.ImageField()
+
     class Meta:
         model = Board
         fields = ['title', 'description', 'sprint', 'slug']
