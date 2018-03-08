@@ -51,7 +51,8 @@ def myscrum(request, scrumboard):
     title = "Scrum Boards"
     return render(request, 'scrumboard/myscrum.html', {'page_name': page_name,
                                                        'page_description': page_description, 'title': title,
-                                                       'scrumboard': scrumboard})
+                                                       'scrumboard': scrumboard
+                                                       })
 
 
 @login_required

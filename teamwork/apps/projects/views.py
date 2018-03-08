@@ -152,7 +152,6 @@ def view_one_project(request, slug):
     else:
         # Send form for initial project creation
         form = ChatForm(request.user.id, slug)
-
     if request.method == 'POST' and 'SUBMIT' in request.POST:  # TODO Implement this
         # print("inside request.method\n")
         form = CreateScrumBoardForm(request.user.id, request.POST, request.FILES)
