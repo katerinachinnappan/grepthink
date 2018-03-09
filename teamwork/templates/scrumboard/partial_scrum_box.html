@@ -19,9 +19,11 @@
                 <li>
                     <div class="inner">
                         <div id="box{{ scrum.pk }}" class="contactBox first">
+                            {% if scrum.backGround %}
                             <script type="text/javascript">
                                 $('#box{{ scrum.pk }}').css('background-image', 'url(http://127.0.0.1:8000{{scrum.backGround.url}})');
                             </script>
+                            {% endif %}
 
                             <div class="title">{{ scrum.title }}</div>
                             <div class="project"> Project: {{ scrum.project.title }}</div>
