@@ -12,7 +12,7 @@
 {% endblock stylesheets %}
 
 {% for key, value in scrumboard %}
-    <h1 class="projectTitle"> {{ key.1 }} </h1>
+    <h1 class="projectTitle"> Project: {{ key.1 }} </h1>
     <div class="outer">
         <ul>
             {% for scrum in value %}
