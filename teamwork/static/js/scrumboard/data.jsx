@@ -7,6 +7,9 @@ export const JSONMembers = JSON.parse(server_data.members);
 export const boardID = JSON.parse(server_data.board_id);
 export const csrfmiddlewaretoken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
 
+console.log(JSONColumns)
+console.log(JSONTasks)
+console.log(JSONTasks)
 
 const getTasksByID = (column: Column, items: Task[]): Task[] =>
   items.filter((task: Task) => task.fields.column === column.pk);
