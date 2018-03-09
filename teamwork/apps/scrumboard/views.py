@@ -11,6 +11,7 @@ from teamwork.apps.core.helpers import *
 from teamwork.apps.scrumboard.models import Board, Task, Column
 
 
+
 def view_one_scrum(request, slug):
     # Populate with page name, title and description
     # scrum = Board.objects.filter(slug=slug)#get_object_or_404(Board, slug=slug)
@@ -156,13 +157,14 @@ def deleteTask(request):
     Task.objects.get(pk=taskID).delete()
     return HttpResponse(status=204)
 
+
 def deleteBoard(request):
     boardID = request.POST.get('board_id')
-    #taskID = request.POST.get('task_id')
-    #columnID = request.POST.get('column_id')
+    # taskID = request.POST.get('task_id')
+    # columnID = request.POST.get('column_id')
     Board.objects.get(pk=boardID).delete()
-    #Task.objects.get(pk=taskID).delete()
-    #Column.objects.get(pk=columnID).delete()
+    # Task.objects.get(pk=taskID).delete()
+    # Column.objects.get(pk=columnID).delete()
     return HttpResponse(status=204)
 
 
@@ -174,6 +176,7 @@ def deleteColumn(request):
 
 def view_projects_scrum(request):
     return render(request, 'scrumboard/view_projects_scrum.html', {})
+
 
 # def index(request):
 #     results = Board.objects.filter(pk=1)

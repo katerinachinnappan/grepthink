@@ -2,11 +2,12 @@
 
 {% load static %}
 {% load i18n %}
+{% load board_filters %}
 
 
 {% block content %}
 
 
-{% include "scrumboard/partial_scrum_box.html" with scrumboard=scrumboard %}
+{% include "scrumboard/partial_scrum_box.html" with scrumboard=scrumboard|reverse %}
 
 {% endblock content %}

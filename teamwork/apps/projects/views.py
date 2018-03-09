@@ -1236,9 +1236,10 @@ def add_member(request, slug, uname):
 
     course = Course.objects.get(projects=project)
     mem_to_add = User.objects.get(username=uname)
-    #TODO make sure this works
-    board = Board.objects.filter(project=project.pk)
-    board.members.add(mem_to_add)
+    # TODO make sure this works
+    boards = Board.objects.filter(project_id=project.pk)
+    for board in boards:
+        board.members.add(mem_to_add)
     mem_courses = Course.get_my_courses(mem_to_add)
     curr_members = Membership.objects.filter(project=project)
 
