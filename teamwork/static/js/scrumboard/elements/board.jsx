@@ -4,7 +4,7 @@ import {DragDropContext, Droppable} from 'react-beautiful-dnd';
 import Column from './column';
 import {colors} from "./constants";
 import reorder, {
-  addColumnToTaskMap, addNewColumn, addTaskToTaskMap, deleteColumn, deleteTask, reorderTaskMap,
+  addColumnToTaskMap, addNewColumn, addTaskToTaskMap, deleteColumn, deleteTask, exportBoard, reorderTaskMap,
   updateColumnName
 } from "../functions/functions";
 import {DroppableProvided} from "react-beautiful-dnd/lib/index";
@@ -12,8 +12,20 @@ import type {TaskMap} from "../primatives/types";
 import type {DraggableLocation, DragStart, DropResult} from "react-beautiful-dnd/lib/types";
 import NewColumn from "./newColumn";
 import {withAlert} from 'react-alert'
-import {boardID, csrfmiddlewaretoken} from "../data";
+import {boardID, csrfmiddlewaretoken, itemMap} from "../data";
+import {MenuItem, Nav, Navbar, NavDropdown, NavItem} from "react-bootstrap";
+import {CSVDownload, CSVLink} from "react-csv";
 
+const linkStyle = {
+    display: 'block',
+    clear: 'both',
+    lineHeight: 1.42857143,
+    fontWeight: 400,
+    paddingTop: 3,
+    paddingRight: 20,
+    paddingBottom: 3,
+    paddingLeft: 20,
+    whiteSpace: 'nowrap'};
 
 const ParentContainer = styled.div`
   height: ${({height}) => height};
@@ -44,7 +56,6 @@ class Board extends Component {
     this.handleDeleteColumn = this.handleDeleteColumn.bind(this);
     this.handleDeleteTask = this.handleDeleteTask.bind(this);
   }
-
 
 
   componentDidMount() {
@@ -205,6 +216,26 @@ class Board extends Component {
     );
 
     return (
+      <div>
+        <Navbar>
+          <Nav>
+            <NavItem eventKey={1} href="#">
+              Home
+            </NavItem>
+            <NavItem eventKey={2} href="#">
+              New Board
+            </NavItem>
+            <NavDropdown eventKey={3} title="Options" id="basic-nav-dropdown">
+              <MenuItem eventKey={3.1} >See Members</MenuItem>
+
+              <CSVLink data={exportBoard(Object.values(this.state.columns))} headers={ this.state.ordered} style={linkStyle}> Export
+                Board</CSVLink>
+
+              <MenuItem divider/>
+              <MenuItem eventKey={3.4}>Delete Board</MenuItem>
+            </NavDropdown>
+          </Nav>
+        </Navbar>
 
         <DragDropContext
           onDragStart={this.onDragStart}
@@ -217,6 +248,7 @@ class Board extends Component {
             board
           )}
         </DragDropContext>
+      </div>
 
     );
   }

@@ -14,13 +14,24 @@ const options = {
   transition: 'scale'
 };
 
+const headers = ['firstname', 'lastname', 'email'];
+const data = [
+  ['Ahmed', 'Tomi', 'ah@smthing.co.com'],
+  ['Raed', 'Labes', 'rl@smthing.co.com'],
+  ['Yezzi', 'Min l3b', 'ymin@cocococo.com']
+];
+
+
+
 class App extends Component {
 
   render() {
     return (
-      <AlertProvider template={AlertTemplate} {...options}>
-        <Board initial={itemMap}/>
-      </AlertProvider>
+      <div>
+        <AlertProvider template={AlertTemplate} {...options}>
+          <Board initial={itemMap}/>
+        </AlertProvider>
+      </div>
     )
   }
 }

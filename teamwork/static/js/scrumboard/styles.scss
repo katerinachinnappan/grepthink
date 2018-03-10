@@ -17,6 +17,23 @@ $color-6: #494a4f;
   }
 }
 
+.container {
+  padding-right: 15px !important;
+  padding-left: 15px !important;
+  margin-right: auto !important;
+  margin-left: 0 !important;
+}
+
+.a {
+  display: block!important;
+  padding: 3px 20px!important;
+  clear: both!important;
+  font-weight: 400!important;
+  line-height: 1.42857143!important;
+  color: #333!important;
+  white-space: nowrap!important;
+}
+
 .btn-toolbar {
   float: right;
 }

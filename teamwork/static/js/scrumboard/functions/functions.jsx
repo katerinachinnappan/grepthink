@@ -2,6 +2,7 @@ import type {Column, Task, TaskMap} from "../primatives/types";
 import type {DraggableLocation} from "react-beautiful-dnd/lib/types";
 import {TaskUpdate} from "../primatives/types";
 import {boardID, csrfmiddlewaretoken, getColumnByName, JSONColumns} from "../data";
+import {transpose} from "ramda";
 
 const reorder = (list: any[], startIndex: number, endIndex: number): any[] => {
   const result = Array.from(list);
@@ -295,6 +296,13 @@ export const deleteTask = (colID, taskID, taskMap): TaskMapResult => {
     taskMap: result,
     autoFocusTaskId: null,
   };
+};
+
+export const exportBoard = (itemMapVals): [[]] => {
+  let lengths = itemMapVals.map(function (a) {
+    return a.length;
+  });
+  return itemMapVals[lengths.indexOf(Math.max.apply(Math, lengths))].map((col, c) => itemMapVals.map((row, r) => itemMapVals[r][c] === undefined ? "":itemMapVals[r][c].fields.title));
 };
 
 
