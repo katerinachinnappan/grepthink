@@ -9,6 +9,7 @@ export const csrfmiddlewaretoken = document.getElementsByName('csrfmiddlewaretok
 // export const title = JSON.parse(server_data.title);
 
 
+
 const getTasksByID = (column: Column, items: Task[]): Task[] =>
   items.filter((task: Task) => task.fields.column === column.pk);
 
@@ -33,6 +34,7 @@ export let userMap: UserMap =
     arr.push({label: item.fields.username, value: item.pk});
     return arr;
   }, []);
+
 
 let result = JSONMembers.reduce((map, item) => {
     map[item.pk] = item.fields.username;

@@ -2,13 +2,12 @@ import React, {Component} from 'react';
 import FormGroup from "react-bootstrap/es/FormGroup";
 import ControlLabel from "react-bootstrap/es/ControlLabel";
 import FormControl from "react-bootstrap/es/FormControl";
-import Checkbox from "react-bootstrap/es/Checkbox";
 import Button from "react-bootstrap/es/Button";
 import ButtonToolbar from "react-bootstrap/es/ButtonToolbar";
 import {CirclePicker} from "react-color";
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
-import {userMap, getMemberByID} from "../data";
+import {userMap} from "../data";
 
 
 export default class FormInstance extends Component {
@@ -86,7 +85,8 @@ export default class FormInstance extends Component {
 
           <FormGroup controlId="formControlsTextarea">
             <ControlLabel>Description</ControlLabel>
-            <FormControl inputRef={node => this.description = node} componentClass="textarea" defaultValue={this.props.task.fields.description}/>
+            <FormControl inputRef={node => this.description = node} componentClass="textarea"
+                         defaultValue={this.props.task.fields.description}/>
           </FormGroup>
 
           <ControlLabel>Colour</ControlLabel>

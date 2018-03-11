@@ -6,7 +6,6 @@ module.exports = {
   context: __dirname,
 
   entry: './teamwork/static/js/scrumboard/index.jsx',
-
   output: {
     path: path.resolve('assets/bundles/'),
     publicPath: '/static/bundles/',
@@ -24,8 +23,9 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['es2015', 'react', 'stage-2']
+            presets: ['es2015', 'react', 'stage-2', 'stage-0'],
           }
+
         }
       },
       {
@@ -50,10 +50,9 @@ module.exports = {
       }]
 
   },
-  resolve:
-    {
-      extensions: ['.js', '.jsx', 'scss', 'css'],
-    }
+  resolve: {
+    extensions: ['.js', '.jsx', 'scss', 'css'],
+  }
 
 }
 ;

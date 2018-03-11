@@ -167,7 +167,6 @@ export default class TaskItem extends PureComponent<Props> {
         <Content>
           <BlockQuote>{task.fields.title}</BlockQuote>
           <Footer>
-            {/*<TaskID>(id: {task.pk})</TaskID>*/}
             <Attribution>{task.fields.description}</Attribution>
             <Attribution>{getUserNameByID(task.fields.members)}</Attribution>
           </Footer>

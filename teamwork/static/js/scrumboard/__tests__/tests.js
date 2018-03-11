@@ -1,8 +1,8 @@
+import Board from '../elements/Board';
 import React from 'react';
-import { mount } from 'enzyme';
-import Board from '../elements/board'
 
-
-
-test('Todo component renders the text of the todo', () => {
+describe('Addition', () => {
+  it('knows that 2 and 2 make 4', () => {
+    expect(2 + 2).toBe(4);
+  });
 });

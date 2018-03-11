@@ -4,7 +4,7 @@ import {DragDropContext, Droppable} from 'react-beautiful-dnd';
 import Column from './column';
 import {colors} from "./constants";
 import reorder, {
-  addColumnToTaskMap, addNewColumn, addTaskToTaskMap, deleteColumn, deleteTask, exportBoard, reorderTaskMap,
+  addColumnToTaskMap, addTaskToTaskMap, deleteColumn, deleteTask, exportBoard, reorderTaskMap,
   updateColumnName
 } from "../functions/functions";
 import {DroppableProvided} from "react-beautiful-dnd/lib/index";
@@ -12,20 +12,26 @@ import type {TaskMap} from "../primatives/types";
 import type {DraggableLocation, DragStart, DropResult} from "react-beautiful-dnd/lib/types";
 import NewColumn from "./newColumn";
 import {withAlert} from 'react-alert'
-import {boardID, csrfmiddlewaretoken, itemMap} from "../data";
+import {boardID, csrfmiddlewaretoken, JSONMembers, userMap} from "../data";
 import {MenuItem, Nav, Navbar, NavDropdown, NavItem} from "react-bootstrap";
-import {CSVDownload, CSVLink} from "react-csv";
+import {CSVLink} from "react-csv";
+import ReactModal from "react-modal/dist/react-modal";
 
 const linkStyle = {
-    display: 'block',
-    clear: 'both',
-    lineHeight: 1.42857143,
-    fontWeight: 400,
-    paddingTop: 3,
-    paddingRight: 20,
-    paddingBottom: 3,
-    paddingLeft: 20,
-    whiteSpace: 'nowrap'};
+  display: 'block',
+  clear: 'both',
+  lineHeight: 1.42857143,
+  fontWeight: 400,
+  paddingTop: 3,
+  paddingRight: 20,
+  paddingBottom: 3,
+  paddingLeft: 20,
+  whiteSpace: 'nowrap',
+  color: '#777',
+  hover: {
+    background: "#494f57"
+  }
+};
 
 const ParentContainer = styled.div`
   height: ${({height}) => height};
@@ -40,7 +46,6 @@ const Container = styled.div`
   display: inline-flex;
 `;
 
-
 class Board extends Component {
 
   constructor(props) {
@@ -49,12 +54,28 @@ class Board extends Component {
       columns: this.props.initial,
       ordered: Object.keys(this.props.initial),
       autoFocusQuoteId: null,
+      modalIsOpen: false,
     };
+    this.openModal = this.openModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+    this.afterOpenModal = this.afterOpenModal.bind(this);
     this.handleAddTask = this.handleAddTask.bind(this);
     this.handleAddColumn = this.handleAddColumn.bind(this);
     this.handleUpdateColumnName = this.handleUpdateColumnName.bind(this);
     this.handleDeleteColumn = this.handleDeleteColumn.bind(this);
     this.handleDeleteTask = this.handleDeleteTask.bind(this);
+  }
+
+  closeModal() {
+    this.setState({modalIsOpen: false});
+  }
+
+  afterOpenModal() {
+    this.subtitle.style.color = '#494f57';
+  }
+
+  openModal() {
+    this.setState({modalIsOpen: true});
   }
 
 
@@ -219,23 +240,53 @@ class Board extends Component {
       <div>
         <Navbar>
           <Nav>
-            <NavItem eventKey={1} href="#">
+            <NavItem eventKey={1} href="/myscrum/all">
               Home
             </NavItem>
-            <NavItem eventKey={2} href="#">
-              New Board
-            </NavItem>
             <NavDropdown eventKey={3} title="Options" id="basic-nav-dropdown">
-              <MenuItem eventKey={3.1} >See Members</MenuItem>
+              <MenuItem eventKey={3.1} onClick={() => this.openModal()}
+              > See Members</MenuItem>
 
-              <CSVLink data={exportBoard(Object.values(this.state.columns))} headers={ this.state.ordered} style={linkStyle}> Export
+              <CSVLink data={exportBoard(Object.values(this.state.columns))} headers={this.state.ordered}
+                       style={linkStyle}> Export
                 Board</CSVLink>
 
               <MenuItem divider/>
-              <MenuItem eventKey={3.4}>Delete Board</MenuItem>
+              <MenuItem eventKey={3.4} onClick={() =>
+                $.ajax({
+                  url: '/scrumboard/deleteBoard/',
+                  data: {
+                    'csrfmiddlewaretoken': csrfmiddlewaretoken,
+                    'board_id': JSON.parse(server_data.board_id)
+                  },
+                  dataType: 'json',
+                  type: "POST",
+                  success: function (res) {
+                    window.location.replace("/myscrum/all");
+                  },
+                  error: function (res) {
+                  }
+                })}
+
+              >Delete Board</MenuItem>
             </NavDropdown>
           </Nav>
         </Navbar>
+
+
+        <ReactModal
+          isOpen={this.state.modalIsOpen}
+          onRequestClose={this.closeModal}
+          className="Modal"
+          ariaHideApp={false}
+        >
+          <ul>
+            {userMap.map(function (key, value) {
+              return <li key={value}>{key.label}</li>
+            })}
+          </ul>
+        </ReactModal>
+
 
         <DragDropContext
           onDragStart={this.onDragStart}
@@ -250,7 +301,8 @@ class Board extends Component {
         </DragDropContext>
       </div>
 
-    );
+    )
+      ;
   }
 }
 

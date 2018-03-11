@@ -4,7 +4,7 @@ import TaskItem from './item';
 import {grid, colors} from '../elements/constants';
 import Title from '../primatives/title';
 import type {Task, TaskUpdate} from "./types";
-import {addTaskToTaskMap, updateTask} from "../functions/functions";
+import {updateTask} from "../functions/functions";
 import {Draggable, Droppable} from "react-beautiful-dnd";
 import {
   DraggableProvided,

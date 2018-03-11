@@ -5,13 +5,30 @@ import {borderRadius, colors, grid} from './constants';
 import Title from '../primatives/title'
 import {DraggableProvided, DraggableStateSnapshot} from "react-beautiful-dnd/lib/index";
 import TaskList from "../primatives/list";
-import type {Task, TaskMap} from "../primatives/types";
+import type {Task} from "../primatives/types";
 import InlineEdit from "../primatives/inline-edit";
 import {withAlert} from "react-alert";
 import DropdownButton from "react-bootstrap/es/DropdownButton";
 import MenuItem from "react-bootstrap/es/MenuItem";
 import '../styles.scss'
+import {exportBoard} from "../functions/functions";
+import {CSVLink} from "react-csv";
 
+const linkStyle = {
+  display: 'block',
+  clear: 'both',
+  lineHeight: 1.42857143,
+  fontWeight: 400,
+  paddingTop: 3,
+  paddingRight: 20,
+  paddingBottom: 3,
+  paddingLeft: 20,
+  whiteSpace: 'nowrap',
+  color: '#777',
+  hover: {
+    background: "#494f57"
+  }
+};
 
 const Wrapper = styled.div`
   display: flex;
@@ -48,14 +65,6 @@ const Header = styled.div`
     background-color: ${colors.blue.lighter};
   }
 `;
-
-//
-// type Props = {|
-//   title: string,
-//   tasks: Task[],
-//   index: number,
-//   autoFocusTaskId: ?string,
-// |}
 
 
 let flag = true;
@@ -112,59 +121,56 @@ class Column extends Component {
     return (
 
 
-        <Draggable draggableId={title} index={index}>
-          {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
-            <Wrapper>
-              <Container
-                innerRef={provided.innerRef}
-                {...provided.draggableProps}
-              >
-                <Header isDragging={snapshot.isDragging}>
-                  <Title
-                    isDragging={snapshot.isDragging}
-                    {...provided.dragHandleProps}
-                  >
-                    <InlineEdit
-                      validate={this.customValidateText}
-                      activeClassName="editing"
-                      text={title}
-                      paramName="message"
-                      change={this.dataChanged}
-                    />
-                  </Title>
+      <Draggable draggableId={title} index={index}>
+        {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
+          <Wrapper>
+            <Container
+              innerRef={provided.innerRef}
+              {...provided.draggableProps}
+            >
+              <Header isDragging={snapshot.isDragging}>
+                <Title
+                  isDragging={snapshot.isDragging}
+                  {...provided.dragHandleProps}
+                >
+                  <InlineEdit
+                    validate={this.customValidateText}
+                    activeClassName="editing"
+                    text={title}
+                    paramName="message"
+                    change={this.dataChanged}
+                  />
+                </Title>
 
-                  <DropdownButton
-                    bsStyle={'default'}
-                    title={''}
-                    id={title}
-                  >
-                    <MenuItem eventKey="1">Action</MenuItem>
-                    <MenuItem eventKey="2">Another action</MenuItem>
-                    <MenuItem divider/>
-                    <MenuItem eventKey="4" onClick={() => this.deleteColumn()}>Delete Column</MenuItem>
-                  </DropdownButton>
+                <DropdownButton
+                  bsStyle={'default'}
+                  title={''}
+                  id={title}
+                >
+                  <MenuItem eventKey="4" onClick={() => this.deleteColumn()}>Delete Column</MenuItem>
+                </DropdownButton>
 
-                </Header>
-                <TaskList
-                  listId={title}
-                  listType="QUOTE"
-                  tasks={tasks}
-                  autoFocusQuoteId={this.props.autoFocusTaskId}
-                  handleDeleteTask={this.handleDeleteTask}
-                />
-                <AddButton type="submit" onClick={() => {
-                  this.handleAddTask(title)
-                }}>
-                  add task
-                </AddButton>
+              </Header>
+              <TaskList
+                listId={title}
+                listType="QUOTE"
+                tasks={tasks}
+                autoFocusQuoteId={this.props.autoFocusTaskId}
+                handleDeleteTask={this.handleDeleteTask}
+              />
+              <AddButton type="submit" onClick={() => {
+                this.handleAddTask(title)
+              }}>
+                add task
+              </AddButton>
 
 
-              </Container>
-              {provided.placeholder}
-            </Wrapper>
+            </Container>
+            {provided.placeholder}
+          </Wrapper>
 
-          )}
-        </Draggable>
+        )}
+      </Draggable>
 
 
     );

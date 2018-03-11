@@ -2,7 +2,6 @@ import React from "react";
 import {colors, grid} from "./constants";
 import styled from 'styled-components';
 import {withAlert} from 'react-alert'
-// import InlineEdit from 'react-edit-inline';
 import InlineEdit from '../primatives/inline-edit';
 
 const Title = styled.h4`
