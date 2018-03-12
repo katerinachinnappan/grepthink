@@ -314,6 +314,11 @@ def leave_project(request, slug):
         for mem_obj in to_delete:
             mem_obj.delete()
 
+        # remove user access to boards if they leave project
+        boards = Board.objects.filter(project=project.pk)
+        for board in boards:
+            board.members.remove(f_user)
+
     return redirect(view_projects)
 
 
@@ -338,7 +343,7 @@ def request_join_project(request, slug):
         # TODO: create link that goes directly to accept or deny
         content_text = "Please follow the link below to accept or deny {0}'s request.".format(request.user)
         content = "{0}\n\n www.grepthink.com".format(content_text)
-        send_email(creator, "noreply@grepthink.com", subject, content)
+        # send_email(creator, "noreply@grepthink.com", subject, content)
         # notify user that their request has gone through successfully
         messages.add_message(request, messages.SUCCESS,
                              "{0} has been notified of your request to join!".format(project.title))
@@ -756,6 +761,11 @@ def edit_project(request, slug):
             # delete membership
             for mem_obj in to_delete:
                 mem_obj.delete()
+
+            # remove user access to boards if they are removed from project
+            boards = Board.objects.filter(project=project.pk)
+            for board in boards:
+                board.members.remove(f_user)
 
         return redirect(view_one_project, project.slug)
 
@@ -1441,6 +1451,12 @@ def add_member(request, slug, uname):
     project = get_object_or_404(Project, slug=slug)
     course = Course.objects.get(projects=project)
     mem_to_add = User.objects.get(username=uname)
+
+    #Give new member in project access to the boards
+    boards = Board.objects.filter(project_id=project.pk)
+    for board in boards:
+        board.members.add(mem_to_add)
+
     mem_courses = Course.get_my_courses(mem_to_add)
     curr_members = Membership.objects.filter(project=project)
 
