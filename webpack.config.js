@@ -6,7 +6,6 @@ module.exports = {
   context: __dirname,
 
   entry: './teamwork/static/js/scrumboard/index.jsx',
-
   output: {
     path: path.resolve('assets/bundles/'),
     publicPath: '/static/bundles/',
@@ -24,15 +23,36 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: [ 'es2015', 'react', 'stage-2' ]
+            presets: ['es2015', 'react', 'stage-2', 'stage-0'],
           }
+
         }
-      }
-    ]
+      },
+      {
+        test: /\.(jpe?g|png|gif|svg)$/i,
+        use: [
+          'url-loader?limit=10000',
+          'img-loader'
+        ]
+      },
+      {
+        test: /\.(s?)css$/,
+        // include: /node_modules/,
+        use: [
+          {
+            loader: "style-loader" // creates style nodes from JS strings
+          }, {
+            loader: "css-loader" // translates CSS into CommonJS
+          }, {
+            loader: "sass-loader",
+          }
+        ]
+      }]
+
   },
-   // externals: require('react-native').getComponents()
   resolve: {
-    extensions: ['.js', '.jsx'],
+    extensions: ['.js', '.jsx', 'scss', 'css'],
   }
 
-};
+}
+;

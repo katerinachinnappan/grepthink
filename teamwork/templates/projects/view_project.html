@@ -77,8 +77,8 @@
             <li class=""><a href="#tab_7" data-toggle="tab" aria-expanded="false">Chat</a></li>
             {% endif %}
 
-            {% if user in project_members or request.user in staff  %}
-            <li class=""><a href="#tab_8" data-toggle="tab" aria-expanded="false">Scrum Boards</a></li>
+            {% if user in project_members %}
+            <li class=""><a href="#tab_8" data-toggle="tab" aria-expanded="false">Scrum Board</a></li>
             {% endif %}
 
             <li class="dropdown">
@@ -824,6 +824,51 @@
     </div>
     <!-- nav-tabs-custom -->
 </div>
+
+            <!--&lt;!&ndash; TAB  - Add Scrum Board &ndash;&gt;-->
+            <!--<div class="tab-pane" id="tab_8">-->
+
+                <!--<h3>Create Scrum Board</h3>-->
+                <!--<div class="box box-primary">-->
+                  <!--<div class="box-header with-border">-->
+                    <!--<h3 class="box-title">Post Update</h3>-->
+                  <!--</div>-->
+                  <!--<form action="{% url 'post_update' project.slug %}" method="post" role="form"-->
+                      <!--class="clearfix">-->
+                  <!--<div class="box-body">-->
+                      <!--{% csrf_token %}-->
+                      <!--{{ form.status }}-->
+                      <!--{% for field in form.visible_fields %}-->
+                      <!--<div class="form-group{% if field.errors %} has-error{% endif %}">-->
+                          <!--<label for="{{ field.label }}" class="control-label">{{ field.label }}</label>-->
+                          <!--{{ field }}-->
+                          <!--{% for error in field.errors %}-->
+                          <!--<label class="control-label">{{ error }}</label>-->
+                          <!--{% endfor %}-->
+                      <!--</div>-->
+                      <!--{% endfor %}-->
+                   <!--</div>-->
+                   <!--<div class="box-body">-->
+                   <!--<div class="form-group">-->
+                      <!--<div class="pull-left">-->
+                      <!--<a href="{% url 'view_one_project' project.slug %}">-->
+                          <!--<button class="btn btn-danger" type="button">-->
+                              <!--Cancel-->
+                          <!--</button>-->
+                      <!--</a>-->
+                      <!--</div>-->
+                      <!--<div class="pull-right">-->
+                          <!--<button class="btn btn-success" type="submit" name="SUBMIT">-->
+                              <!--Post Update-->
+                          <!--</button>-->
+                      <!--</div>-->
+                  <!--</div>-->
+                  <!--</div>-->
+                  <!--</form>-->
+
+                <!--</div>-->
+            <!--</div>-->
+
 
 <!-- Pending Members Box -->
 {% if user in project_members or user == project.creator%}

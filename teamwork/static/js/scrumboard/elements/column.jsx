@@ -4,16 +4,38 @@ import styled from 'styled-components';
 import {borderRadius, colors, grid} from './constants';
 import Title from '../primatives/title'
 import {DraggableProvided, DraggableStateSnapshot} from "react-beautiful-dnd/lib/index";
-import QuoteList from "../primatives/list";
-import type {Task, TaskMap} from "../primatives/types";
+import TaskList from "../primatives/list";
+import type {Task} from "../primatives/types";
+import InlineEdit from "../primatives/inline-edit";
+import {withAlert} from "react-alert";
+import DropdownButton from "react-bootstrap/es/DropdownButton";
+import MenuItem from "react-bootstrap/es/MenuItem";
+import '../styles.scss'
+import {exportBoard} from "../functions/functions";
+import {CSVLink} from "react-csv";
 
+const linkStyle = {
+  display: 'block',
+  clear: 'both',
+  lineHeight: 1.42857143,
+  fontWeight: 400,
+  paddingTop: 3,
+  paddingRight: 20,
+  paddingBottom: 3,
+  paddingLeft: 20,
+  whiteSpace: 'nowrap',
+  color: '#777',
+  hover: {
+    background: "#494f57"
+  }
+};
 
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
 `;
 
-const Button = styled.button`
+const AddButton = styled.button`
   color: ${colors.black};
   border: none;
   background-color: ${colors.lightBlue};
@@ -45,23 +67,51 @@ const Header = styled.div`
 `;
 
 
-type Props = {|
-  title: string,
-  tasks: Task[],
-  index: number,
-  autoFocusTaskId: ?string,
-|}
+let flag = true;
 
 
-export default class Column extends Component {
+class Column extends Component {
 
   constructor(props) {
     super(props);
     this.handleAddTask = this.handleAddTask.bind(this);
+    this.dataChanged = this.dataChanged.bind(this);
+    this.customValidateText = this.customValidateText.bind(this);
+    this.deleteColumn = this.deleteColumn.bind(this);
+    this.handleDeleteTask = this.handleDeleteTask.bind(this);
   }
+
 
   handleAddTask(e) {
     this.props.onAddTask(e);
+  }
+
+  handleDeleteTask(taskID) {
+    this.props.handleDeleteTask(this.props.title, taskID)
+  }
+
+  dataChanged(data) {
+    this.props.onTitleUpdate(this.props.title, data.message)
+  }
+
+  deleteColumn() {
+    this.props.onDeleteColumn(this.props.title)
+  }
+
+  customValidateText(text) {
+    if (text === this.props.title)
+      return false;
+    if (this.props.keys.includes(text)) {
+      if (flag) {
+        flag = false;
+        this.props.alert.error('Column name must be unique');
+      } else {
+        flag = true;
+      }
+      return false;
+    } else {
+      return (text.length > 0 && text.length < 64 && text !== 'add new column...');
+    }
   }
 
   render() {
@@ -69,6 +119,7 @@ export default class Column extends Component {
     const tasks: Task[] = this.props.tasks;
     const index: number = this.props.index;
     return (
+
 
       <Draggable draggableId={title} index={index}>
         {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
@@ -82,21 +133,37 @@ export default class Column extends Component {
                   isDragging={snapshot.isDragging}
                   {...provided.dragHandleProps}
                 >
-                  {title}
+                  <InlineEdit
+                    validate={this.customValidateText}
+                    activeClassName="editing"
+                    text={title}
+                    paramName="message"
+                    change={this.dataChanged}
+                  />
                 </Title>
+
+                <DropdownButton
+                  bsStyle={'default'}
+                  title={''}
+                  id={title}
+                >
+                  <MenuItem eventKey="4" onClick={() => this.deleteColumn()}>Delete Column</MenuItem>
+                </DropdownButton>
+
               </Header>
-              <QuoteList
+              <TaskList
                 listId={title}
                 listType="QUOTE"
                 tasks={tasks}
                 autoFocusQuoteId={this.props.autoFocusTaskId}
+                handleDeleteTask={this.handleDeleteTask}
               />
-              <Button type="submit" onClick={() => {
-
+              <AddButton type="submit" onClick={() => {
                 this.handleAddTask(title)
+              }}>
+                add task
+              </AddButton>
 
-              }}>add task
-              </Button>
 
             </Container>
             {provided.placeholder}
@@ -104,8 +171,11 @@ export default class Column extends Component {
 
         )}
       </Draggable>
+
+
     );
   }
 }
 
 
+export default withAlert(Column)

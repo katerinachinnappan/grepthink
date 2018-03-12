@@ -20,7 +20,6 @@ from teamwork.apps.profiles.views import view_alerts
 from teamwork.apps.scrumboard.models import Board, Column
 from teamwork.apps.scrumboard.views import view_one_scrum
 
-
 from teamwork.apps.courses.forms import EmailRosterForm
 from .forms import *
 from .models import *
@@ -52,7 +51,6 @@ def view_projects(request):
     then calls _projects to render the request to template view_projects.html
     """
     my_projects = Project.get_my_projects(request.user)
-
     return _projects(request, my_projects)
 
 
@@ -139,9 +137,9 @@ def view_one_project(request, slug):
     if request.user in pending_members:
         requestButton = 0
 
-
     project_chat = reversed(project.get_chat())
-    if request.method == 'POST':
+
+    if request.method == 'POST' and 'SUBMIT' not in request.POST:
         form = ChatForm(request.user.id, slug, request.POST)
         if form.is_valid():
             # Create a chat object
@@ -151,14 +149,12 @@ def view_one_project(request, slug):
             return redirect(view_one_project, project.slug)
         else:
             messages.info(request, 'Errors in form')
-
     else:
         # Send form for initial project creation
         form = ChatForm(request.user.id, slug)
 
-
-    if request.method == 'POST':
-        form = CreateScrumBoardForm(request.user.id, request.POST)
+    if request.method == 'POST' and 'SUBMIT' in request.POST:
+        form = CreateScrumBoardForm(request.user.id, request.POST, request.FILES)
 
         if form.is_valid():
             #create new board in database
@@ -168,17 +164,20 @@ def view_one_project(request, slug):
             new_board.sprint = form.cleaned_data.get('sprint')
             new_board.slug = form.cleaned_data.get('slug')
             new_board.owner = request.user
+            new_board.backGround = form.cleaned_data['backGround']
             new_board.save()
 
+            new_board.members.add(user)
             # add members associated with the project to the scrumboard
             for member in members:
                 users = User.objects.get(username=member)
-                Board.objects.get(pk=new_board.id).members.add(users)
+                new_board.members.add(users)
 
             #create new column in database
             new_column = Column()
             new_column.title = 'To Do'
             new_column.description = 'To do'
+            new_column.index = 0
             new_column_slug = str(Board.objects.get(slug=new_board.slug))
             new_column.slug = new_column_slug
             print("Column slug is \n", new_column.slug)
@@ -189,6 +188,7 @@ def view_one_project(request, slug):
             new_column = Column()
             new_column.title = 'In Progress'
             new_column.description = 'In progress'
+            new_column.index = 1
             new_column_slug = str(Board.objects.get(slug=new_board.slug))
             new_column.slug = new_column_slug
             new_board_id = Board.objects.get(id=new_board.id)
@@ -198,17 +198,13 @@ def view_one_project(request, slug):
             new_column = Column()
             new_column.title = 'Done'
             new_column.description = 'done'
+            new_column.index = 2
             new_column_slug = str(Board.objects.get(slug=new_board.slug))
             new_column.slug = new_column_slug
             new_board_id = Board.objects.get(id=new_board.id)
             new_column.board = new_board_id
             new_column.save()
 
-            # print("Project is \n", new_board.project)
-            # print("title is \n", new_board.title)
-            # print("description is \n", new_board.description)
-            # print("owner is \n", new_board.owner)
-            # print("Board id is ", new_board.id)
             return redirect(view_one_scrum, new_column.slug)
 
     else:
@@ -280,7 +276,7 @@ def view_one_project(request, slug):
                                                           'course': course, 'project_owner': project_owner,
                                                           'meetings': readable, 'resources': resources,
                                                           'json_events': project.meetings, 'contribute_levels': mid,
-                                                          'assigned_tsrs': assigned_tsrs, })
+                                                          'assigned_tsrs': assigned_tsrs})
 
 
 def leave_project(request, slug):
@@ -343,7 +339,9 @@ def request_join_project(request, slug):
         # TODO: create link that goes directly to accept or deny
         content_text = "Please follow the link below to accept or deny {0}'s request.".format(request.user)
         content = "{0}\n\n www.grepthink.com".format(content_text)
-        # send_email(creator, "noreply@grepthink.com", subject, content)
+
+        #apparently this causes the 401 error
+        #send_email(creator, "noreply@grepthink.com", subject, content)
         # notify user that their request has gone through successfully
         messages.add_message(request, messages.SUCCESS,
                              "{0} has been notified of your request to join!".format(project.title))
@@ -417,7 +415,7 @@ def edit_select_members(request, slug):
     return HttpResponse("Failure")
 
 
-#add desired skill method
+# add desired skill method
 def add_desired_skills(request, slug):
     if request.method == 'GET' and request.is_ajax():
         # JSON prefers dictionaries over lists.
@@ -449,10 +447,10 @@ def create_desired_skills(request):
             data['items'].append({'id': s.skill, 'text': s.skill})
         return JsonResponse(data)
 
-
     return HttpResponse("Failure")
 
-#add desired technologies method
+
+# add desired technologies method
 def add_desired_technologies(request, slug):
     if request.method == 'GET' and request.is_ajax():
         # JSON prefers dictionaries over lists.
@@ -462,13 +460,13 @@ def add_desired_technologies(request, slug):
         q = request.GET.get('q')
         if q is not None:
             results = Technologies.objects.filter(
-                Q( technology__contains = q ) ).order_by( 'technology' )
+                Q(technology__contains=q)).order_by('technology')
         for s in results:
             data['items'].append({'id': s.technology, 'text': s.technology})
         return JsonResponse(data)
 
-
     return HttpResponse("Failure")
+
 
 def create_desired_technologies(request):
     if request.method == 'GET' and request.is_ajax():
@@ -479,7 +477,7 @@ def create_desired_technologies(request):
         q = request.GET.get('q')
         if q is not None:
             results = Technologies.objects.filter(
-                Q( technology__contains = q ) ).order_by( 'technology' )
+                Q(technology__contains=q)).order_by('technology')
         for s in results:
             data['items'].append({'id': s.technology, 'text': s.technology})
         return JsonResponse(data)
@@ -583,7 +581,7 @@ def create_project(request):
                     project.desired_skills.add(desired_skill)
                     project.save()
 
-             # Add technologies to the project
+            # Add technologies to the project
             if request.POST.get('desired_technologies'):
                 technologies = request.POST.getlist('desired_technologies')
                 for t in technologies:
@@ -926,37 +924,6 @@ def post_update(request, slug):
                    'project': project})
 
 
-# @login_required
-# def create_board(request, slug):
-#
-#     project = get_object_or_404(Project, slug=slug)
-#
-#     if request.user.profile.isGT:
-#         pass
-#     elif not request.user == project.creator and request.user not in project.members.all(
-#     ):
-#         # redirect them with a message
-#         messages.info(request, 'Only current members can create a scrum board!')
-#         return HttpResponseRedirect('/project/all')
-#
-#     if request.method == 'POST':
-#         print("Inside request\n")
-#         form = CreateScrumBoardForm(request.user.id, request.POST)
-#         print("form is \n", form)
-#         if form.is_valid():
-#             new_board = Board(project=project)
-#             new_board.tittle = form.cleaned_data.get('tittle')
-#             new_board.description = form.cleaned_data.get('description')
-#             new_board.owner = request.user
-#             new_board.save()
-#             return redirect(myscrum)
-#     else:
-#         form = CreateScrumBoardForm(request.user.id)
-#         print("dont post data yet\n")
-#         return render(request, 'scrumboard/create_board.html',
-#                       {'form': form,
-#                        'project': project})
-
 @login_required
 def resource_update(request, slug):
     project = get_object_or_404(Project, slug=slug)
@@ -1263,185 +1230,6 @@ def find_meeting(slug):
     #              {'projects': projects})
 
 
-"""
-@login_required
-def tsr_update(request, slug):
-
-    public method that takes in a slug and generates a TSR
-    form for user. Different form generated based on which
-    button was pressed (scrum/normal)
-
-    page_name = "TSR Update"
-    page_description = "Update TSR form"
-    title = "TSR Update"
-
-    user = request.user
-    cur_proj = get_object_or_404(Project, slug=slug)
-    course = Course.objects.get(projects=cur_proj)
-
-    # get list of emails of users in current project
-    members = cur_proj.members.all()
-    emails = list()
-    for member in members:
-        emails.append(member.email)
-
-    asgs = list(course.assignments.all())
-
-    # if an assignment is not available, boolean is set to
-    # false and user is redirected to project view when they
-    # try to fill out a tsr
-    asg_available = False
-    if not asgs:
-        ("No ASSIGNMENTS")
-    else:
-        # if an assignment is available, the lines below will check the date
-        # of the assignment, verify that todays date is in between the assigned
-        # date and the due date, and set the boolean for true as well as making
-        # the assignment number = the assignment number of the assignment object
-        today = datetime.now().date()
-
-        for asg in asgs:
-            if "tsr" in asg.ass_type.lower():
-                asg_ass_date = asg.ass_date
-                asg_ass_date = datetime.strptime(asg_ass_date,"%Y-%m-%d").date()
-
-                asg_due_date = asg.due_date
-                asg_due_date = datetime.strptime(asg_due_date,"%Y-%m-%d").date()
-                if asg_ass_date < today <= asg_due_date:
-                    ("assignment in progress")
-                    asg_available = True
-                    asg_number = asg.ass_number
-
-
-    # This checks if button clicked was scrum or non scrum
-    params = str(request)
-    if "scrum_master_form" in params:
-        scrum_master = True
-    else:
-        scrum_master = False
-
-    forms=list()
-
-    if(asg_available):
-        # if 'Save TSR' was clicked
-        if request.method == 'POST':
-            for email in emails:
-                # grab form
-                form = TSR(request.user.id, request.POST, members=members,
-                    emails=emails,prefix=email, scrum_master=scrum_master)
-                if form.is_valid():
-                    # put form data in variables
-                    data=form.cleaned_data
-                    percent_contribution = data.get('perc_contribution')
-                    positive_feedback = data.get('pos_fb')
-                    negative_feedback = data.get('neg_fb')
-                    tasks_completed = data.get('tasks_comp')
-                    performance_assessment = data.get('perf_assess')
-                    notes = data.get('notes')
-                    evaluatee_query = User.objects.filter(email__iexact=email)
-                    evaluatee = evaluatee_query.first()
-
-                    # gets fields variables and saves them to project
-                    cur_proj.tsr.add(Tsr.objects.create(evaluator=user,
-                        evaluatee=evaluatee,
-                        percent_contribution=percent_contribution,
-                        positive_feedback=positive_feedback,
-                        negative_feedback=negative_feedback,
-                        tasks_completed=tasks_completed,
-                        performance_assessment=performance_assessment,
-                        notes=notes,
-                        ass_number=int(asg_number)))
-
-                    cur_proj.save()
-
-            print(list(cur_proj.tsr.all()))
-            return redirect(view_projects)
-
-        else:
-            # if request was not post then display forms for filling out a TSR
-            for m in emails:
-                form_i = TSR(request.user.id, request.POST, members=members,
-                    emails=emails, prefix=m, scrum_master=scrum_master)
-                forms.append(form_i)
-            form = TSR(request.user.id, request.POST, members=members,
-                emails=emails, scrum_master=scrum_master)
-        return render(request, 'projects/tsr_update.html',
-            {'forms':forms,'emails':emails,'cur_proj': cur_proj,
-            'page_name' : page_name, 'page_description': page_description,
-            'title': title})
-    else:
-        # need to change this redirect to display message
-        # so that user is aware why they were redirected
-        return redirect(view_projects)
-
-
-@login_required
-def view_tsr(request, slug):
-
-    public method that takes in a slug and generates a view for
-    submitted TSRs
-
-    page_name = "View TSR"
-    page_description = "Submissions"
-    title = "View TSR"
-
-    project = get_object_or_404(Project, slug=slug)
-    members = project.members.all()
-    tsrs = list(project.tsr.all())
-
-    # put emails into list
-    emails=list()
-    for member in members:
-        emails.append(member.email)
-
-    # for every sprint, get the tsr's and calculate the average % contribution
-    tsr_dicts=list()
-    tsr_dict = list()
-    sprint_numbers=Tsr.objects.values_list('ass_number',flat=True).distinct()
-    averages = list()
-    for i in sprint_numbers.all():
-        # averages=list()
-        tsr_dict=list()
-        for member in members:
-            tsr_single=list()
-            # for every member in project, filter query using member.id
-            # and assignment number
-            for member_ in members:
-                if member == member_:
-                    continue
-                tsr_query_result=Tsr.objects.filter(evaluatee_id=member.id).filter(evaluator_id=member_.id).filter(ass_number=i).all()
-                if(len(tsr_query_result)==0):
-                    continue
-                tsr_single.append(tsr_query_result[len(tsr_query_result)-1])
-
-            avg=0
-            if(len(tsr_single)!=0):
-                for tsr_obj in tsr_single:
-                    avg = avg + tsr_obj.percent_contribution
-                avg = avg / len(tsr_single)
-
-            tsr_dict.append({'email':member.email, 'tsr' :tsr_single,
-                'avg' : avg})
-            averages.append({'email':member.email,'avg':avg})
-
-        tsr_dicts.append({'number': i , 'dict':tsr_dict,
-            'averages':averages})
-
-    med = 1
-    if len(members):
-        med = int(100/len(members))
-
-    mid = {'low' : int(med*0.7), 'high' : int(med*1.4)}
-
-
-    if request.method == 'POST':
-
-        return redirect(view_projects)
-    return render(request, 'projects/view_tsr.html', {'page_name' : page_name, 'page_description': page_description, 'title': title,
-                        'tsrs' : tsr_dicts, 'contribute_levels' : mid, 'avg':averages})
-"""
-
-
 def add_member(request, slug, uname):
     """
     Add member to project if:
@@ -1449,14 +1237,13 @@ def add_member(request, slug, uname):
         - They are a member of the course
     """
     project = get_object_or_404(Project, slug=slug)
+
     course = Course.objects.get(projects=project)
     mem_to_add = User.objects.get(username=uname)
 
-    #Give new member in project access to the boards
     boards = Board.objects.filter(project_id=project.pk)
     for board in boards:
         board.members.add(mem_to_add)
-
     mem_courses = Course.get_my_courses(mem_to_add)
     curr_members = Membership.objects.filter(project=project)
 

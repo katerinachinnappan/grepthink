@@ -350,7 +350,7 @@ class UpdateForm(forms.ModelForm):
         fields = ['update_title', 'update']
 
 
-class CreateScrumBoardForm (forms.Form):
+class CreateScrumBoardForm (forms.ModelForm):
     """
     Form used for creating scrum board
 
@@ -390,6 +390,9 @@ class CreateScrumBoardForm (forms.Form):
         widget=forms.TextInput(attrs={'class': 'form-control'}),
         max_length=20,
         required=False)
+
+    """Image upload form."""
+    backGround = forms.ImageField(required=False)
 
     class Meta:
         model = Board

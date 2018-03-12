@@ -2,8 +2,7 @@ import React from "react";
 import {colors, grid} from "./constants";
 import styled from 'styled-components';
 import {withAlert} from 'react-alert'
-// import InlineEdit from 'react-edit-inline';
-import InlineEdit from '../../react-edit-inline';
+import InlineEdit from '../primatives/inline-edit';
 
 const Title = styled.h4`
   padding: ${grid}px;
@@ -45,46 +44,48 @@ const Header = styled.div`
 let flag = true;
 
 class NewColumn extends React.Component {
+
   constructor(props) {
     super(props);
+    this.state = {text: this.props.text};
     this.dataChanged = this.dataChanged.bind(this);
-    this.state = {
-      message: 'add new column',
-      taskMap: props.taskMap
-    };
     this.customValidateText = this.customValidateText.bind(this);
 
   }
 
+
   dataChanged(data) {
-    this.setState({...data})
+    this.props.onAddColumn(data.message)
   }
 
   customValidateText(text) {
-    if (flag) {
-      if (text in this.state.taskMap) {
+    if (this.props.keys.includes(text)) {
+      if (flag) {
+        flag = false;
         this.props.alert.error('Column name must be unique');
-        return false;
-      } else
-        return (text.length > 0 && text.length < 64);
+      } else {
+        flag = true;
+      }
+      return false;
+    } else {
+      return (text.length > 0 && text.length < 64 && text != 'add new column...');
     }
-    flag = !flag;
   }
-
 
   render() {
     return (
 
-      <Wrapper>
+      <Wrapper fontSize={'1.5em'}>
         <Container>
           <Header>
             <Title>
               <InlineEdit
                 validate={this.customValidateText}
                 activeClassName="editing"
-                text={this.state.message}
+                text={this.state.text}
                 paramName="message"
                 change={this.dataChanged}
+                initial={"add new column..."}
               />
             </Title>
           </Header>

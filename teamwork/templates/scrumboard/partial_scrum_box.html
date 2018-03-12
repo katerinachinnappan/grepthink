@@ -1,12 +1,41 @@
+{% load static %}
 
-{% for scrum in scrumboard %}
-<div class="contactBox first">
-  <div class="title">{{ scrum.title }}</div>
-  <div class="project"> Project: {{ scrum.project.title }}</div>
-  <div class="sprint"> Sprint #: {{ scrum.sprint }}</div>
-  <a href="{% url 'view_one_scrum' scrum.slug %}">
-  View Board
-</a>
-</div>
+{% block javascript %}
+
+
+    <script src="http://code.jquery.com/jquery-latest.js" type="text/javascript"></script>
+{% endblock javascript %}
+
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{% static 'css/myscrumBox.css' %}">
+{% endblock stylesheets %}
+
+{% for key, value in scrumboard %}
+    <h1 class="projectTitle"> Project: {{ key.1 }} </h1>
+    <div class="outer">
+        <ul>
+            {% for scrum in value %}
+                <li>
+                    <div class="inner">
+                        <div id="box{{ scrum.pk }}" class="contactBox first">
+                            {% if scrum.backGround %}
+                            <script type="text/javascript">
+                                $('#box{{ scrum.pk }}').css('background-image', 'url(http://127.0.0.1:8000{{scrum.backGround.url}})');
+                            </script>
+                            {% endif %}
+
+                            <div class="title">{{ scrum.title }}</div>
+                            <div class="project"> Project: {{ scrum.project.title }}</div>
+                            <div class="sprint"> Sprint #: {{ scrum.sprint }}</div>
+                            <a href="{% url 'view_one_scrum' scrum.slug %}">
+                                View Board
+                            </a>
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 {% endfor %}
 
