@@ -21,12 +21,6 @@
 {% block content %}
 
     <main class="cd-main-content">
-
-        <section class="cd-gallery">
-                {% include "projects/partial_project_box.html" with projects=projects %}
-
-        </section>
- 
         <div class="cd-filter">
             <form>
                 <div class="cd-filter-block search">
@@ -56,6 +50,14 @@
         </div>
 
         <a href="#0" class="cd-filter-trigger">Filters</a>
+        <br><br>
+
+       <div class="tab-pane active" id="projects">
+                {% include "projects/partial_project_box.html" with projects=projects %}
+
+        </div>
+ 
+
     </main>
 
 
