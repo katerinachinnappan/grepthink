@@ -98,12 +98,11 @@ urlpatterns = [
                   url(r'^assignment/(?P<slug>[^/]+)/edit/$', course_views.edit_assignment, name='edit_assignment'),
 
                   # SCRUM BOARD
-                  # url(r'^scrumboard/$', scrumboard.index, name='scrumboard'),
-
                   url(r'^board/(?P<slug>[^/]+)/$', scrumboard.view_one_scrum, name='view_one_scrum'),
 
                   url(r'^myscrum/all/', scrumboard.view_scrums, name='myscrum'),
                   url(r'^myscrum/all/', scrumboard.home, name='myscrum'),
+                  url(r'^myscrum/(?P<slug>[^/]+)/$', scrumboard.prof_view_scrums, name='prof_view_boards'),
 
 
                   url(r'^scrumboard/updateColumnIndex/', scrumboard.updateColumnIndex, name='updateColumnIndex'),

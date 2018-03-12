@@ -358,6 +358,9 @@ class CreateScrumBoardForm (forms.ModelForm):
     Attributes (Fields):
         title:  [CharField] Name of scrum board
         description:  [CharField] Project description
+        sprint: [CharField] sprint number
+        slug:   [CharField] unique slug url
+        background: {ImageField} optional background for boards
         owner:		  [User] User object associated with creating scrum board
 
     Methods:
@@ -368,6 +371,7 @@ class CreateScrumBoardForm (forms.ModelForm):
     # used for filtering the queryset
     def __init__(self, uid, *args, **kwargs):
         super(CreateScrumBoardForm, self).__init__(*args, **kwargs)
+        self.fields['slug'].label = "Custom URL Slug (Optional)"
 
         owner = User.objects.get(id=uid)
 

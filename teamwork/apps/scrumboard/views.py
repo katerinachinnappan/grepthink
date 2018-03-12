@@ -5,6 +5,8 @@ from django.core import serializers
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
+from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 
 from teamwork.apps.core.helpers import *
 # TODO Send the right scrum board here
@@ -49,9 +51,8 @@ def myscrum(request, scrumboard):
     # Populate with page name and title
     page_name = "My Scrum Board"
     page_description = "Scrum Boards created by " + request.user.username
-    title = "Scrum Boards"
     return render(request, 'scrumboard/myscrum.html', {'page_name': page_name,
-                                                       'page_description': page_description, 'title': title,
+                                                       'page_description': page_description,
                                                        'scrumboard': scrumboard
                                                        })
 
@@ -64,10 +65,9 @@ def prof_view_myscrum(request, scrumboard, slug):
         # Populate with page name and title
         page_name = "View Scrum Boards"
         page_description = "Scrum Boards created by " + get_project_title
-        title = "Scrum Boards"
 
         return render(request, 'scrumboard/myscrum.html', {'page_name': page_name,
-             'page_description': page_description, 'title': title, 'scrumboard': scrumboard})
+             'page_description': page_description, 'scrumboard': scrumboard})
 
 
 @login_required

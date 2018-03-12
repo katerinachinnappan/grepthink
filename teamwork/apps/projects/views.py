@@ -180,7 +180,6 @@ def view_one_project(request, slug):
             new_column.index = 0
             new_column_slug = str(Board.objects.get(slug=new_board.slug))
             new_column.slug = new_column_slug
-            print("Column slug is \n", new_column.slug)
             new_board_id = Board.objects.get(id=new_board.id)
             new_column.board = new_board_id
             new_column.save()
@@ -905,10 +904,7 @@ def post_update(request, slug):
         return HttpResponseRedirect('/project/all')
 
     if request.method == 'POST':
-        print("Inside POST\n")
         form = UpdateForm(request.user.id, request.POST)
-        print("form is \n", form)
-        print(" \n", form.is_valid())
 
         if form.is_valid():
             new_update = ProjectUpdate(project=project)

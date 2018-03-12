@@ -80,6 +80,9 @@
             {% if user in project_members %}
             <li class=""><a href="#tab_8" data-toggle="tab" aria-expanded="false">Scrum Board</a></li>
             {% endif %}
+            {% if request.user in staff %}
+            <li class=""><a href="#tab_8" data-toggle="tab" aria-expanded="false">Scrum Boards</a></li>
+            {% endif %}
 
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -754,54 +757,35 @@
             <!-- TAB  - Add Scrum Board -->
             <div class="tab-pane" id="tab_8">
                 {% if not user.profile.isProf %}
-                    <h3>Create New Scrum Board</h3>
-                   <div class="box box-primary">
-                      <form action="{% url 'view_one_project' project.slug %}" method="post" role="form"
-                          class="clearfix">
-                          <div class="box-body">
-                              {% csrf_token %} {{ form.status }} {{ form.non_field_errors }}
-                              <div class="form-group">
-                                  {{form.title.errors}}
-                                  <label for="{{ form.title.id_for_label }}"class="control-label">
-                                      Title
-                                  </label>
-                                  {{form.title}}
-                              </div>
-                              <div class="form-group">
-                                  {{form.description.errors}}
-                                  <label for="{{ form.description.id_for_label }}"class="control-label">
-                                      Description
-                                  </label>
-                                  {{form.description}}
-                              </div>
-                              <div class="form-group">
-                                  {{form.sprint.errors}}
-                                  <label for="{{ form.sprint.id_for_label }}"class="control-label">
-                                     Sprint
-                                  </label>
-                                  {{form.sprint}}
-                              </div>
-                              <div class="form-group">
-                                  {{form.slug.errors}}
-                                    <a class='slug-tooltip' data-toggle="tooltip" data-placement="left" title="This will be the URL of your scrum board. Leave blank for a randomly generated URL. You will not be able to edit this after creation.">
-                                  <i class='glyphicon glyphicon-info-sign'></i></a>
-                                  <label for="{{ form.slug.id_for_label }}"class="control-label">
-                                      Custom URL Slug
-                                  </label>
-                                  {{form.slug}}
-                              </div>
-
-                          <div class="box-body">
-                               <div class="form-group">
-                                  <div class="pull-right">
-                                      <button class="btn btn-success" type="submit" name="SUBMIT">
-                                          Create Board
-                                      </button>
-                                  </div>
-                              </div>
-                          </div>
-                      </form>
+                <h3>Create New Scrum Board</h3>
+               <div class="box box-primary">
+                  <form action="{% url 'view_one_project' project.slug %}" enctype="multipart/form-data" method="post" role="form"
+                      class="clearfix">
+                  <div class="box-body">
+                      {% csrf_token %}
+                      {{ form.status }}
+                      {% for field in form.visible_fields %}
+                      <div class="form-group{% if field.errors %} has-error{% endif %}">
+                          <label for="{{ field.label }}" class="control-label">{{ field.label }}</label>
+                          {{ field }}
+                          {% for error in field.errors %}
+                          <label class="control-label">{{ error }}</label>
+                          {% endfor %}
+                      </div>
+                      {% endfor %}
                    </div>
+                   <div class="box-body">
+                   <div class="form-group">
+                      <div class="pull-right">
+                          <button class="btn btn-success" type="submit" name="SUBMIT"  value="create_board">
+                              Create Board
+                          </button>
+                      </div>
+                  </div>
+                  </div>
+                  </form>
+                </div>
+             </div>
                 {% endif %}
 
                 {% if user.profile.isProf %}
@@ -824,51 +808,6 @@
     </div>
     <!-- nav-tabs-custom -->
 </div>
-
-            <!--&lt;!&ndash; TAB  - Add Scrum Board &ndash;&gt;-->
-            <!--<div class="tab-pane" id="tab_8">-->
-
-                <!--<h3>Create Scrum Board</h3>-->
-                <!--<div class="box box-primary">-->
-                  <!--<div class="box-header with-border">-->
-                    <!--<h3 class="box-title">Post Update</h3>-->
-                  <!--</div>-->
-                  <!--<form action="{% url 'post_update' project.slug %}" method="post" role="form"-->
-                      <!--class="clearfix">-->
-                  <!--<div class="box-body">-->
-                      <!--{% csrf_token %}-->
-                      <!--{{ form.status }}-->
-                      <!--{% for field in form.visible_fields %}-->
-                      <!--<div class="form-group{% if field.errors %} has-error{% endif %}">-->
-                          <!--<label for="{{ field.label }}" class="control-label">{{ field.label }}</label>-->
-                          <!--{{ field }}-->
-                          <!--{% for error in field.errors %}-->
-                          <!--<label class="control-label">{{ error }}</label>-->
-                          <!--{% endfor %}-->
-                      <!--</div>-->
-                      <!--{% endfor %}-->
-                   <!--</div>-->
-                   <!--<div class="box-body">-->
-                   <!--<div class="form-group">-->
-                      <!--<div class="pull-left">-->
-                      <!--<a href="{% url 'view_one_project' project.slug %}">-->
-                          <!--<button class="btn btn-danger" type="button">-->
-                              <!--Cancel-->
-                          <!--</button>-->
-                      <!--</a>-->
-                      <!--</div>-->
-                      <!--<div class="pull-right">-->
-                          <!--<button class="btn btn-success" type="submit" name="SUBMIT">-->
-                              <!--Post Update-->
-                          <!--</button>-->
-                      <!--</div>-->
-                  <!--</div>-->
-                  <!--</div>-->
-                  <!--</form>-->
-
-                <!--</div>-->
-            <!--</div>-->
-
 
 <!-- Pending Members Box -->
 {% if user in project_members or user == project.creator%}

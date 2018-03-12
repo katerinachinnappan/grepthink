@@ -4,6 +4,9 @@ from __future__ import unicode_literals
 from teamwork.apps.core.models import *
 from teamwork.apps.profiles.models import *
 from teamwork.apps.projects.models import Project
+from django.template.defaultfilters import slugify
+from django.db import models
+from django.contrib.auth.models import User
 import datetime
 
 
@@ -41,8 +44,7 @@ class Board(models.Model):
         """
         Gets a list of ScrumBoard objects. Used in views then passed to the template.
         """
-        # #Gets membership and ownership object of current user
-
+        #Gets membership and ownership object of current user
         scrums = Board.objects.filter(members=user.id)
         return scrums
 
@@ -56,7 +58,6 @@ class Board(models.Model):
             newslug = self.title
             newslug = slugify(newslug)[0:20]
             while Board.objects.filter(slug=newslug).exists():
-                # print(Project.objects.filter(slug=newslug).exists())
                 newslug = self.title
                 newslug = slugify(newslug[0:16] + "-" + rand_code(3))
             self.slug = newslug
