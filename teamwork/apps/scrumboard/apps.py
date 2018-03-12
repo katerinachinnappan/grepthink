@@ -2,4 +2,7 @@ from django.apps import AppConfig
 
 
 class ScrumboardConfig(AppConfig):
-    name = 'teamwork.apps.scrumboard'
+    name = 'scrumboard'
+    verbose_name = 'Scrum Board'
+
+

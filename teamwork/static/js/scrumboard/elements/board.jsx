@@ -134,12 +134,6 @@ class Board extends Component {
         source: source,
         destination,
       });
-      const post_data = {
-        'csrfmiddlewaretoken': csrfmiddlewaretoken,
-        'sorted': this.state.columns,
-        'board_id': JSON.parse(server_data.board_id)
-      };
-
       this.setState({
         columns: data.taskMap,
         autoFocusQuoteId: data.autoFocusTaskId,

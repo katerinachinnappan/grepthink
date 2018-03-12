@@ -74,18 +74,3 @@ class ViewProjectTestCase(TestCase):
         course1 = Course.objects.create(name="Test Course 1", info="Test Course", slug="test-course1",
                                         creator=self.user1)
 
-        # fuck this.
-        # # Create a test project to be served.
-        # # Currently can't create_project due to User not being authenticated (logged-in),
-        # #
-        # project1 = create_project("Test Project 1", self.user1, "Test Tagline 1",
-        #     "Test Content 1", "test1-slug", "Test Resource 1")
-        #
-        # # Add the project to the course many to many field so the course lookup is sucesfull.
-        # course1.projects.add(project1)
-        #
-        # # Get the response using reverse to load the url with keyword arg: slug of project 1
-        # response = self.client.get(reverse('view_one_project', kwargs={'slug':project1.slug}))
-        #
-        # # Confirm that view_one_project returned a response with status code 200 (page served sucesfully).
-        # self.assertEqual(response.status_code, 200)

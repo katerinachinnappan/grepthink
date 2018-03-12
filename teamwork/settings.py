@@ -49,18 +49,12 @@ INSTALLED_APPS = [
     'teamwork.apps.courses',
     'teamwork.apps.scrumboard',
 
-
     'django_adminlte',
     'django_adminlte_theme',
-
     # 'django_extensions',
-
     'django.contrib.admin',
-
     'django_gravatar',
-
     'chartjs',
-
     'webpack_loader'
 ]
 

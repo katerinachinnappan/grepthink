@@ -102,7 +102,6 @@ def updateTask(request):
     desc = request.POST.get('desc')
     colour = request.POST.get('colour')
     members = request.POST.getlist('members[]')
-
     Task.objects.filter(id=taskID).update(assigned=not (members is None))
     if title is not None:
         Task.objects.filter(id=taskID).update(title=title)
@@ -175,22 +174,3 @@ def home(request):
 
 def view_projects_scrum(request):
     return render(request, 'scrumboard/view_projects_scrum.html', {})
-
-# def index(request):
-#     results = Board.objects.filter(pk=1)
-#     members = []
-#     for board in results:
-#         members = serializers.serialize('json', board.members.only('id', 'username'))
-#     columns = Column.objects.all().filter(board_id=1).order_by('index')
-#     tasks = Task.objects.all().filter(board_id=1).order_by('index')
-#     initial_data = json.dumps({
-#         'board_id': 1,
-#
-#         # 'board': serializers.serialize('json', board),
-#         'columns': serializers.serialize('json', columns),
-#         'tasks': serializers.serialize('json', tasks),
-#         'members': members
-#     }, cls=DjangoJSONEncoder)
-#     return render(request, 'scrumboard/scrumboard.html', {
-#         'initial_data': initial_data
-#     })
