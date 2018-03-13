@@ -91,14 +91,9 @@ def prof_view_scrums(request, slug):
     """
     project = get_object_or_404(Project, slug=slug)
     members = project.members.all()
-    flag  = 2
     
-    for member in members:
-        user = User.objects.get(username=member)
-        flag = 1
-        break
-    if flag == 1:
-        my_scrums = Board.get_my_scrums(user)
+    if len(members) > 0:
+        my_scrums = Board.objects.filter(project_id=project.pk)
         return prof_view_myscrum(request, my_scrums, slug)
     else:
         messages.info(request, 'Project ' + project.title + ' does not have members/scrum board')
