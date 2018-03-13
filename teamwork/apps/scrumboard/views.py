@@ -20,10 +20,13 @@ from teamwork.apps.courses.views import Course
 
 def view_one_scrum(request, slug):
     # Populate with page name, title and description
+    board = get_object_or_404(Board, slug=slug)
+
+    project = Project.objects.get(pk=board.project_id)
     scrum = get_object_or_404(Board, slug=slug)
 
     page_name = "My Scrum Board - " + scrum.title
-    page_description = "Scrum Board created by " + request.user.username
+    page_description = "Scrum Board created by " + project.title
     title = "ScrumBoard"
     description = "About: " + scrum.description
 
@@ -64,6 +67,7 @@ def prof_view_myscrum(request, scrumboard, slug):
         Private method that will be used for paginator once I figure out how to get it working.
         """
         get_project_title = str(Project.objects.get(slug=slug))
+        print(get_project_title, '\n')
         page = request.GET.get('page')
         # Populate with page name and title
         page_name = "View Scrum Boards"
