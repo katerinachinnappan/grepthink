@@ -785,11 +785,10 @@
                   </div>
                   </form>
                 </div>
-             </div>
                 {% endif %}
 
                 {% if user.profile.isProf %}
-                    <h3>View Scrum Boards</h3>
+                <h3>View Scrum Boards</h3>
                 <h4><i> Click button to view all scrum boards associated with this project</i></h4>
                     <div class="box-body ">
                         <a href="{% url 'prof_view_boards' project.slug%}" >
@@ -802,12 +801,14 @@
                         </a>
                     </div>
                 {% endif %}
+             </div>
+
+
             </div>
         </div>
         <!-- /.tab-content -->
     </div>
     <!-- nav-tabs-custom -->
-</div>
 
 <!-- Pending Members Box -->
 {% if user in project_members or user == project.creator%}
