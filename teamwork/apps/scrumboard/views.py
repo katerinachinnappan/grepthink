@@ -56,7 +56,7 @@ def myscrum(request, scrumboard):
     page = request.GET.get('page')
     # Populate with page name and title
     page_name = "My Scrum Board"
-    page_description = "Scrum Boards created by " + request.user.username
+    page_description = request.user.username + " Scrum Boards"
     return render(request, 'scrumboard/myscrum.html', {'page_name': page_name,
                                                        'page_description': page_description,
                                                        'scrumboard': scrumboard
