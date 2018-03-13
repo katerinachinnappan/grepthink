@@ -21,7 +21,7 @@ Total Time: < 1 week
 
 * User Story 3: As a developer I want to fix small bugs in GrepThink
    * Task 1: Get the list of bugs from Sean and Ryan and distribute the bugs evenly among the team (~30 min)
-   * Task: Work on fixing the bugs and take no longer than one week to do so (< 1 week)
+   * Task 2: Work on fixing the bugs and take no longer than one week to do so (< 1 week)
 Total Hours: < 1 week
 
 Team Roles
