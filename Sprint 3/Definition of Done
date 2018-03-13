@@ -1,0 +1,32 @@
+Definition of Done
+Product Name: Grepthink
+Team Name: Grepthink
+Date: March 13, 2018 
+
+Definition of Done: Tasks
+
+User Story 1: As a user, I want to fix the bugs in the current GrepThink version using Django.
+1.	Learn Django and create small basic app.
+2.	Add “desired technologies” to a project.
+3.	Email address login and edit primary email address.
+4.	Filter display of full, sponsored, or skill of project. (Allow students to see only sponsored or open projects)
+
+User Story 2: As a developer, I want to implement the SCRUM board.
+1.	Create SCRUM board.
+2.	Give members ability to work on and edit board.
+3.	Design UI for SCRUM board.
+4.	Drag and drop functionality for task note cards and columns.
+5.	Ability to add, edit, and remove tasks and columns.
+6.	Can view created SCRUM boards with all previous datas saved.
+7.	Create popup modal for task editing options. (Color, task assignment)
+8.	Export board to CSV file.
+
+
+Definition of Done: Unit Tests and Code
+1.	Unit Test pass and coverage meets the standards (75% and up).
+2.	Sufficient negative unit tests were written (more negative than positive).
+3.	Make sure that all code is review and all standards are met.
+4.	Necessary documentation is completed. 
+5.	Code is reviewed by others (or Pair Programmed).
+6.	Code is refactored to support any new functionality
+7.	Make UI works the way we want it to (meets expectation).
