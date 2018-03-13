@@ -4,16 +4,13 @@ Team GrepThink
 Revision #1
 January 22 - February 15
 
-
 Team Members: Oscar Castro, Katerina Chinnappan, Eddy Chen, Henry Hargreaves
-
 
 Top Level Goals: Add new capabilities to the GrepThink tool used to manage projects. GrepThink native Scrum Board and Assignment capability. Scrum Board Requirements: The ability to place and move a task to not assigned, in progress, and completed columns(Interactive, such as dragging, preferred) Ability to distinguish who is assigned to an in progress task Ability to create boards for separate sprints (BONUS) Be able to export a scrum board. Expand this system to allow the professor to choose the type and allow customization. Allow the professor to upload his own print out of the requirements for the assignment
 
 
 Sprint 1
 Goal: As a developer, I want to fix the bugs in the current GrepThink version using Django
-
 
 Point Breakdown:
 2 Story Points - User Story 1: As a developer I want to learn Django
@@ -33,7 +30,6 @@ Total: 18 Points
 Sprint 2
 Goal: As a developer I want to make a GrepThink native Scrum Board
 
-
 Point Breakdown:
 2 Story Point - User Story 1: As a developer I want to add the Scrum Board tab to the Project
 4 Story Points - User Story 2: As a developer I want to add a basic page layout for the scrum board
@@ -44,7 +40,6 @@ Total: 14 Points
 Sprint 3
 Goal: (Continued) As a developer, I want to make a GrepThink native Scrum Board
 
-
 Point Breakdown:
 2 Story Points - User Story 1: As a developer I want to edit the "cards"
 6 Story Points - User Story 2: As a developer I want to assign specific tasks to group member
@@ -52,7 +47,3 @@ Point Breakdown:
 8 Story Points - User Story 4: As a developer I want to move around the "cards"
 
 Total: 23 Points
-
---if we find more bugs, fix them no matter what sprint we are currently in
-
-Product Backlog:
