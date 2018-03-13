@@ -4,15 +4,18 @@ from django.contrib.auth.decorators import login_required
 from django.core import serializers
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
+from teamwork.apps.profiles.models import Alert
+from django.contrib import messages
 
 from teamwork.apps.core.helpers import *
 # TODO Send the right scrum board here
 from teamwork.apps.scrumboard.models import Board, Task, Column
 from teamwork.apps.projects.models import Project
 from django.contrib.auth.models import User
+from teamwork.apps.courses.views import Course
 
 
 def view_one_scrum(request, slug):
@@ -87,13 +90,23 @@ def prof_view_scrums(request, slug):
     then calls myscrum to render the request to template myscrum.html
     """
     project = get_object_or_404(Project, slug=slug)
+    board = Board.get_my_scrums(request.user)
+    course = Course.get_my_courses(request.user)
     members = project.members.all()
+    flag  = 2
+    
     for member in members:
         user = User.objects.get(username=member)
+        flag = 1
         break
-    my_scrums = Board.get_my_scrums(user)
+    #if project.members.all() is not None and board is  None:
+    if flag == 1:
+        my_scrums = Board.get_my_scrums(user)
+        return prof_view_myscrum(request, my_scrums, slug)
+    else:
+        messages.info(request, 'Project ' + project.title + ' does not have members/scrum board')
+        return HttpResponseRedirect('/course')
 
-    return prof_view_myscrum(request, my_scrums, slug)
 
 def updateColumnIndex(request):
     newIndexes = request.POST.getlist('columns[]')
