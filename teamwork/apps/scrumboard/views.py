@@ -56,7 +56,7 @@ def myscrum(request, scrumboard):
     page = request.GET.get('page')
     # Populate with page name and title
     page_name = "My Scrum Board"
-    page_description = "Scrum Boards created by " + request.user.username
+    page_description = request.user.username + " Scrum Boards"
     return render(request, 'scrumboard/myscrum.html', {'page_name': page_name,
                                                        'page_description': page_description,
                                                        'scrumboard': scrumboard
@@ -67,7 +67,6 @@ def prof_view_myscrum(request, scrumboard, slug):
         Private method that will be used for paginator once I figure out how to get it working.
         """
         get_project_title = str(Project.objects.get(slug=slug))
-        print(get_project_title, '\n')
         page = request.GET.get('page')
         # Populate with page name and title
         page_name = "View Scrum Boards"
