@@ -21,7 +21,6 @@ User Story 2: As a developer, I want to implement the SCRUM board.
 7.	Create popup modal for task editing options. (Color, task assignment)
 8.	Export board to CSV file.
 
-
 Definition of Done: Unit Tests and Code
 1.	Unit Test pass and coverage meets the standards (75% and up).
 2.	Sufficient negative unit tests were written (more negative than positive).
