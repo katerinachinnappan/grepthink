@@ -12,6 +12,7 @@ from teamwork.apps.core.helpers import *
 # TODO Send the right scrum board here
 from teamwork.apps.scrumboard.models import Board, Task, Column
 from teamwork.apps.projects.models import Project
+from teamwork.apps.projects.models import Course
 from django.contrib.auth.models import User
 
 
@@ -87,13 +88,22 @@ def prof_view_scrums(request, slug):
     then calls myscrum to render the request to template myscrum.html
     """
     project = get_object_or_404(Project, slug=slug)
+    board = Board.get_my_scrums(request.user)
+    course = Course.get_my_courses(request.user)
     members = project.members.all()
+    flag  = 2
+    
     for member in members:
         user = User.objects.get(username=member)
+        flag = 1
         break
-    my_scrums = Board.get_my_scrums(user)
-
-    return prof_view_myscrum(request, my_scrums, slug)
+    #if project.members.all() is not None and board is  None:
+    if flag == 1:
+        my_scrums = Board.get_my_scrums(user)
+        return prof_view_myscrum(request, my_scrums, slug)
+    else:
+        messages.info(request, 'Project ' + project.title + ' does not have members/scrum board')
+        return HttpResponseRedirect('/course')
 
 def updateColumnIndex(request):
     newIndexes = request.POST.getlist('columns[]')
