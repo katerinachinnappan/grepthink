@@ -16,5 +16,4 @@ def reverse(value):
             map[(e.project_id, project.title)].append(e)
         else:
             map[(e.project_id, project.title)] = [e]
-    print(map)
     return map.items()

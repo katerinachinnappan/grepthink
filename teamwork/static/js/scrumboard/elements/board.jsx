@@ -5,7 +5,7 @@ import Column from './column';
 import {colors} from "./constants";
 import reorder, {
   addColumnToTaskMap, addTaskToTaskMap, deleteColumn, deleteTask, exportBoard, reorderTaskMap,
-  updateColumnName
+  updateColumnName, updateTask
 } from "../functions/functions";
 import {DroppableProvided} from "react-beautiful-dnd/lib/index";
 import type {TaskMap} from "../primatives/types";
@@ -64,6 +64,7 @@ class Board extends Component {
     this.handleUpdateColumnName = this.handleUpdateColumnName.bind(this);
     this.handleDeleteColumn = this.handleDeleteColumn.bind(this);
     this.handleDeleteTask = this.handleDeleteTask.bind(this);
+    this.handleUpdateTask = this.handleUpdateTask.bind(this);
   }
 
   closeModal() {
@@ -188,6 +189,15 @@ class Board extends Component {
   }
 
 
+  handleUpdateTask(colName, taskID, taskUpdate) {
+    const data = updateTask(colName, taskID, this.state.columns, taskUpdate);
+    this.setState({
+      columns: data.taskMap,
+      autoFocusQuoteId: data.autoFocusTaskId,
+    });
+  }
+
+
   render() {
     const columns: TaskMap = this.state.columns;
     const ordered: Column[] = this.state.ordered;
@@ -217,6 +227,7 @@ class Board extends Component {
                   onTitleUpdate={this.handleUpdateColumnName}
                   onDeleteColumn={this.handleDeleteColumn}
                   handleDeleteTask={this.handleDeleteTask}
+                  handleUpdateTask={this.handleUpdateTask}
                 />
               ))}
             <NewColumn

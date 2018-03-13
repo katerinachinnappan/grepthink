@@ -19,9 +19,6 @@ export const getColumnByName = (colName: string): Column => {
   }
 };
 
-export const getUserNameByID = (id: string): string => {
-  return result[id];
-};
 
 export let itemMap: TaskMap =
   JSONColumns.reduce((previous: TaskMap, column: Column) => ({
@@ -39,3 +36,9 @@ let result = JSONMembers.reduce((map, item) => {
     return map;
 }, {});
 
+
+
+export const getUserNameByID = (id: string): string => {
+  console.log(id)
+  return result[id];
+};

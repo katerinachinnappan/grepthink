@@ -229,7 +229,7 @@ export const deleteColumn = (colName, taskMap, keys): void => {
 };
 
 
-export const updateTask = (taskUpdate: TaskUpdate): Task => {
+export const updateTask = (colID, taskID, taskMap, taskUpdate: TaskUpdate): Task => {
   const post_data = {
     'csrfmiddlewaretoken': csrfmiddlewaretoken,
     'task_id': taskUpdate.task.pk,
@@ -263,7 +263,20 @@ export const updateTask = (taskUpdate: TaskUpdate): Task => {
     error: function (res) {
     }
   });
-  return taskUpdate.task;
+
+  const current: Task[] = [...taskMap[colID]];
+  let task = current[taskID];
+  current.splice(task.fields.index, 1, taskUpdate.task);
+
+  const result: TaskMap = {
+    ...taskMap,
+    [colID]: current,
+  };
+  return {
+    taskMap: result,
+    autoFocusTaskId: null,
+  };
+
 };
 
 
@@ -301,7 +314,8 @@ export const exportBoard = (itemMapVals): [[]] => {
   let lengths = itemMapVals.map(function (a) {
     return a.length;
   });
-  return itemMapVals[lengths.indexOf(Math.max.apply(Math, lengths))].map((col, c) => itemMapVals.map((row, r) => itemMapVals[r][c] === undefined ? "":itemMapVals[r][c].fields.title));
+  return itemMapVals[lengths.indexOf(Math.max.apply(Math, lengths))].map((col, c) => itemMapVals.map((row, r) => itemMapVals[r][c] === undefined ?
+    "":itemMapVals[r][c].fields.title));
 };
 
 

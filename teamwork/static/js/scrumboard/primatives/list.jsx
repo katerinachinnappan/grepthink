@@ -65,19 +65,19 @@ class InnerTaskList extends Component<> {
 
   constructor(props) {
     super(props);
-    this.state = {
-      tasks: [],
-    };
-    this.handleUpdate = this.handleUpdate.bind(this);
+    // this.state = {
+    //   tasks: [],
+    // };
     this.toggleDragging = this.toggleDragging.bind(this);
     this.handleDeleteTask = this.handleDeleteTask.bind(this);
+    this.handleUpdateTask = this.handleUpdateTask.bind(this);
   }
 
   shouldComponentUpdate(nextProps: TaskListProps) {
     return nextProps.tasks !== this.props.tasks;
   }
 
-  handleUpdate(index, title, desc, members, colour) {
+  handleUpdateTask(index, title, desc, members, colour) {
     const taskUpdate: TaskUpdate = {
       task: this.props.tasks[index],
       title: title,
@@ -85,7 +85,7 @@ class InnerTaskList extends Component<> {
       members: members,
       colour: colour,
     };
-    this.props.tasks[index] = updateTask(taskUpdate);
+     this.props.handleUpdateTask(index, taskUpdate);
   }
 
   handleDeleteTask(index) {
@@ -114,6 +114,7 @@ class InnerTaskList extends Component<> {
                   autoFocus={this.props.autoFocusTaskId === task.pk}
                   handleUpdate={this.handleUpdate}
                   handleDeleteTask={this.handleDeleteTask}
+                  handleUpdateTask={this.handleUpdateTask}
                 />
                 {dragProvided.placeholder}
               </div>
@@ -136,6 +137,11 @@ class InnerList extends Component<InnerListProps> {
   constructor(props) {
     super(props);
     this.handleDeleteTask = this.handleDeleteTask.bind(this);
+    this.handleUpdateTask = this.handleUpdateTask.bind(this);
+  }
+
+  handleUpdateTask(taskID, taskUpdate) {
+    this.props.handleUpdateTask(taskID, taskUpdate)
   }
 
   handleDeleteTask(taskID) {
@@ -156,6 +162,7 @@ class InnerList extends Component<InnerListProps> {
             tasks={tasks}
             autoFocusQuoteId={autoFocusQuoteId}
             handleDeleteTask={this.handleDeleteTask}
+            handleUpdateTask={this.handleUpdateTask}
           />
           {dropProvided.placeholder}
         </DropZone>
@@ -169,6 +176,12 @@ export default class TaskList extends Component<Props> {
   constructor(props) {
     super(props);
     this.handleDeleteTask = this.handleDeleteTask.bind(this);
+    this.handleUpdateTask = this.handleUpdateTask.bind(this);
+  }
+
+
+  handleUpdateTask(taskID, taskUpdate) {
+    this.props.handleUpdateTask(taskID, taskUpdate)
   }
 
   handleDeleteTask(taskID) {
@@ -209,6 +222,7 @@ export default class TaskList extends Component<Props> {
                   dropProvided={dropProvided}
                   autoFocusQuoteId={autoFocusQuoteId}
                   handleDeleteTask={this.handleDeleteTask}
+                  handleUpdateTask={this.handleUpdateTask}
                 />
               </ScrollContainer>
             ) : (
@@ -218,6 +232,7 @@ export default class TaskList extends Component<Props> {
                 dropProvided={dropProvided}
                 autoFocusQuoteId={autoFocusQuoteId}
                 handleDeleteTask={this.handleDeleteTask}
+                handleUpdateTask={this.handleUpdateTask}
               />
             )
             }

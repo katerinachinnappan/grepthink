@@ -79,6 +79,7 @@ class Column extends Component {
     this.customValidateText = this.customValidateText.bind(this);
     this.deleteColumn = this.deleteColumn.bind(this);
     this.handleDeleteTask = this.handleDeleteTask.bind(this);
+    this.handleUpdateTask = this.handleUpdateTask.bind(this);
   }
 
 
@@ -88,6 +89,10 @@ class Column extends Component {
 
   handleDeleteTask(taskID) {
     this.props.handleDeleteTask(this.props.title, taskID)
+  }
+
+  handleUpdateTask(taskID, taskUpdate) {
+    this.props.handleUpdateTask(this.props.title, taskID, taskUpdate)
   }
 
   dataChanged(data) {
@@ -157,6 +162,7 @@ class Column extends Component {
                 tasks={tasks}
                 autoFocusQuoteId={this.props.autoFocusTaskId}
                 handleDeleteTask={this.handleDeleteTask}
+                handleUpdateTask={this.handleUpdateTask}
               />
               <AddButton type="submit" onClick={() => {
                 this.handleAddTask(title)

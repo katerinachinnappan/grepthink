@@ -114,7 +114,7 @@ export default class TaskItem extends PureComponent<Props> {
   }
 
   handleUpdate(title, desc, members, colour) {
-    this.props.handleUpdate(this.props.index, title, desc, members, colour);
+    this.props.handleUpdateTask(this.props.index, title, desc, members, colour);
   }
 
   handleDeleteTask() {
@@ -132,6 +132,19 @@ export default class TaskItem extends PureComponent<Props> {
 
   render() {
     const {task, isDragging, provided} = this.props;
+    let users = [];
+    for (let i = 0; i < task.fields.members.length; i++) {
+      let user_string;
+      if(task.fields.members[i]['label'] === undefined)
+         user_string = getUserNameByID(task.fields.members[i]);
+      else
+        user_string = task.fields.members[i]['label'];
+      if(i < task.fields.members.length-1){
+        user_string += ',  '
+      }
+      users.push(user_string);
+    }
+
     return (
 
       <Container
@@ -168,7 +181,7 @@ export default class TaskItem extends PureComponent<Props> {
           <BlockQuote>{task.fields.title}</BlockQuote>
           <Footer>
             <Attribution>{task.fields.description}</Attribution>
-            <Attribution>{getUserNameByID(task.fields.members)}</Attribution>
+            <Attribution>{users}</Attribution>
           </Footer>
         </Content>
       </Container>
