@@ -1,5 +1,4 @@
-{% extends 'base.html' %} {% load static %} {% load i18n %}
-{% block stylesheets %}
+{% extends 'base.html' %} {% load static %} {% load i18n %} {% block stylesheets %}
 <!-- Select2 -->
 {{block.super}}
 <link rel="stylesheet" href="{% static 'css/select2.min.css' %}"> {% endblock stylesheets %} {% block javascript %} {{block.super}}
@@ -77,6 +76,43 @@ $(document).ready(function() {
         //templateResult: formatRepo, // omitted for brevity, see the source of this page
         //templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
     });
+
+    //DESIRED TECHNOLOGIES
+    $(".s2_desired_technologies").select2({
+        ajax: {
+            url: "ajax/add_desired_technologies/",
+            dataType: 'json',
+            delay: 250,
+            data: function(params) {
+                return {
+                    q: params.term, // search term
+                    page: params.page
+                };
+            },
+            processResults: function(data, params) {
+                // parse the results into the format expected by Select2
+                // since we are using custom formatting functions we do not need to
+                // alter the remote JSON data, except to indicate that infinite
+                // scrolling can be used
+                params.page = params.page || 1;
+                return {
+                    results: data.items,
+                    pagination: {
+                        more: (params.page * 30) < data.total_count
+                    }
+                };
+            },
+            cache: true
+        },
+        tags: true,
+        placeholder: "Search technologies",
+        //escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+        minimumInputLength: 1,
+        //templateResult: formatRepo, // omitted for brevity, see the source of this page
+        //templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
+    });
+
+
 });
 
 </script>

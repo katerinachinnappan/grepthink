@@ -810,7 +810,7 @@
 </div>
 
 <!-- Pending Members Box -->
-{% if user in project_members or user == project.creator%}
+{% if user in project.members.all or user == project.creator%}
 <div class="box sm-box-solid collapsed-box">
 
     <div class="box-header with-border">
