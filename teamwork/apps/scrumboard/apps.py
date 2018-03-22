@@ -2,7 +2,8 @@ from django.apps import AppConfig
 
 
 class ScrumboardConfig(AppConfig):
-    name = 'scrumboard'
-    verbose_name = 'Scrum Board'
+    name = 'scrumboard_1'
+    verbose_name1 = 'Scrum Board'
+    print(verbose_name1)
 
 
