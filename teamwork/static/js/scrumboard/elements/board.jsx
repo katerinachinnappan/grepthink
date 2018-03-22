@@ -252,7 +252,7 @@ class Board extends Component {
               <MenuItem eventKey={3.1} onClick={() => this.openModal()}
               > See Members</MenuItem>
 
-              <CSVLink data={exportBoard(Object.values(this.state.columns))} headers={this.state.ordered}
+              <CSVLink  filename="filename.csv" data={exportBoard(Object.values(this.state.columns))} headers={this.state.ordered}
                        style={linkStyle}> Export
                 Board</CSVLink>
 

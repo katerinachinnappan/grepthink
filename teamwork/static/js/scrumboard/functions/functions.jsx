@@ -1,7 +1,7 @@
 import type {Task, TaskMap} from "../primatives/types";
 import type {DraggableLocation} from "react-beautiful-dnd/lib/types";
 import {TaskUpdate} from "../primatives/types";
-import {boardID, csrfmiddlewaretoken, getColumnByName, JSONColumns} from "../data";
+import {boardID, csrfmiddlewaretoken, getColumnByName, getUserNameByID, JSONColumns} from "../data";
 
 const reorder = (list: any[], startIndex: number, endIndex: number): any[] => {
   const result = Array.from(list);

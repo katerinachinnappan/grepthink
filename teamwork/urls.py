@@ -105,26 +105,26 @@ urlpatterns = [
                   url(r'^myscrum/(?P<slug>[^/]+)/$', scrumboard.prof_view_scrums, name='prof_view_boards'),
 
 
-                  url(r'^scrumboard/updateColumnIndex/', scrumboard.updateColumnIndex, name='updateColumnIndex'),
-                  url(r'^scrumboard/updateTaskIndexSameColumn/', scrumboard.updateTaskIndexSameColumn,
+                  url(r'^scrumboard/updateColumnIndex/', scrumboard.update_column_index, name='updateColumnIndex'),
+                  url(r'^scrumboard/updateTaskIndexSameColumn/', scrumboard.update_taskIndex_same_column,
                       name='updateTaskIndex'),
-                  url(r'^scrumboard/updateTaskIndexDifferentColumn/', scrumboard.updateTaskIndexDifferentColumn,
+                  url(r'^scrumboard/updateTaskIndexDifferentColumn/', scrumboard.update_task_index_different_column,
                       name='updateTaskIndexDifferentColumn'),
-                  url(r'^scrumboard/updateColumnIndex/', scrumboard.updateColumnIndex, name='updateColumnIndex'),
-                  url(r'^scrumboard/updateTaskIndexSameColumn/', scrumboard.updateTaskIndexSameColumn,
+                  url(r'^scrumboard/updateColumnIndex/', scrumboard.update_column_index, name='updateColumnIndex'),
+                  url(r'^scrumboard/updateTaskIndexSameColumn/', scrumboard.update_taskIndex_same_column,
                       name='updateTaskIndex'),
-                  url(r'^scrumboard/updateTaskIndexDifferentColumn/', scrumboard.updateTaskIndexDifferentColumn,
+                  url(r'^scrumboard/updateTaskIndexDifferentColumn/', scrumboard.update_task_index_different_column,
                       name='updateTaskIndexDifferentColumn'),
 
-                  url(r'^scrumboard/deleteBoard/', scrumboard.deleteBoard, name='deleteBoard'),
-                  url(r'^scrumboard/updateTask/', scrumboard.updateTask, name='updateTask'),
-                  url(r'^scrumboard/updateColumn/', scrumboard.updateColumn, name='updateColumn'),
+                  url(r'^scrumboard/deleteBoard/', scrumboard.delete_board, name='deleteBoard'),
+                  url(r'^scrumboard/updateTask/', scrumboard.update_task, name='updateTask'),
+                  url(r'^scrumboard/updateColumn/', scrumboard.update_column, name='updateColumn'),
 
-                  url(r'^scrumboard/addTask/', scrumboard.addTask, name='addTask'),
-                  url(r'^scrumboard/addColumn/', scrumboard.addColumn, name='addColumn'),
+                  url(r'^scrumboard/addTask/', scrumboard.add_task, name='addTask'),
+                  url(r'^scrumboard/addColumn/', scrumboard.add_column, name='addColumn'),
 
-                  url(r'^scrumboard/deleteTask/', scrumboard.deleteTask, name='deleteTask'),
-                  url(r'^scrumboard/deleteColumn/', scrumboard.deleteColumn, name='deleteColumn'),
+                  url(r'^scrumboard/deleteTask/', scrumboard.delete_task, name='deleteTask'),
+                  url(r'^scrumboard/deleteColumn/', scrumboard.delete_column, name='deleteColumn'),
 
                   # View all courses
                   url(r'^course/$', course_views.view_courses, name='view_course'),

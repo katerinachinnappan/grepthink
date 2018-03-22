@@ -39,6 +39,5 @@ let result = JSONMembers.reduce((map, item) => {
 
 
 export const getUserNameByID = (id: string): string => {
-  console.log(id)
   return result[id];
 };

@@ -62,18 +62,19 @@ def myscrum(request, scrumboard):
                                                        'scrumboard': scrumboard
                                                        })
 
+
 def prof_view_myscrum(request, scrumboard, slug):
-        """
+    """
         Private method that will be used for paginator once I figure out how to get it working.
         """
-        get_project_title = str(Project.objects.get(slug=slug))
-        page = request.GET.get('page')
-        # Populate with page name and title
-        page_name = "View Scrum Boards"
-        page_description = "Scrum Boards created by " + get_project_title
+    get_project_title = str(Project.objects.get(slug=slug))
+    page = request.GET.get('page')
+    # Populate with page name and title
+    page_name = "View Scrum Boards"
+    page_description = "Scrum Boards created by " + get_project_title
 
-        return render(request, 'scrumboard/myscrum.html', {'page_name': page_name,
-             'page_description': page_description, 'scrumboard': scrumboard})
+    return render(request, 'scrumboard/myscrum.html', {'page_name': page_name,
+                                                       'page_description': page_description, 'scrumboard': scrumboard})
 
 
 @login_required
@@ -85,6 +86,7 @@ def view_scrums(request):
 
     my_scrums = Board.get_my_scrums(request.user)  # This is broken
     return myscrum(request, my_scrums)
+
 
 @login_required
 def prof_view_scrums(request, slug):
@@ -103,7 +105,7 @@ def prof_view_scrums(request, slug):
         return HttpResponseRedirect('/course')
 
 
-def updateColumnIndex(request):
+def update_column_index(request):
     newIndexes = request.POST.getlist('columns[]')
     boardID = request.POST.get('board_id')
     for x in range(0, len(newIndexes)):
@@ -111,14 +113,15 @@ def updateColumnIndex(request):
     return HttpResponse(status=204)
 
 
-def updateTaskIndexSameColumn(request):
+def update_taskIndex_same_column(request):
     newIndexes = request.POST.getlist('tasks[]')
     boardID = request.POST.get('board_id')
     for x in range(0, len(newIndexes)):
         Task.objects.filter(board=boardID, id=newIndexes[x]).update(index=x)
     return HttpResponse(status=204)
 
-def updateTaskIndexDifferentColumn(request):
+
+def update_task_index_different_column(request):
     boardID = request.POST.get('board_id')
     newColumnID = request.POST.get('newColumnID')
     oldColTasksOrdered = request.POST.getlist('oldColTasksOrdered[]')
@@ -132,7 +135,7 @@ def updateTaskIndexDifferentColumn(request):
     return HttpResponse(status=204)
 
 
-def updateTask(request):
+def update_task(request):
     taskID = request.POST.get('task_id')
     title = request.POST.get('title')
     desc = request.POST.get('desc')
@@ -146,6 +149,7 @@ def updateTask(request):
     if colour is not None:
         Task.objects.filter(id=taskID).update(colour=colour)
     if members is not None:
+        print(members)
         Task.objects.get(pk=taskID).members.clear()
         for member in members:
             user = User.objects.get(pk=member)
@@ -153,13 +157,15 @@ def updateTask(request):
     task = Task.objects.get(pk=taskID)
     return JsonResponse({'task': serializers.serialize('json', [task])})
 
-def updateColumn(request):
+
+def update_column(request):
     colID = request.POST.get('col_id')
     title = request.POST.get('title')
     Column.objects.filter(id=colID).update(title=title)
     return HttpResponse(status=204)
 
-def addTask(request):
+
+def add_task(request):
     boardID = request.POST.get('board_id')
     board = Board.objects.get(id=boardID)
     colID = request.POST.get('col_id')
@@ -172,7 +178,8 @@ def addTask(request):
     newTask = Task.objects.create(board=board, column=column, index=taskIndex)
     return JsonResponse({'task': serializers.serialize('json', [newTask])})
 
-def addColumn(request):
+
+def add_column(request):
     boardID = request.POST.get('board_id')
     board = Board.objects.get(id=boardID)
     title = request.POST.get('title')
@@ -180,23 +187,28 @@ def addColumn(request):
     newColumn = Column.objects.create(board=board, title=title, index=columnIndex)
     return JsonResponse({'column': serializers.serialize('json', [newColumn])})
 
-def deleteTask(request):
+
+def delete_task(request):
     taskID = request.POST.get('task_id')
     Task.objects.get(pk=taskID).delete()
     return HttpResponse(status=204)
 
-def deleteColumn(request):
+
+def delete_column(request):
     columnID = request.POST.get('column_id')
     Column.objects.get(pk=columnID).delete()
     return HttpResponse(status=204)
 
-def deleteBoard(request):
+
+def delete_board(request):
     boardID = request.POST.get('board_id')
     Board.objects.get(pk=boardID).delete()
     return HttpResponse(status=204)
 
+
 def home(request):
     return HttpResponseRedirect('myscrum/all/')
+
 
 def view_projects_scrum(request):
     return render(request, 'scrumboard/view_projects_scrum.html', {})
